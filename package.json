@@ -5,6 +5,7 @@
   "description": "Centro de controle local para players HTML5.",
   "scripts": {
     "build:extension": "node tools/build-extension.js",
-    "check": "node --check userscript/tampermonkey-vcc.user.js && node --check extension/src/gm-compat.js && node --check tools/build-extension.js"
+    "package:extension": "node tools/build-extension.js && node tools/package-extension.js",
+    "check": "node --check userscript/tampermonkey-vcc.user.js && node --check extension/src/gm-compat.js && node --check extension/src/service-worker.js && node --check tools/build-extension.js && node --check tools/package-extension.js"
   }
 }

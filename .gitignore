@@ -1,4 +1,5 @@
 dist/
+releases/
 node_modules/
 *.zip
 *.crx

@@ -1550,7 +1550,7 @@
   }
 
   function start() {
-    init(false);
+    init(Boolean(globalThis.VCC_FORCE_ENABLE));
   }
 
   storageReady.then(() => {
