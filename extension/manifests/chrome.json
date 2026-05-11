@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "VCC - Video Command Center",
+  "version": "0.3.0",
+  "description": "Centro de controle local para players HTML5, voltado a uso pessoal.",
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "src/gm-compat.js",
+        "src/tampermonkey-vcc.user.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "VCC"
+  }
+}

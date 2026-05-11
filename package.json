@@ -1,0 +1,10 @@
+{
+  "name": "vcc-video-command-center",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Centro de controle local para players HTML5.",
+  "scripts": {
+    "build:extension": "node tools/build-extension.js",
+    "check": "node --check userscript/tampermonkey-vcc.user.js && node --check extension/src/gm-compat.js && node --check tools/build-extension.js"
+  }
+}
