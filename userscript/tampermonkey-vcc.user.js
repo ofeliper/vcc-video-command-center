@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/vcc-userscript
-// @version      0.4.0
+// @version      0.4.1
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       VCC
 // @match        *://*/*
@@ -234,6 +234,22 @@
     flashCB(state.muted ? 'MUDO' : `volume ${Math.round(state.volume * 100)}%`, true);
   }
 
+  function togglePrimaryPlayback() {
+    const vid = state.videos[state.primaryVideo];
+    if (!vid || !vid.isConnected) return;
+    const shouldPlay = vid.paused || vid.ended;
+    try {
+      if (shouldPlay) {
+        const playResult = vid.play();
+        if (playResult?.catch) playResult.catch(() => {});
+      } else {
+        vid.pause();
+      }
+    } catch {}
+    flashCB(shouldPlay ? '▶ play' : '⏸ pause', true);
+    setTimeout(updateVideoList, 80);
+  }
+
   function setSpeed(v)    { applySpeed(v); }
   function changeSpeed(d) { applySpeed(state.speed + d); }
   function resetSpeed()   { applySpeed(1.0); }
@@ -365,6 +381,11 @@
     if (/^[1-7]$/.test(e.key) && !e.ctrlKey && !e.altKey) {
       const s = SPEED_MAP[e.key];
       if (s !== undefined) { e.preventDefault(); setSpeed(s); return; }
+    }
+
+    // Zero → play/pause do vídeo principal
+    if (e.key === '0' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.repeat) {
+      e.preventDefault(); togglePrimaryPlayback(); return;
     }
 
     if (matchKey(e, KEYS.slowDown))   { e.preventDefault(); changeSpeed(-state.speedStep); return; }
@@ -538,7 +559,9 @@
 
       .vcc-vrow { display: flex; align-items: center; gap: 6px; padding: 7px 0; border-bottom: .5px solid rgba(255,255,255,0.04); }
       .vcc-vrow:last-child { border-bottom: none; }
-      .vcc-vthumb { width: 32px; height: 22px; background: rgba(255,255,255,0.07); border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: rgba(255,255,255,0.3); flex-shrink: 0; font-family: monospace; }
+      .vcc-vthumb { width: 32px; height: 22px; background: rgba(255,255,255,0.07); border: .5px solid transparent; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: rgba(255,255,255,0.3); flex-shrink: 0; font-family: monospace; cursor: pointer; }
+      .vcc-vthumb:hover { background: rgba(255,255,255,0.12); color: #fff; }
+      .vcc-vthumb.primary { background: rgba(29,158,117,0.2); border-color: #1D9E75; color: #5DCAA5; }
       .vcc-vname  { font-size: 11px; color: rgba(255,255,255,0.62); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .vcc-vmeta  { font-size: 10px; color: rgba(255,255,255,0.28); }
       .vcc-primary-badge { font-size: 9px; background: rgba(29,158,117,0.2); color: #5DCAA5; border-radius: 3px; padding: 1px 5px; font-family: monospace; margin-left: 4px; vertical-align: middle; }
@@ -862,6 +885,7 @@
           <span class="vcc-sub-title" style="margin:0" id="vcc-vid-count">0 vídeos detectados</span>
           <button class="vcc-abt" id="vcc-vid-all">selecionar todos</button>
         </div>
+        <p class="vcc-hint" style="margin:0 0 7px">Clique no indicador ★ ou no botão ★ para escolher o vídeo principal. A tecla 0 alterna play/pause nele.</p>
         <div id="vcc-vid-list"></div>
       `),
 
@@ -1176,13 +1200,13 @@
       const row = document.createElement('div');
       row.className = 'vcc-vrow';
       row.innerHTML = `
-        <div class="vcc-vthumb">${isPrimary ? '★' : '#' + (i + 1)}</div>
+        <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${isPrimary ? 'Vídeo principal' : 'Definir como vídeo principal'}">${isPrimary ? '★' : '#' + (i + 1)}</div>
         <div style="flex:1;min-width:0">
           <div class="vcc-vname">${srcLabel}${isPrimary ? '<span class="vcc-primary-badge">principal</span>' : ''}</div>
           <div class="vcc-vmeta">${res} · ${dur}</div>
         </div>
         <div class="vcc-vid-actions">
-          <button class="vcc-vid-btn" data-act="primary"   title="Definir como vídeo principal">★</button>
+          <button class="vcc-vid-btn" data-act="primary" title="${isPrimary ? 'Este é o vídeo principal' : 'Definir como vídeo principal'}" style="${isPrimary ? 'color:#5DCAA5;border-color:#1D9E75' : ''}">★</button>
           <button class="vcc-vid-btn" data-act="playpause" title="Play / Pause">${vid.paused ? '▶' : '⏸'}</button>
           <button class="vcc-vid-btn" data-act="hide"      title="Ocultar / mostrar">◻</button>
           <button class="vcc-vid-btn" data-act="mute"      title="Mutar">${vid.muted ? '✕♪' : '♪'}</button>
@@ -1190,6 +1214,12 @@
         </div>
         <div class="vcc-chk${isTarget ? ' on' : ''}" data-vidx="${i}">${isTarget ? '✓' : ''}</div>
       `;
+
+      row.querySelector('.vcc-vthumb').addEventListener('click', () => {
+        state.primaryVideo = i;
+        buildVideoList();
+        updateETA();
+      });
 
       row.querySelector('.vcc-chk').addEventListener('click', e => {
         const idx = parseInt(e.currentTarget.dataset.vidx);
@@ -1258,6 +1288,10 @@
 
     // Numerais fixos (não editáveis)
     list.innerHTML += `
+      <div class="vcc-kbd-row" style="opacity:.5">
+        <span class="vcc-kbd-action">Play / pause do vídeo principal (fixo)</span>
+        <span class="vcc-kbd-key" style="cursor:default">0</span>
+      </div>
       <div class="vcc-kbd-row" style="opacity:.5">
         <span class="vcc-kbd-action">Presets 1.0×…4.0× (fixos)</span>
         <span style="display:flex;gap:3px">
