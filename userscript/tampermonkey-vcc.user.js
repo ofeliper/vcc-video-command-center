@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/vcc-userscript
-// @version      0.3.0
+// @version      0.4.0
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       VCC
 // @match        *://*/*
@@ -10,6 +10,8 @@
 // @grant        GM_deleteValue
 // @grant        GM_listValues
 // @run-at       document-idle
+// @updateURL    https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/userscript/tampermonkey-vcc.user.js
+// @downloadURL  https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/userscript/tampermonkey-vcc.user.js
 // ==/UserScript==
 
 (function () {
@@ -48,6 +50,9 @@
     toggle2x:   'G',
     seekBack:   'Z',
     seekFwd:    'X',
+    volumeDown: 'Q',
+    volumeUp:   'E',
+    toggleMute: 'M',
     toggleCB:   'V',
     toggleCP:   'H',
   };
@@ -59,6 +64,9 @@
     { id:'toggle2x',   label:'Toggle 2×'          },
     { id:'seekBack',   label:'Retroceder'          },
     { id:'seekFwd',    label:'Avançar'             },
+    { id:'volumeDown', label:'Diminuir volume'     },
+    { id:'volumeUp',   label:'Aumentar volume'     },
+    { id:'toggleMute', label:'Mudo / volume atual' },
     { id:'toggleCB',   label:'Modo do CB (cicla)'  },
     { id:'toggleCP',   label:'Abrir/fechar CP'     },
   ];
@@ -84,6 +92,10 @@
     alertDuration: 500,
     seekStep:      10,
     speedStep:     0.1,
+    volume:        1.0,
+    lastVolume:    1.0,
+    muted:         false,
+    volumeStep:    5,
   };
 
   // ─────────────────────────────────────────────
@@ -111,10 +123,19 @@
     state.alertDuration = load(gk('alertDuration'), 500);
     state.seekStep      = load(gk('seekStep'),      10);
     state.speedStep     = load(gk('speedStep'),     0.1);
+    state.volume        = Math.max(0, Math.min(1, load(sk('volume'), 1.0)));
+    state.lastVolume    = Math.max(0.01, Math.min(1, load(sk('lastVolume'), state.volume || 1.0)));
+    state.muted         = load(sk('muted'), false);
+    state.volumeStep    = load(gk('volumeStep'), 5);
   }
 
   function savePos(x, y) { state.cbPos = {x,y}; save(sk('cbPos'), {x,y}); }
   function saveSpeed()   { save(sk('speed'), state.speed); }
+  function saveVolume()  {
+    save(sk('volume'), state.volume);
+    save(sk('lastVolume'), state.lastVolume);
+    save(sk('muted'), state.muted);
+  }
 
   // ─────────────────────────────────────────────
   // ATALHOS — carregados por domínio
@@ -175,6 +196,44 @@
     flashCB(seconds > 0 ? `+${seconds}s` : `${seconds}s`, true);
   }
 
+  function applyVolume(value, unmute = true) {
+    state.volume = Math.max(0, Math.min(1, Math.round(value * 100) / 100));
+    if (state.volume > 0) state.lastVolume = state.volume;
+    if (unmute) state.muted = false;
+    state.targetVideos.forEach(i => {
+      const vid = state.videos[i];
+      if (!vid || !vid.isConnected) return;
+      try { vid.volume = state.volume; vid.muted = state.muted; } catch {}
+    });
+    saveVolume();
+    updateCBVolume();
+    updateCPVolume();
+    flashCB(state.muted ? 'MUDO' : `volume ${Math.round(state.volume * 100)}%`, true);
+  }
+
+  function changeVolume(percent) {
+    applyVolume(state.volume + percent / 100, true);
+  }
+
+  function toggleMute() {
+    if (!state.muted && state.volume > 0) state.lastVolume = state.volume;
+    if (state.muted || state.volume === 0) {
+      state.volume = state.lastVolume || 1.0;
+      state.muted = false;
+    } else {
+      state.muted = true;
+    }
+    state.targetVideos.forEach(i => {
+      const vid = state.videos[i];
+      if (!vid || !vid.isConnected) return;
+      try { vid.volume = state.volume; vid.muted = state.muted; } catch {}
+    });
+    saveVolume();
+    updateCBVolume();
+    updateCPVolume();
+    flashCB(state.muted ? 'MUDO' : `volume ${Math.round(state.volume * 100)}%`, true);
+  }
+
   function setSpeed(v)    { applySpeed(v); }
   function changeSpeed(d) { applySpeed(state.speed + d); }
   function resetSpeed()   { applySpeed(1.0); }
@@ -224,7 +283,11 @@
     // Aplica velocidade imediatamente, e também quando
     // o vídeo estiver pronto (readyState pode ser 0 ainda)
     const applyWhenReady = () => {
-      try { vid.playbackRate = state.speed; } catch {}
+      try {
+        vid.playbackRate = state.speed;
+        vid.volume = state.volume;
+        vid.muted = state.muted;
+      } catch {}
     };
     applyWhenReady();
     vid.addEventListener('loadedmetadata', applyWhenReady);
@@ -310,6 +373,9 @@
     if (matchKey(e, KEYS.toggle2x))   { e.preventDefault(); toggle2x();                    return; }
     if (matchKey(e, KEYS.seekBack))   { e.preventDefault(); applySeek(-state.seekStep);    return; }
     if (matchKey(e, KEYS.seekFwd))    { e.preventDefault(); applySeek(+state.seekStep);    return; }
+    if (matchKey(e, KEYS.volumeDown)) { e.preventDefault(); changeVolume(-state.volumeStep); return; }
+    if (matchKey(e, KEYS.volumeUp))   { e.preventDefault(); changeVolume(+state.volumeStep); return; }
+    if (matchKey(e, KEYS.toggleMute)) { e.preventDefault(); toggleMute();                    return; }
     if (matchKey(e, KEYS.toggleCB))   { e.preventDefault(); cycleCBMode();                 return; }
     if (matchKey(e, KEYS.toggleCP))   { e.preventDefault(); toggleCPVisibility();          return; }
   }
@@ -359,7 +425,14 @@
       #vcc-cb-speed:hover  { background: rgba(255,255,255,0.07); }
       #vcc-cb-speed:active { cursor: grabbing; }
 
-      #vcc-cb-div {
+      #vcc-cb-volume {
+        color: rgba(255,255,255,0.75); font-size: 10px; min-width: 34px;
+        height: 18px; line-height: 18px; text-align: center; cursor: pointer;
+        padding: 0 2px; border-radius: 3px; flex-shrink: 0;
+      }
+      #vcc-cb-volume:hover { background: rgba(255,255,255,0.07); color: #fff; }
+
+      #vcc-cb-div, #vcc-cb-vol-div {
         width: 0.5px; height: 12px; background: rgba(255,255,255,0.13);
         margin: 0 1px; flex-shrink: 0; align-self: center;
       }
@@ -542,6 +615,10 @@
       <button id="vcc-cb-fast" title="D — velocidade +">+</button>
       <button id="vcc-cb-fwd"  title="X — avançar">»</button>
       <div id="vcc-cb-div"></div>
+      <button id="vcc-cb-vol-down" title="Q — volume −">🔉</button>
+      <span id="vcc-cb-volume" title="M — alternar mudo">100%</span>
+      <button id="vcc-cb-vol-up" title="E — volume +">🔊</button>
+      <div id="vcc-cb-vol-div"></div>
       <button id="vcc-cb-cfg"  title="H — painel">≡</button>
       <span id="vcc-cb-mode-badge"></span>
     `;
@@ -580,10 +657,14 @@
     cbEl.querySelector('#vcc-cb-slow').addEventListener('click', () => changeSpeed(-state.speedStep));
     cbEl.querySelector('#vcc-cb-fast').addEventListener('click', () => changeSpeed(+state.speedStep));
     cbEl.querySelector('#vcc-cb-fwd' ).addEventListener('click', () => applySeek(+state.seekStep));
+    cbEl.querySelector('#vcc-cb-vol-down').addEventListener('click', () => changeVolume(-state.volumeStep));
+    cbEl.querySelector('#vcc-cb-volume').addEventListener('click', toggleMute);
+    cbEl.querySelector('#vcc-cb-vol-up').addEventListener('click', () => changeVolume(+state.volumeStep));
     cbEl.querySelector('#vcc-cb-cfg' ).addEventListener('click', toggleCPVisibility);
 
     makeDraggable(cbEl, cbEl.querySelector('#vcc-cb-speed'), (x, y) => savePos(x, y));
     updateCBSpeed();
+    updateCBVolume();
   }
 
   function updateCBSpeed() {
@@ -737,11 +818,12 @@
 
       // ── Áudio ──
       acc('au', '♪', 'Áudio', `
+        <div class="vcc-slr"><label>Volume</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? 'MUDO' : Math.round(state.volume * 100) + '%'}</span></div>
+        <div class="vcc-abts"><button class="vcc-abt" id="vcc-volume-down">🔉 diminuir</button><button class="vcc-abt" id="vcc-volume-mute">${state.muted ? 'restaurar volume' : 'mudo'}</button><button class="vcc-abt" id="vcc-volume-up">aumentar 🔊</button></div>
         ${tog('boost', true, 'Volume boost', 'Amplifica além de 100%')}
         <div class="vcc-slr"><label>Nível</label><input type="range" id="vcc-boost-level" min="100" max="300" value="100" step="5"><span class="vcc-slv" id="vcc-boost-val">100%</span></div>
         ${tog('normalize', false, 'Normalização de volume', 'Equaliza vídeos com volumes diferentes')}
         ${tog('silence', false, 'Skip de silêncio', 'Pula trechos sem fala')}
-        ${tog('mute', false, 'Mute')}
       `),
 
       // ── Navegação avançada ──
@@ -806,6 +888,11 @@
           <label>Passo velocidade</label>
           <input type="number" id="vcc-speed-step" class="vcc-num-in" min="0.05" max="1" step="0.05" value="${state.speedStep}">
           <span style="font-size:10px;color:rgba(255,255,255,0.35)">×</span>
+        </div>
+        <div class="vcc-slr" style="margin-top:8px">
+          <label>Passo de volume</label>
+          <input type="number" id="vcc-volume-step" class="vcc-num-in" min="1" max="25" step="1" value="${state.volumeStep}">
+          <span style="font-size:10px;color:rgba(255,255,255,0.35)">%</span>
         </div>
         <div class="vcc-slr" style="margin-top:8px">
           <label>Passo de seek</label>
@@ -913,10 +1000,13 @@
     q('#vcc-toggle-cb-btn').addEventListener('click', cycleCBMode);
 
     // Áudio
+    q('#vcc-volume-down').addEventListener('click', () => changeVolume(-state.volumeStep));
+    q('#vcc-volume-up').addEventListener('click', () => changeVolume(+state.volumeStep));
+    q('#vcc-volume-mute').addEventListener('click', toggleMute);
+    q('#vcc-volume').addEventListener('input', e => applyVolume(parseInt(e.target.value) / 100, true));
     bindTog('boost',     () => {});
     bindTog('normalize', () => {});
     bindTog('silence',   () => {});
-    bindTog('mute', on => { state.targetVideos.forEach(i => { const v = state.videos[i]; if (v) try { v.muted = on; } catch {} }); });
     q('#vcc-boost-level').addEventListener('input', e => { q('#vcc-boost-val').textContent = e.target.value + '%'; });
 
     // Navegação
@@ -980,6 +1070,11 @@
       const v = parseInt(e.target.value);
       if (!isNaN(v) && v >= 1 && v <= 300) { state.seekStep = v; save(gk('seekStep'), state.seekStep); }
       else e.target.value = state.seekStep;
+    });
+    q('#vcc-volume-step').addEventListener('change', e => {
+      const v = parseInt(e.target.value);
+      if (!isNaN(v) && v >= 1 && v <= 25) { state.volumeStep = v; save(gk('volumeStep'), state.volumeStep); }
+      else e.target.value = state.volumeStep;
     });
     q('#vcc-alert-dur').addEventListener('input', e => {
       state.alertDuration = parseInt(e.target.value);
@@ -1270,6 +1365,22 @@
       .replace(/^https?:\/\//, '')
       .replace(/^www\./, '')
       .split('/')[0];
+  }
+
+  function updateCPVolume() {
+    if (!cpEl) return;
+    const slider = cpEl.querySelector('#vcc-volume');
+    const value = cpEl.querySelector('#vcc-volume-val');
+    const button = cpEl.querySelector('#vcc-volume-mute');
+    if (slider) slider.value = Math.round(state.volume * 100);
+    if (value) value.textContent = state.muted ? 'MUDO' : `${Math.round(state.volume * 100)}%`;
+    if (button) button.textContent = state.muted ? 'restaurar volume' : 'mudo';
+  }
+
+  function updateCBVolume() {
+    if (!cbEl) return;
+    const el = cbEl.querySelector('#vcc-cb-volume');
+    if (el) el.textContent = state.muted ? 'MUDO' : `${Math.round(state.volume * 100)}%`;
   }
 
   function getActiveSites() {
