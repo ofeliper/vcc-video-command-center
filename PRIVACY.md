@@ -15,6 +15,11 @@ VCC does not:
 - Bypass paywalls, login restrictions, ads, or DRM/content protection.
 - Use analytics, advertising SDKs, or remote code.
 
-The extension can access the current tab only after the user clicks the extension button. That
-temporary access is used to inject the local VCC controls into the active page and control HTML5
-video elements already loaded in the browser.
+The extension loads its local interface code on ordinary web pages so the `H` shortcut and the
+control panel are available without first clicking the toolbar button. On domains the user has not
+activated, VCC does not scan for or control video elements. The panel only exposes general settings
+and an explicit action to activate video controls for that domain.
+
+The broad site permission is used only to run this local interface and, on domains explicitly
+activated by the user, control HTML5 video elements already loaded in the page. Browsing activity
+and page content are not transmitted or shared.

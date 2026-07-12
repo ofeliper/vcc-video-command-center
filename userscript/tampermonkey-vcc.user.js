@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/vcc-userscript
-// @version      0.4.1
+// @version      0.5.0
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       VCC
 // @match        *://*/*
@@ -96,6 +96,7 @@
     lastVolume:    1.0,
     muted:         false,
     volumeStep:    5,
+    videoControlsActive: false,
   };
 
   // ─────────────────────────────────────────────
@@ -377,6 +378,10 @@
     const tag = document.activeElement?.tagName?.toLowerCase();
     if (['input','textarea','select'].includes(tag) || document.activeElement?.isContentEditable) return;
 
+    // O painel está sempre disponível, inclusive em sites ainda não ativados.
+    if (matchKey(e, KEYS.toggleCP)) { e.preventDefault(); toggleCPVisibility(); return; }
+    if (!state.videoControlsActive) return;
+
     // Numerais 1-7 → presets
     if (/^[1-7]$/.test(e.key) && !e.ctrlKey && !e.altKey) {
       const s = SPEED_MAP[e.key];
@@ -398,7 +403,6 @@
     if (matchKey(e, KEYS.volumeUp))   { e.preventDefault(); changeVolume(+state.volumeStep); return; }
     if (matchKey(e, KEYS.toggleMute)) { e.preventDefault(); toggleMute();                    return; }
     if (matchKey(e, KEYS.toggleCB))   { e.preventDefault(); cycleCBMode();                 return; }
-    if (matchKey(e, KEYS.toggleCP))   { e.preventDefault(); toggleCPVisibility();          return; }
   }
 
   document.addEventListener('keydown', onKeyDown, true);
@@ -612,6 +616,16 @@
       .vcc-danger-zone { border: .5px solid rgba(226,75,74,0.25); border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
       .vcc-danger-title { font-size: 11px; color: rgba(226,75,74,0.82); margin-bottom: 8px; font-weight: 500; }
 
+      .vcc-site-warning { margin: 12px 16px 8px; padding: 12px; border: 1px solid rgba(239,159,39,0.55); border-radius: 7px; background: rgba(186,117,23,0.16); color: rgba(255,255,255,0.78); }
+      .vcc-site-warning-title { color: #FAC775; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+      .vcc-site-warning-text { color: rgba(255,255,255,0.52); font-size: 10px; line-height: 1.5; margin-bottom: 9px; }
+      .vcc-site-warning .vcc-activate-site { background: #BA7517; border: 1px solid #EF9F27; color: #fff; border-radius: 5px; padding: 6px 10px; font: 600 11px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; cursor: pointer; }
+      .vcc-site-warning .vcc-activate-site:hover { background: #D98B1D; }
+      .vcc-video-feature.vcc-disabled > .vcc-acc-hdr { color: rgba(255,255,255,0.28); }
+      .vcc-video-feature.vcc-disabled > .vcc-acc-hdr::after { content: 'site inativo'; margin-left: auto; margin-right: 8px; color: #EF9F27; font: 9px monospace; }
+      .vcc-video-feature.vcc-disabled > .vcc-acc-body { opacity: .35; pointer-events: none; filter: grayscale(1); }
+      .vcc-video-control.vcc-disabled { opacity: .35; pointer-events: none; filter: grayscale(1); }
+
       /* Inline number input no CP */
       .vcc-num-in { background: rgba(255,255,255,0.08); border: .5px solid rgba(255,255,255,0.15); border-radius: 5px; color: rgba(255,255,255,0.9); font-family: monospace; font-size: 12px; text-align: center; padding: 3px 6px; outline: none; width: 68px; }
       .vcc-num-in:focus { border-color: rgba(255,255,255,0.35); }
@@ -786,7 +800,7 @@
           <button id="vcc-cp-close">✕</button>
         </div>
       </div>
-      <div id="vcc-cp-scroll"><div id="vcc-cp-content"></div></div>
+      <div id="vcc-cp-scroll"><div id="vcc-site-status"></div><div id="vcc-cp-content"></div></div>
     `;
 
     // Mesmo root que o CB: escapa overflow/clip do <body>
@@ -799,8 +813,9 @@
   }
 
   // ── helpers de template ──
-  function acc(id, icon, label, content, open = false) {
-    return `<div class="vcc-acc">
+  function acc(id, icon, label, content, open = false, videoFeature = false) {
+    const featureClass = videoFeature ? ` vcc-video-feature${state.videoControlsActive ? '' : ' vcc-disabled'}` : '';
+    return `<div class="vcc-acc${featureClass}">
       <button class="vcc-acc-hdr" data-acc="${id}">
         <span class="vcc-acc-hdr-left"><span class="vcc-acc-icon">${icon}</span>${label}</span>
         <span class="vcc-arr${open ? ' open' : ''}" id="vcc-arr-${id}">›</span>
@@ -809,8 +824,9 @@
     </div>`;
   }
 
-  function tog(id, on, label, sub = '') {
-    return `<div class="vcc-row">
+  function tog(id, on, label, sub = '', videoControl = false) {
+    const controlClass = videoControl ? ` vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}` : '';
+    return `<div class="vcc-row${controlClass}">
       <div><div class="vcc-row-label">${label}</div>${sub ? `<div class="vcc-row-sub">${sub}</div>` : ''}</div>
       <div class="vcc-tog${on ? ' on' : ''}" id="vcc-tog-${id}"><div class="vcc-tog-t"></div></div>
     </div>`;
@@ -818,6 +834,7 @@
 
   function buildCPContent() {
     const content = cpEl.querySelector('#vcc-cp-content');
+    renderSiteStatus();
     content.innerHTML = [
 
       // ── Reprodução ──
@@ -837,7 +854,7 @@
           <button class="vcc-abt" id="vcc-seek-fwd">avançar »</button>
           <button class="vcc-abt" id="vcc-toggle-cb-btn">ciclar modo CB</button>
         </div>
-      `, true),
+      `, true, true),
 
       // ── Áudio ──
       acc('au', '♪', 'Áudio', `
@@ -847,7 +864,7 @@
         <div class="vcc-slr"><label>Nível</label><input type="range" id="vcc-boost-level" min="100" max="300" value="100" step="5"><span class="vcc-slv" id="vcc-boost-val">100%</span></div>
         ${tog('normalize', false, 'Normalização de volume', 'Equaliza vídeos com volumes diferentes')}
         ${tog('silence', false, 'Skip de silêncio', 'Pula trechos sem fala')}
-      `),
+      `, false, true),
 
       // ── Navegação avançada ──
       acc('nv', '⊹', 'Navegação avançada', `
@@ -868,12 +885,12 @@
         <div class="vcc-abts" style="margin-top:2px">
           <button class="vcc-abt" id="vcc-timestamp">copiar timestamp</button>
         </div>
-      `),
+      `, false, true),
 
       // ── Visual ──
       acc('vs', '◑', 'Visual', `
-        ${tog('invert', false, 'Inversão de cores', 'Útil para assistir no escuro')}
-        <div class="vcc-slr"><label>Brilho</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
+        ${tog('invert', false, 'Inversão de cores', 'Útil para assistir no escuro', true)}
+        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label>Brilho</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
         <p class="vcc-sub-title" style="margin-top:8px">Opacidade</p>
         <div class="vcc-slr"><label>Control Box</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
         <div class="vcc-slr"><label>Control Panel</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
@@ -887,7 +904,7 @@
         </div>
         <p class="vcc-hint" style="margin:0 0 7px">Clique no indicador ★ ou no botão ★ para escolher o vídeo principal. A tecla 0 alterna play/pause nele.</p>
         <div id="vcc-vid-list"></div>
-      `),
+      `, false, true),
 
       // ── Atalhos de teclado ──
       acc('ks', '⌨', 'Atalhos de teclado', `
@@ -955,7 +972,7 @@
         </div>
         <p class="vcc-sub-title">Compatibilidade — ${domain}</p>
         <div id="vcc-compat"></div>
-      `),
+      `, false, true),
 
       // ── Dados salvos ──
       acc('data', '⊟', 'Dados salvos e redefinições', `
@@ -982,6 +999,22 @@
     buildKeysList();
     buildVideoList();
     refreshStorageList();
+  }
+
+  function renderSiteStatus() {
+    const status = cpEl?.querySelector('#vcc-site-status');
+    if (!status) return;
+    if (state.videoControlsActive) {
+      status.innerHTML = '';
+      return;
+    }
+    status.innerHTML = `
+      <div class="vcc-site-warning" role="alert">
+        <div class="vcc-site-warning-title">⚠ VCC não está ativo neste site</div>
+        <div class="vcc-site-warning-text">Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.</div>
+        <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${domain}</button>
+      </div>`;
+    status.querySelector('#vcc-activate-site').addEventListener('click', activateCurrentSite);
   }
 
   // ─────────────────────────────────────────────
@@ -1471,8 +1504,14 @@
       const site = this.dataset.siteTog;
       const on = this.classList.contains('on');
       setSiteActive(site, on);
-      if (normalizeSite(site) === domain && !on) {
-        alert('VCC desativado para este domínio. Recarregue a página para aplicar.');
+      if (normalizeSite(site) === domain) {
+        if (on) {
+          startVideoEngine();
+          buildCPContent();
+          flashCB('✓ site ativado', true);
+        } else {
+          alert('VCC desativado para este domínio. Recarregue a página para interromper os controles já iniciados.');
+        }
       }
     });
   }
@@ -1594,6 +1633,7 @@
   }
 
   setInterval(() => {
+    if (!state.videoControlsActive) return;
     if (state.cpVisible) updateStats();
     updateETA();
     state.speedHistory.push(state.speed);
@@ -1642,60 +1682,46 @@
       : `${m}:${String(s).padStart(2,'0')}`;
   }
 
-  function showEnablePrompt() {
-    if (document.getElementById('vcc-enable')) return;
-    const el = document.createElement('button');
-    el.id = 'vcc-enable';
-    el.type = 'button';
-    el.textContent = 'Ativar VCC neste site';
-    el.style.cssText = `
-      position: fixed !important;
-      right: 12px !important;
-      bottom: 12px !important;
-      z-index: 2147483647 !important;
-      padding: 7px 10px !important;
-      border: 1px solid rgba(255,255,255,.18) !important;
-      border-radius: 6px !important;
-      background: rgba(8,8,8,.86) !important;
-      color: rgba(255,255,255,.78) !important;
-      font: 12px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
-      cursor: pointer !important;
-    `;
-    el.addEventListener('click', () => {
-      setSiteActive(domain, true);
-      el.remove();
-      init(true);
-    });
-    document.documentElement.appendChild(el);
-  }
+  let videoEngineStarted = false;
 
-  function waitForVideoToOfferEnable() {
-    const maybeOffer = () => {
-      if (queryAllVideos(document).length) showEnablePrompt();
-    };
-    maybeOffer();
-    const obs = new MutationObserver(maybeOffer);
-    obs.observe(document.documentElement, { childList: true, subtree: true });
-    setTimeout(() => obs.disconnect(), 120000);
-  }
-
-  // ─────────────────────────────────────────────
-  // INIT
-  // ─────────────────────────────────────────────
-  function init(force = false) {
-    loadState();
-    if (!force && !isSiteActive()) {
-      waitForVideoToOfferEnable();
-      return;
-    }
-    injectStyles();
+  function startVideoEngine() {
+    if (videoEngineStarted) return;
+    videoEngineStarted = true;
+    state.videoControlsActive = true;
+    state.sessionStart = Date.now();
+    state.speedHistory = [];
     scanVideos();
     startObserver();
     buildCB();
   }
 
+  function activateCurrentSite() {
+    setSiteActive(domain, true);
+    startVideoEngine();
+    if (cpEl) buildCPContent();
+    flashCB('✓ site ativado', true);
+  }
+
+  // ─────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────
+  function init() {
+    loadState();
+    KEYS = loadKeys(domain);
+    injectStyles();
+    state.videoControlsActive = isSiteActive();
+    if (state.videoControlsActive) startVideoEngine();
+  }
+
   function start() {
-    init(Boolean(globalThis.VCC_FORCE_ENABLE));
+    init();
+  }
+
+  const extensionRuntime = globalThis.browser?.runtime || globalThis.chrome?.runtime;
+  if (extensionRuntime?.onMessage?.addListener) {
+    extensionRuntime.onMessage.addListener(message => {
+      if (message?.type === 'VCC_TOGGLE_PANEL') storageReady.then(toggleCPVisibility);
+    });
   }
 
   storageReady.then(() => {

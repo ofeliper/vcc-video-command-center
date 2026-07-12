@@ -21,7 +21,7 @@ extension/
     firefox.json                # Firefox extension manifest source
   src/
     gm-compat.js                # GM_* storage shim for extension builds
-    service-worker.js           # Injects VCC after the user clicks the extension
+    service-worker.js           # Opens/closes the already loaded VCC panel from the toolbar
 
 tools/
   build-extension.js            # Copies shared sources into dist/
@@ -74,14 +74,16 @@ releases/vcc-firefox.zip
 2. Enable Developer mode.
 3. Click "Load unpacked".
 4. Select `dist/chrome`.
-5. Open a page with an HTML5 video and click the VCC toolbar button.
+5. Open a web page and press `H` or click the VCC toolbar button. Activate the domain in the panel
+   before using video controls.
 
 ### Firefox
 
 1. Open `about:debugging#/runtime/this-firefox`.
 2. Click "Load Temporary Add-on".
 3. Select `dist/firefox/manifest.json`.
-4. Open a page with an HTML5 video and click the VCC toolbar button.
+4. Open a web page and press `H` or click the VCC toolbar button. Activate the domain in the panel
+   before using video controls.
 
 ## Development
 
@@ -95,8 +97,9 @@ The userscript is the source of the VCC runtime. The extension build copies that
 adds `extension/src/gm-compat.js` before it, so Chrome and Firefox can provide the same
 `GM_getValue`, `GM_setValue`, `GM_deleteValue`, and `GM_listValues` calls used by Tampermonkey.
 
-The browser extension uses `activeTab` and `scripting` instead of broad host permissions. VCC is
-injected into the current tab only after the user clicks the extension button.
+The browser extension loads the local VCC interface on ordinary web pages so `H` can always open the
+panel. Video discovery and control only start after the user explicitly activates the current
+domain. All preferences remain in local extension storage.
 
 ## Store Submission
 

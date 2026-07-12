@@ -19,8 +19,9 @@ panel for your own viewing workflow.
 VCC is designed for personal browser use. It does not download media, extract streams, remove ads,
 bypass paywalls, or attempt to defeat DRM/content protection.
 
-To use it, open a page with an HTML5 video and click the VCC extension button. The extension only
-injects its controls into the active tab after that click.
+Press `H` on any ordinary web page, or click the extension button, to open VCC. On a domain that has
+not been activated, the panel shows general settings and a clear activation prompt; VCC does not
+scan for or control videos until the user activates that domain.
 
 ## Single Purpose
 
@@ -28,12 +29,12 @@ VCC provides personal playback controls for HTML5 video elements in the active b
 
 ## Permission Justifications
 
-`activeTab`: Lets VCC run only in the current tab after the user clicks the extension button.
-
-`scripting`: Injects the local VCC control scripts into the active tab after user action.
+`<all_urls>`: Loads the local VCC interface so the `H` shortcut and settings panel are available on
+ordinary web pages. Video detection and control remain disabled until the user explicitly activates
+the current domain.
 
 `storage`: Saves local preferences such as playback speed, shortcuts, panel opacity, and site
-settings.
+settings and the list of domains activated by the user.
 
 ## Privacy Disclosure
 
