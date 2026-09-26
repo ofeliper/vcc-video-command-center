@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>VCC</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../assets/icon-32.png" alt="" width="20" height="20">
+    <h1>VCC</h1>
+    <span id="site" class="site"></span>
+  </header>
+
+  <!-- Página onde extensões não podem rodar (about:, loja de extensões etc.) -->
+  <section id="unsupported" hidden>
+    <p class="muted">O VCC não funciona nesta página. Abra um site comum para usar o painel.</p>
+  </section>
+
+  <!-- Sem permissão para acessar o site -->
+  <section id="no-access" hidden>
+    <p class="status warn">● Sem acesso a este site</p>
+    <p class="muted">Para o VCC funcionar aqui, permita que ele acesse o site.</p>
+    <button id="grant-site" class="primary">Permitir neste site</button>
+    <button id="grant-all">Permitir em todos os sites</button>
+    <div id="denied" class="help" hidden>
+      <strong>Permissão não concedida.</strong>
+      Para liberar depois, clique no botão de extensões da barra (ícone de peça de quebra-cabeça),
+      procure o VCC e ative o acesso ao site — ou vá em
+      <em>Gerenciar extensão → Permissões</em> e ative
+      <em>“Acessar seus dados em todos os sites”</em>.
+    </div>
+  </section>
+
+  <!-- Tem permissão, mas o script ainda não está na página -->
+  <section id="needs-reload" hidden>
+    <p class="status ok">● Acesso liberado</p>
+    <p class="muted">Recarregue a página para o VCC começar a funcionar nela.</p>
+    <button id="reload" class="primary">Recarregar página</button>
+  </section>
+
+  <!-- Funcionando -->
+  <section id="ready" hidden>
+    <button id="open-panel" class="primary">Abrir painel <kbd>H</kbd></button>
+    <div class="row">
+      <div>
+        <div>Controles de vídeo</div>
+        <div id="active-label" class="muted small"></div>
+      </div>
+      <button id="toggle-site" class="switch" role="switch" aria-checked="false" aria-label="Controles de vídeo neste site"><span></span></button>
+    </div>
+    <p id="reload-hint" class="help" hidden>
+      Desativado. Recarregue a página para interromper os controles já iniciados.
+      <button id="reload-after-off" class="link">Recarregar agora</button>
+    </p>
+  </section>
+
+  <footer id="access-footer" hidden>
+    <span id="access-summary" class="muted small"></span>
+    <button id="grant-all-footer" class="link small" hidden>Liberar todos</button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

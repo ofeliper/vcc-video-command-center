@@ -21,7 +21,7 @@ extension/
     firefox.json                # Firefox extension manifest source
   src/
     gm-compat.js                # GM_* storage shim for extension builds
-    service-worker.js           # Opens/closes the already loaded VCC panel from the toolbar
+    popup.html / popup.js / popup.css  # Toolbar menu: site access, open panel, per-site toggle
 
 tools/
   build-extension.js            # Copies shared sources into dist/
@@ -74,16 +74,36 @@ releases/vcc-firefox.zip
 2. Enable Developer mode.
 3. Click "Load unpacked".
 4. Select `dist/chrome`.
-5. Open a web page and press `H` or click the VCC toolbar button. Activate the domain in the panel
-   before using video controls.
+5. Open a web page and press `H`, or click the VCC toolbar button and choose "Abrir painel". Activate the
+   domain in the panel (or with the toggle in the toolbar menu) before using video controls.
 
 ### Firefox
+
+For a quick test (removed when Firefox restarts):
 
 1. Open `about:debugging#/runtime/this-firefox`.
 2. Click "Load Temporary Add-on".
 3. Select `dist/firefox/manifest.json`.
-4. Open a web page and press `H` or click the VCC toolbar button. Activate the domain in the panel
-   before using video controls.
+
+For a permanent install, submit `releases/vcc-firefox.zip` to addons.mozilla.org (see Store Submission).
+
+On Manifest V3, Firefox lets users withhold site access. The VCC toolbar menu shows whether VCC can
+access the current site and offers "Permitir neste site" / "Permitir em todos os sites"; if the request is
+declined it explains how to grant access later (Extensions button, or Manage Extension → Permissions).
+After access is granted the tab is reloaded so VCC starts on that page.
+
+### Toolbar menu
+
+Clicking the VCC toolbar button opens a small menu that:
+
+- shows whether VCC has access to the current site and requests it when missing;
+- opens the VCC control panel on the page (same as pressing `H`);
+- turns video controls on or off for the current site.
+
+Settings (shortcuts, opacity, active sites, etc.) are kept in the extension's local storage and survive
+browser restarts and updates. They are tied to the extension ID, so keep
+`vcc-video-command-center@ofeliper` unchanged in `extension/manifests/firefox.json`. Settings saved by the
+Tampermonkey userscript live in Tampermonkey's own storage and are not shared with the extension.
 
 ## Development
 
@@ -104,3 +124,15 @@ domain. All preferences remain in local extension storage.
 ## Store Submission
 
 Draft listing copy is available in `store-listing/`. The privacy policy is in `PRIVACY.md`.
+
+Before submitting a new version, bump `version` in `package.json`, both manifests and the userscript header,
+then run:
+
+```bash
+npm run check
+npm run package:extension
+npx web-ext lint -s dist/firefox
+```
+
+Upload `releases/vcc-firefox.zip` at https://addons.mozilla.org/developers/ (the source is not minified or
+bundled, so no separate source upload is needed).

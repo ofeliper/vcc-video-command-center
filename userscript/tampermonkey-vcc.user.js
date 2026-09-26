@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/vcc-userscript
-// @version      0.5.1
+// @version      0.6.0
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       VCC
 // @match        *://*/*
@@ -42,6 +42,9 @@
     return null;
   })();
   const toHTML = s => (ttPolicy ? ttPolicy.createHTML(String(s)) : s);
+
+  // Escapa texto vindo do usuário/armazenamento antes de entrar em HTML.
+  const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 
   // ─────────────────────────────────────────────
   // CONSTANTES
@@ -1031,7 +1034,7 @@
       <div class="vcc-site-warning" role="alert">
         <div class="vcc-site-warning-title">⚠ VCC não está ativo neste site</div>
         <div class="vcc-site-warning-text">Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.</div>
-        <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${domain}</button>
+        <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${esc(domain)}</button>
       </div>`);
     status.querySelector('#vcc-activate-site').addEventListener('click', activateCurrentSite);
   }
@@ -1333,7 +1336,7 @@
       <div class="vcc-kbd-row">
         <span class="vcc-kbd-action">${a.label}</span>
         <span style="display:flex;align-items:center;gap:3px">
-          <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] || '—'}</span>
+          <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] ? esc(KEYS[a.id]) : '—'}</span>
           <button class="vcc-kbd-clear" data-clear="${a.id}" title="Remover atalho">✕</button>
         </span>
       </div>`).join(''));
@@ -1500,18 +1503,18 @@
   }
 
   function siteRowHTML(s, on) {
-    return `<div class="vcc-site-row" data-site="${s}">
-      <div class="vcc-site-name">${s}</div>
-      <div class="vcc-tog${on ? ' on' : ''}" data-site-tog="${s}"><div class="vcc-tog-t"></div></div>
+    return `<div class="vcc-site-row" data-site="${esc(s)}">
+      <div class="vcc-site-name">${esc(s)}</div>
+      <div class="vcc-tog${on ? ' on' : ''}" data-site-tog="${esc(s)}"><div class="vcc-tog-t"></div></div>
     </div>`;
   }
 
   function addSiteRow(s, on) {
     s = normalizeSite(s);
     const list = cpEl.querySelector('#vcc-sites-list');
-    if (!list || list.querySelector(`[data-site="${s}"]`)) return;
+    if (!list || list.querySelector(`[data-site="${CSS.escape(s)}"]`)) return;
     list.insertAdjacentHTML('beforeend', toHTML(siteRowHTML(s, on)));
-    bindSiteToggle(list.querySelector(`[data-site-tog="${s}"]`));
+    bindSiteToggle(list.querySelector(`[data-site-tog="${CSS.escape(s)}"]`));
     setSiteActive(s, on);
   }
 
@@ -1546,11 +1549,14 @@
       let val = ''; try { val = JSON.stringify(GM_getValue(k)); } catch {}
       const line = `${k}: ${val}`;
       return `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:.5px solid rgba(255,255,255,.04)">
-        <span style="color:rgba(255,255,255,.38);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" title="${k}">${k}</span>
-        <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${val}">${val}</span>
-        <button onclick="navigator.clipboard.writeText(${JSON.stringify(line)})" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="Copiar linha">⎘</button>
+        <span style="color:rgba(255,255,255,.38);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" title="${esc(k)}">${esc(k)}</span>
+        <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(val)}">${esc(val)}</span>
+        <button data-copy-line="${esc(line)}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="Copiar linha">⎘</button>
       </div>`;
     }).join(''));
+    list.querySelectorAll('[data-copy-line]').forEach(btn => btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB('⎘ copiado'), () => {});
+    }));
   }
 
   // ─────────────────────────────────────────────
@@ -1737,9 +1743,38 @@
   }
 
   const extensionRuntime = globalThis.browser?.runtime || globalThis.chrome?.runtime;
+  // Mensagens do menu do ícone (popup) da extensão.
+  function handleExtensionMessage(message) {
+    switch (message?.type) {
+      case 'VCC_TOGGLE_PANEL':
+        toggleCPVisibility();
+        return { ok: true };
+      case 'VCC_OPEN_PANEL':
+        if (!state.cpVisible) toggleCPVisibility();
+        return { ok: true };
+      case 'VCC_GET_STATUS':
+        return { ok: true, domain, active: isSiteActive() };
+      case 'VCC_SET_SITE_ACTIVE':
+        if (message.on) {
+          activateCurrentSite();
+        } else {
+          // Remove o domínio e qualquer domínio-pai que o ative.
+          saveActiveSites(getActiveSites().filter(s => !(domain === s || domain.endsWith('.' + s))));
+          if (cpEl) buildCPContent();
+        }
+        return { ok: true, domain, active: isSiteActive(), needsReload: !message.on && videoEngineStarted };
+      default:
+        return null;
+    }
+  }
+
   if (extensionRuntime?.onMessage?.addListener) {
-    extensionRuntime.onMessage.addListener(message => {
-      if (message?.type === 'VCC_TOGGLE_PANEL') storageReady.then(toggleCPVisibility);
+    extensionRuntime.onMessage.addListener((message, _sender, sendResponse) => {
+      if (!String(message?.type || '').startsWith('VCC_')) return false;
+      storageReady
+        .then(() => handleExtensionMessage(message))
+        .then(sendResponse, err => sendResponse({ ok: false, error: String(err) }));
+      return true; // resposta assíncrona (Chrome e Firefox)
     });
   }
 

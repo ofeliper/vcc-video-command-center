@@ -19,7 +19,7 @@ panel for your own viewing workflow.
 VCC is designed for personal browser use. It does not download media, extract streams, remove ads,
 bypass paywalls, or attempt to defeat DRM/content protection.
 
-Press `H` on any ordinary web page, or click the extension button, to open VCC. On a domain that has
+Press `H` on any ordinary web page, or click the extension button and choose "Abrir painel", to open VCC. On a domain that has
 not been activated, the panel shows general settings and a clear activation prompt; VCC does not
 scan for or control videos until the user activates that domain.
 
@@ -35,6 +35,9 @@ the current domain.
 
 `storage`: Saves local preferences such as playback speed, shortcuts, panel opacity, and site
 settings and the list of domains activated by the user.
+
+`activeTab`: Lets the toolbar menu read the current tab's address when the user clicks the VCC button,
+to show the site name and whether VCC has access to it.
 
 ## Privacy Disclosure
 

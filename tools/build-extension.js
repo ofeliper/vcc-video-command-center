@@ -35,10 +35,12 @@ for (const target of targets) {
     path.join(root, 'extension', 'src', 'gm-compat.js'),
     path.join(outDir, 'src', 'gm-compat.js')
   );
-  copyFile(
-    path.join(root, 'extension', 'src', 'service-worker.js'),
-    path.join(outDir, 'src', 'service-worker.js')
-  );
+  for (const file of ['popup.html', 'popup.js', 'popup.css']) {
+    copyFile(
+      path.join(root, 'extension', 'src', file),
+      path.join(outDir, 'src', file)
+    );
+  }
   copyFile(
     path.join(root, 'userscript', 'tampermonkey-vcc.user.js'),
     path.join(outDir, 'src', 'tampermonkey-vcc.user.js')
