@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/vcc-userscript
-// @version      0.5.0
+// @version      0.5.1
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       VCC
 // @match        *://*/*
@@ -23,6 +23,25 @@
    * bypass paywalls, or attempt to defeat DRM/content protection.
    */
   const storageReady = globalThis.VCC_STORAGE_READY || Promise.resolve();
+
+  // ─────────────────────────────────────────────
+  // TRUSTED TYPES
+  //
+  // Sites como o YouTube exigem TrustedHTML em innerHTML/insertAdjacentHTML
+  // (CSP "require-trusted-types-for 'script'"). Sem isso, a primeira
+  // atribuição lança erro e o VCC não monta a barra nem o painel.
+  // Todo HTML do VCC é gerado pelo próprio script, então a política
+  // apenas repassa a string. Em navegadores sem Trusted Types, usa a string.
+  // ─────────────────────────────────────────────
+  const ttPolicy = (() => {
+    const tt = globalThis.trustedTypes;
+    if (!tt?.createPolicy) return null;
+    for (const name of ['vcc-html', 'vcc-html-' + Math.random().toString(36).slice(2)]) {
+      try { return tt.createPolicy(name, { createHTML: s => s }); } catch {}
+    }
+    return null;
+  })();
+  const toHTML = s => (ttPolicy ? ttPolicy.createHTML(String(s)) : s);
 
   // ─────────────────────────────────────────────
   // CONSTANTES
@@ -645,7 +664,7 @@
   function buildCB() {
     cbEl = document.createElement('div');
     cbEl.id = 'vcc-cb';
-    cbEl.innerHTML = `
+    cbEl.innerHTML = toHTML(`
       <button id="vcc-cb-back" title="Z — retroceder">«</button>
       <button id="vcc-cb-slow" title="S — velocidade −">−</button>
       <span   id="vcc-cb-speed" title="Arraste para mover">1.0×</span>
@@ -658,7 +677,7 @@
       <div id="vcc-cb-vol-div"></div>
       <button id="vcc-cb-cfg"  title="H — painel">≡</button>
       <span id="vcc-cb-mode-badge"></span>
-    `;
+    `);
 
     // Posição salva por domínio
     const x = state.cbPos?.x ?? 12;
@@ -792,7 +811,7 @@
     cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
     cpEl.style.setProperty('display', state.cpVisible ? 'flex' : 'none', 'important');
 
-    cpEl.innerHTML = `
+    cpEl.innerHTML = toHTML(`
       <div id="vcc-cp-bar">
         <span id="vcc-cp-title">VCC — Video Command Center</span>
         <div style="display:flex;align-items:center;gap:8px">
@@ -801,7 +820,7 @@
         </div>
       </div>
       <div id="vcc-cp-scroll"><div id="vcc-site-status"></div><div id="vcc-cp-content"></div></div>
-    `;
+    `);
 
     // Mesmo root que o CB: escapa overflow/clip do <body>
     document.documentElement.appendChild(cpEl);
@@ -835,7 +854,7 @@
   function buildCPContent() {
     const content = cpEl.querySelector('#vcc-cp-content');
     renderSiteStatus();
-    content.innerHTML = [
+    content.innerHTML = toHTML([
 
       // ── Reprodução ──
       acc('pb', '▶', 'Reprodução', `
@@ -992,7 +1011,7 @@
         </div>
       `),
 
-    ].join('');
+    ].join(''));
 
     bindCPEvents();
     buildPresets();
@@ -1005,15 +1024,15 @@
     const status = cpEl?.querySelector('#vcc-site-status');
     if (!status) return;
     if (state.videoControlsActive) {
-      status.innerHTML = '';
+      status.innerHTML = toHTML('');
       return;
     }
-    status.innerHTML = `
+    status.innerHTML = toHTML(`
       <div class="vcc-site-warning" role="alert">
         <div class="vcc-site-warning-title">⚠ VCC não está ativo neste site</div>
         <div class="vcc-site-warning-text">Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.</div>
         <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${domain}</button>
-      </div>`;
+      </div>`);
     status.querySelector('#vcc-activate-site').addEventListener('click', activateCurrentSite);
   }
 
@@ -1176,9 +1195,9 @@
   // ─────────────────────────────────────────────
   function buildPresets() {
     const grid = cpEl.querySelector('#vcc-presets'); if (!grid) return;
-    grid.innerHTML = PRESET_SPEEDS.map(s =>
+    grid.innerHTML = toHTML(PRESET_SPEEDS.map(s =>
       `<div class="vcc-pc${Math.abs(state.speed - s) < 0.01 ? ' sel' : ''}" data-speed="${s}">${s}×</div>`
-    ).join('') + `<div class="vcc-pc" style="border-style:dashed;color:rgba(255,255,255,.2);font-size:15px" id="vcc-preset-add">+</div>`;
+    ).join('') + `<div class="vcc-pc" style="border-style:dashed;color:rgba(255,255,255,.2);font-size:15px" id="vcc-preset-add">+</div>`);
 
     grid.querySelectorAll('.vcc-pc[data-speed]').forEach(c => {
       c.addEventListener('click', () => setSpeed(parseFloat(c.dataset.speed)));
@@ -1208,10 +1227,10 @@
     const eta = cpEl.querySelector('#vcc-eta'); if (!eta) return;
     const vid = state.videos[state.primaryVideo];
     if (!vid || !isFinite(vid.duration) || vid.duration === 0) {
-      eta.innerHTML = '<span style="color:rgba(255,255,255,.28)">duração não disponível</span>'; return;
+      eta.innerHTML = toHTML('<span style="color:rgba(255,255,255,.28)">duração não disponível</span>'); return;
     }
     const rem = (vid.duration - vid.currentTime) / state.speed;
-    eta.innerHTML = `Faltam <strong>${fmtDuration(rem)}</strong> na velocidade atual de <strong>${fmtSpeed(state.speed)}×</strong>`;
+    eta.innerHTML = toHTML(`Faltam <strong>${fmtDuration(rem)}</strong> na velocidade atual de <strong>${fmtSpeed(state.speed)}×</strong>`);
   }
 
   // ─────────────────────────────────────────────
@@ -1219,7 +1238,7 @@
   // ─────────────────────────────────────────────
   function buildVideoList() {
     const list = cpEl ? cpEl.querySelector('#vcc-vid-list') : null; if (!list) return;
-    list.innerHTML = '';
+    list.innerHTML = toHTML('');
 
     state.videos.forEach((vid, i) => {
       if (!vid.isConnected) return;
@@ -1232,7 +1251,7 @@
 
       const row = document.createElement('div');
       row.className = 'vcc-vrow';
-      row.innerHTML = `
+      row.innerHTML = toHTML(`
         <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${isPrimary ? 'Vídeo principal' : 'Definir como vídeo principal'}">${isPrimary ? '★' : '#' + (i + 1)}</div>
         <div style="flex:1;min-width:0">
           <div class="vcc-vname">${srcLabel}${isPrimary ? '<span class="vcc-primary-badge">principal</span>' : ''}</div>
@@ -1246,7 +1265,7 @@
           <button class="vcc-vid-btn danger" data-act="remove" title="Remover da página">✕</button>
         </div>
         <div class="vcc-chk${isTarget ? ' on' : ''}" data-vidx="${i}">${isTarget ? '✓' : ''}</div>
-      `;
+      `);
 
       row.querySelector('.vcc-vthumb').addEventListener('click', () => {
         state.primaryVideo = i;
@@ -1310,17 +1329,17 @@
   function buildKeysList() {
     const list = cpEl.querySelector('#vcc-keys-list'); if (!list) return;
 
-    list.innerHTML = KEY_ACTIONS.map(a => `
+    list.innerHTML = toHTML(KEY_ACTIONS.map(a => `
       <div class="vcc-kbd-row">
         <span class="vcc-kbd-action">${a.label}</span>
         <span style="display:flex;align-items:center;gap:3px">
           <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] || '—'}</span>
           <button class="vcc-kbd-clear" data-clear="${a.id}" title="Remover atalho">✕</button>
         </span>
-      </div>`).join('');
+      </div>`).join(''));
 
     // Numerais fixos (não editáveis)
-    list.innerHTML += `
+    list.innerHTML = toHTML(list.innerHTML + `
       <div class="vcc-kbd-row" style="opacity:.5">
         <span class="vcc-kbd-action">Play / pause do vídeo principal (fixo)</span>
         <span class="vcc-kbd-key" style="cursor:default">0</span>
@@ -1332,7 +1351,7 @@
           <span class="vcc-kbd-key" style="cursor:default">…</span>
           <span class="vcc-kbd-key" style="cursor:default">7</span>
         </span>
-      </div>`;
+      </div>`);
 
     list.querySelectorAll('.vcc-kbd-key[data-action]').forEach(el => el.addEventListener('click', () => startCapture(el)));
 
@@ -1491,7 +1510,7 @@
     s = normalizeSite(s);
     const list = cpEl.querySelector('#vcc-sites-list');
     if (!list || list.querySelector(`[data-site="${s}"]`)) return;
-    list.insertAdjacentHTML('beforeend', siteRowHTML(s, on));
+    list.insertAdjacentHTML('beforeend', toHTML(siteRowHTML(s, on)));
     bindSiteToggle(list.querySelector(`[data-site-tog="${s}"]`));
     setSiteActive(s, on);
   }
@@ -1522,8 +1541,8 @@
   function refreshStorageList() {
     const list = cpEl?.querySelector('#vcc-storage-list'); if (!list) return;
     const keys = getAllVccKeys();
-    if (!keys.length) { list.innerHTML = '<span style="color:rgba(255,255,255,.25)">(nenhum dado salvo)</span>'; return; }
-    list.innerHTML = keys.map(k => {
+    if (!keys.length) { list.innerHTML = toHTML('<span style="color:rgba(255,255,255,.25)">(nenhum dado salvo)</span>'); return; }
+    list.innerHTML = toHTML(keys.map(k => {
       let val = ''; try { val = JSON.stringify(GM_getValue(k)); } catch {}
       const line = `${k}: ${val}`;
       return `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:.5px solid rgba(255,255,255,.04)">
@@ -1531,7 +1550,7 @@
         <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${val}">${val}</span>
         <button onclick="navigator.clipboard.writeText(${JSON.stringify(line)})" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="Copiar linha">⎘</button>
       </div>`;
-    }).join('');
+    }).join(''));
   }
 
   // ─────────────────────────────────────────────
@@ -1562,12 +1581,12 @@
   function updateLoopStatus() {
     const el = cpEl?.querySelector('#vcc-loop-status'); if (!el) return;
     if (loopA === null && loopB === null) {
-      el.innerHTML = '<span class="none">nenhum loop configurado</span>'; return;
+      el.innerHTML = toHTML('<span class="none">nenhum loop configurado</span>'); return;
     }
     const aStr = loopA !== null ? `<span class="pt">${fmtTimecode(loopA)}</span>` : '<span class="none">não definido</span>';
     const bStr = loopB !== null ? `<span class="pt">${fmtTimecode(loopB)}</span>` : '<span class="none">não definido</span>';
     const active = loopA !== null && loopB !== null;
-    el.innerHTML = `A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? ' &nbsp;<span style="color:#5DCAA5;font-size:9px">● ativo</span>' : ''}`;
+    el.innerHTML = toHTML(`A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? ' &nbsp;<span style="color:#5DCAA5;font-size:9px">● ativo</span>' : ''}`);
   }
 
   // ─────────────────────────────────────────────
@@ -1604,14 +1623,14 @@
 
   function renderCompatibility() {
     const el = cpEl?.querySelector('#vcc-compat'); if (!el) return;
-    el.innerHTML = COMPAT_CHECKS.map(c => {
+    el.innerHTML = toHTML(COMPAT_CHECKS.map(c => {
       const st = c.check ? c.check() : 'ok';
       const [dot, cls, tag] = st === 'ok' ? ['#5DCAA5','vcc-ok','disponível'] : st === 'partial' ? ['#EF9F27','vcc-warn','parcial'] : ['#E24B4A','vcc-err','indisponível'];
       return `<div class="vcc-ci">
         <div class="vcc-cdot" style="background:${dot}"></div>
         <div class="vcc-ct">${c.label} — <span class="vcc-ctag ${cls}">${tag}</span>${(c.note && st !== 'ok') ? ' — ' + c.note : ''}</div>
       </div>`;
-    }).join('');
+    }).join(''));
   }
 
   // ─────────────────────────────────────────────
