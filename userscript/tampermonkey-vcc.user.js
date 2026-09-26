@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/vcc-userscript
-// @version      0.6.0
+// @version      0.6.1
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       VCC
 // @match        *://*/*
@@ -43,8 +43,39 @@
   })();
   const toHTML = s => (ttPolicy ? ttPolicy.createHTML(String(s)) : s);
 
-  // Escapa texto vindo do usuário/armazenamento antes de entrar em HTML.
-  const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  // ─────────────────────────────────────────────
+  // HTML SEGURO
+  //
+  // Todo HTML do VCC é montado com a tag escapeHTML`...`: cada valor
+  // interpolado é escapado, a não ser que já seja HTML seguro (outro
+  // escapeHTML`...` ou uma lista deles). setSafeHTML()/appendSafeHTML()
+  // aplicam o resultado na página (via TrustedHTML quando exigido).
+  // ─────────────────────────────────────────────
+  class SafeHTML {
+    constructor(html) { this.html = html; }
+    toString() { return this.html; }
+  }
+  const escapeText = v => String(v).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  const htmlPiece = v =>
+    v instanceof SafeHTML ? v.html
+    : Array.isArray(v) ? v.map(htmlPiece).join('')
+    : (v === null || v === undefined || v === false) ? ''
+    : escapeText(v);
+  function escapeHTML(strings, ...values) {
+    let out = strings[0];
+    values.forEach((v, i) => { out += htmlPiece(v) + strings[i + 1]; });
+    return new SafeHTML(out);
+  }
+
+  // Insere HTML seguro na página: o texto é convertido em elementos por um
+  // DOMParser (documento inerte, sem executar scripts) e os nós são movidos
+  // para o destino. Não usa innerHTML.
+  function safeHTMLToNodes(v) {
+    const doc = new DOMParser().parseFromString(toHTML(htmlPiece(v)), 'text/html');
+    return [...doc.body.childNodes];
+  }
+  function setSafeHTML(el, v) { el.replaceChildren(...safeHTMLToNodes(v)); }
+  function appendSafeHTML(el, v) { el.append(...safeHTMLToNodes(v)); }
 
   // ─────────────────────────────────────────────
   // CONSTANTES
@@ -667,7 +698,7 @@
   function buildCB() {
     cbEl = document.createElement('div');
     cbEl.id = 'vcc-cb';
-    cbEl.innerHTML = toHTML(`
+    setSafeHTML(cbEl, escapeHTML`
       <button id="vcc-cb-back" title="Z — retroceder">«</button>
       <button id="vcc-cb-slow" title="S — velocidade −">−</button>
       <span   id="vcc-cb-speed" title="Arraste para mover">1.0×</span>
@@ -814,7 +845,7 @@
     cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
     cpEl.style.setProperty('display', state.cpVisible ? 'flex' : 'none', 'important');
 
-    cpEl.innerHTML = toHTML(`
+    setSafeHTML(cpEl, escapeHTML`
       <div id="vcc-cp-bar">
         <span id="vcc-cp-title">VCC — Video Command Center</span>
         <div style="display:flex;align-items:center;gap:8px">
@@ -837,7 +868,7 @@
   // ── helpers de template ──
   function acc(id, icon, label, content, open = false, videoFeature = false) {
     const featureClass = videoFeature ? ` vcc-video-feature${state.videoControlsActive ? '' : ' vcc-disabled'}` : '';
-    return `<div class="vcc-acc${featureClass}">
+    return escapeHTML`<div class="vcc-acc${featureClass}">
       <button class="vcc-acc-hdr" data-acc="${id}">
         <span class="vcc-acc-hdr-left"><span class="vcc-acc-icon">${icon}</span>${label}</span>
         <span class="vcc-arr${open ? ' open' : ''}" id="vcc-arr-${id}">›</span>
@@ -848,8 +879,8 @@
 
   function tog(id, on, label, sub = '', videoControl = false) {
     const controlClass = videoControl ? ` vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}` : '';
-    return `<div class="vcc-row${controlClass}">
-      <div><div class="vcc-row-label">${label}</div>${sub ? `<div class="vcc-row-sub">${sub}</div>` : ''}</div>
+    return escapeHTML`<div class="vcc-row${controlClass}">
+      <div><div class="vcc-row-label">${label}</div>${sub ? escapeHTML`<div class="vcc-row-sub">${sub}</div>` : ''}</div>
       <div class="vcc-tog${on ? ' on' : ''}" id="vcc-tog-${id}"><div class="vcc-tog-t"></div></div>
     </div>`;
   }
@@ -857,10 +888,10 @@
   function buildCPContent() {
     const content = cpEl.querySelector('#vcc-cp-content');
     renderSiteStatus();
-    content.innerHTML = toHTML([
+    setSafeHTML(content, [
 
       // ── Reprodução ──
-      acc('pb', '▶', 'Reprodução', `
+      acc('pb', '▶', 'Reprodução', escapeHTML`
         <div class="vcc-spd-row">
           <button class="vcc-spd-btn" id="vcc-spd-minus">−</button>
           <input class="vcc-spd-in" id="vcc-spd-input" type="number" min="0.1" max="16" step="0.1" value="1.0">
@@ -879,7 +910,7 @@
       `, true, true),
 
       // ── Áudio ──
-      acc('au', '♪', 'Áudio', `
+      acc('au', '♪', 'Áudio', escapeHTML`
         <div class="vcc-slr"><label>Volume</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? 'MUDO' : Math.round(state.volume * 100) + '%'}</span></div>
         <div class="vcc-abts"><button class="vcc-abt" id="vcc-volume-down">🔉 diminuir</button><button class="vcc-abt" id="vcc-volume-mute">${state.muted ? 'restaurar volume' : 'mudo'}</button><button class="vcc-abt" id="vcc-volume-up">aumentar 🔊</button></div>
         ${tog('boost', true, 'Volume boost', 'Amplifica além de 100%')}
@@ -889,7 +920,7 @@
       `, false, true),
 
       // ── Navegação avançada ──
-      acc('nv', '⊹', 'Navegação avançada', `
+      acc('nv', '⊹', 'Navegação avançada', escapeHTML`
         ${tog('loopab', false, 'Loop A→B', 'Repetir trecho entre dois pontos')}
         <div class="vcc-abts" style="margin-bottom:4px">
           <button class="vcc-abt" id="vcc-loop-a">marcar ponto A</button>
@@ -910,7 +941,7 @@
       `, false, true),
 
       // ── Visual ──
-      acc('vs', '◑', 'Visual', `
+      acc('vs', '◑', 'Visual', escapeHTML`
         ${tog('invert', false, 'Inversão de cores', 'Útil para assistir no escuro', true)}
         <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label>Brilho</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
         <p class="vcc-sub-title" style="margin-top:8px">Opacidade</p>
@@ -919,7 +950,7 @@
       `),
 
       // ── Vídeos na página ──
-      acc('vi', '▣', 'Vídeos na página', `
+      acc('vi', '▣', 'Vídeos na página', escapeHTML`
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
           <span class="vcc-sub-title" style="margin:0" id="vcc-vid-count">0 vídeos detectados</span>
           <button class="vcc-abt" id="vcc-vid-all">selecionar todos</button>
@@ -929,7 +960,7 @@
       `, false, true),
 
       // ── Atalhos de teclado ──
-      acc('ks', '⌨', 'Atalhos de teclado', `
+      acc('ks', '⌨', 'Atalhos de teclado', escapeHTML`
         <div class="vcc-scope-tabs" id="vcc-scope-tabs">
           <button class="vcc-scope-tab active" data-scope="default">padrão (global)</button>
           <button class="vcc-scope-tab" data-scope="${domain}">${domain}</button>
@@ -945,7 +976,7 @@
       `),
 
       // ── Comportamento ──
-      acc('beh', '⚙', 'Comportamento', `
+      acc('beh', '⚙', 'Comportamento', escapeHTML`
         <p class="vcc-sub-title">Valores de incremento</p>
         <div class="vcc-slr">
           <label>Passo velocidade</label>
@@ -979,13 +1010,13 @@
       `),
 
       // ── Sites ativos ──
-      acc('si', '◈', 'Sites ativos', `
+      acc('si', '◈', 'Sites ativos', escapeHTML`
         <div id="vcc-sites-list">${buildSitesList()}</div>
         <div class="vcc-abts"><button class="vcc-abt" id="vcc-add-site">+ adicionar domínio</button></div>
       `),
 
       // ── Estatísticas e compatibilidade ──
-      acc('st', '◎', 'Estatísticas e compatibilidade', `
+      acc('st', '◎', 'Estatísticas e compatibilidade', escapeHTML`
         <div class="vcc-stat-grid">
           <div class="vcc-sc"><div class="vcc-sv" id="stat-saved">0s</div><div class="vcc-sl">tempo economizado</div></div>
           <div class="vcc-sc"><div class="vcc-sv" id="stat-watched">0s</div><div class="vcc-sl">assistido nesta sessão</div></div>
@@ -997,7 +1028,7 @@
       `, false, true),
 
       // ── Dados salvos ──
-      acc('data', '⊟', 'Dados salvos e redefinições', `
+      acc('data', '⊟', 'Dados salvos e redefinições', escapeHTML`
         <p class="vcc-sub-title">Dados armazenados pelo VCC</p>
         <div id="vcc-storage-list" style="margin-bottom:8px;font-family:monospace;font-size:10px;color:rgba(255,255,255,0.42);line-height:1.8"></div>
         <div class="vcc-abts" style="margin-bottom:12px">
@@ -1014,7 +1045,7 @@
         </div>
       `),
 
-    ].join(''));
+    ]);
 
     bindCPEvents();
     buildPresets();
@@ -1027,14 +1058,14 @@
     const status = cpEl?.querySelector('#vcc-site-status');
     if (!status) return;
     if (state.videoControlsActive) {
-      status.innerHTML = toHTML('');
+      status.replaceChildren();
       return;
     }
-    status.innerHTML = toHTML(`
+    setSafeHTML(status, escapeHTML`
       <div class="vcc-site-warning" role="alert">
         <div class="vcc-site-warning-title">⚠ VCC não está ativo neste site</div>
         <div class="vcc-site-warning-text">Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.</div>
-        <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${esc(domain)}</button>
+        <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${domain}</button>
       </div>`);
     status.querySelector('#vcc-activate-site').addEventListener('click', activateCurrentSite);
   }
@@ -1198,9 +1229,9 @@
   // ─────────────────────────────────────────────
   function buildPresets() {
     const grid = cpEl.querySelector('#vcc-presets'); if (!grid) return;
-    grid.innerHTML = toHTML(PRESET_SPEEDS.map(s =>
-      `<div class="vcc-pc${Math.abs(state.speed - s) < 0.01 ? ' sel' : ''}" data-speed="${s}">${s}×</div>`
-    ).join('') + `<div class="vcc-pc" style="border-style:dashed;color:rgba(255,255,255,.2);font-size:15px" id="vcc-preset-add">+</div>`);
+    setSafeHTML(grid, escapeHTML`${PRESET_SPEEDS.map(s =>
+      escapeHTML`<div class="vcc-pc${Math.abs(state.speed - s) < 0.01 ? ' sel' : ''}" data-speed="${s}">${s}×</div>`
+    )}<div class="vcc-pc" style="border-style:dashed;color:rgba(255,255,255,.2);font-size:15px" id="vcc-preset-add">+</div>`);
 
     grid.querySelectorAll('.vcc-pc[data-speed]').forEach(c => {
       c.addEventListener('click', () => setSpeed(parseFloat(c.dataset.speed)));
@@ -1230,10 +1261,10 @@
     const eta = cpEl.querySelector('#vcc-eta'); if (!eta) return;
     const vid = state.videos[state.primaryVideo];
     if (!vid || !isFinite(vid.duration) || vid.duration === 0) {
-      eta.innerHTML = toHTML('<span style="color:rgba(255,255,255,.28)">duração não disponível</span>'); return;
+      setSafeHTML(eta, escapeHTML`<span style="color:rgba(255,255,255,.28)">duração não disponível</span>`); return;
     }
     const rem = (vid.duration - vid.currentTime) / state.speed;
-    eta.innerHTML = toHTML(`Faltam <strong>${fmtDuration(rem)}</strong> na velocidade atual de <strong>${fmtSpeed(state.speed)}×</strong>`);
+    setSafeHTML(eta, escapeHTML`Faltam <strong>${fmtDuration(rem)}</strong> na velocidade atual de <strong>${fmtSpeed(state.speed)}×</strong>`);
   }
 
   // ─────────────────────────────────────────────
@@ -1241,7 +1272,7 @@
   // ─────────────────────────────────────────────
   function buildVideoList() {
     const list = cpEl ? cpEl.querySelector('#vcc-vid-list') : null; if (!list) return;
-    list.innerHTML = toHTML('');
+    list.replaceChildren();
 
     state.videos.forEach((vid, i) => {
       if (!vid.isConnected) return;
@@ -1254,10 +1285,10 @@
 
       const row = document.createElement('div');
       row.className = 'vcc-vrow';
-      row.innerHTML = toHTML(`
+      setSafeHTML(row, escapeHTML`
         <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${isPrimary ? 'Vídeo principal' : 'Definir como vídeo principal'}">${isPrimary ? '★' : '#' + (i + 1)}</div>
         <div style="flex:1;min-width:0">
-          <div class="vcc-vname">${srcLabel}${isPrimary ? '<span class="vcc-primary-badge">principal</span>' : ''}</div>
+          <div class="vcc-vname">${srcLabel}${isPrimary ? escapeHTML`<span class="vcc-primary-badge">principal</span>` : ''}</div>
           <div class="vcc-vmeta">${res} · ${dur}</div>
         </div>
         <div class="vcc-vid-actions">
@@ -1332,17 +1363,17 @@
   function buildKeysList() {
     const list = cpEl.querySelector('#vcc-keys-list'); if (!list) return;
 
-    list.innerHTML = toHTML(KEY_ACTIONS.map(a => `
+    const keyRows = KEY_ACTIONS.map(a => escapeHTML`
       <div class="vcc-kbd-row">
         <span class="vcc-kbd-action">${a.label}</span>
         <span style="display:flex;align-items:center;gap:3px">
-          <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] ? esc(KEYS[a.id]) : '—'}</span>
+          <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] || '—'}</span>
           <button class="vcc-kbd-clear" data-clear="${a.id}" title="Remover atalho">✕</button>
         </span>
-      </div>`).join(''));
+      </div>`);
 
     // Numerais fixos (não editáveis)
-    list.innerHTML = toHTML(list.innerHTML + `
+    setSafeHTML(list, escapeHTML`${keyRows}
       <div class="vcc-kbd-row" style="opacity:.5">
         <span class="vcc-kbd-action">Play / pause do vídeo principal (fixo)</span>
         <span class="vcc-kbd-key" style="cursor:default">0</span>
@@ -1498,14 +1529,13 @@
   function buildSitesList() {
     const sites = [domain, ...getActiveSites()];
     return [...new Set(sites.map(normalizeSite).filter(Boolean))]
-      .map(s => siteRowHTML(s, isSiteActive(s)))
-      .join('');
+      .map(s => siteRowHTML(s, isSiteActive(s)));
   }
 
   function siteRowHTML(s, on) {
-    return `<div class="vcc-site-row" data-site="${esc(s)}">
-      <div class="vcc-site-name">${esc(s)}</div>
-      <div class="vcc-tog${on ? ' on' : ''}" data-site-tog="${esc(s)}"><div class="vcc-tog-t"></div></div>
+    return escapeHTML`<div class="vcc-site-row" data-site="${s}">
+      <div class="vcc-site-name">${s}</div>
+      <div class="vcc-tog${on ? ' on' : ''}" data-site-tog="${s}"><div class="vcc-tog-t"></div></div>
     </div>`;
   }
 
@@ -1513,7 +1543,7 @@
     s = normalizeSite(s);
     const list = cpEl.querySelector('#vcc-sites-list');
     if (!list || list.querySelector(`[data-site="${CSS.escape(s)}"]`)) return;
-    list.insertAdjacentHTML('beforeend', toHTML(siteRowHTML(s, on)));
+    appendSafeHTML(list, siteRowHTML(s, on));
     bindSiteToggle(list.querySelector(`[data-site-tog="${CSS.escape(s)}"]`));
     setSiteActive(s, on);
   }
@@ -1544,16 +1574,16 @@
   function refreshStorageList() {
     const list = cpEl?.querySelector('#vcc-storage-list'); if (!list) return;
     const keys = getAllVccKeys();
-    if (!keys.length) { list.innerHTML = toHTML('<span style="color:rgba(255,255,255,.25)">(nenhum dado salvo)</span>'); return; }
-    list.innerHTML = toHTML(keys.map(k => {
+    if (!keys.length) { setSafeHTML(list, escapeHTML`<span style="color:rgba(255,255,255,.25)">(nenhum dado salvo)</span>`); return; }
+    setSafeHTML(list, keys.map(k => {
       let val = ''; try { val = JSON.stringify(GM_getValue(k)); } catch {}
       const line = `${k}: ${val}`;
-      return `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:.5px solid rgba(255,255,255,.04)">
-        <span style="color:rgba(255,255,255,.38);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" title="${esc(k)}">${esc(k)}</span>
-        <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(val)}">${esc(val)}</span>
-        <button data-copy-line="${esc(line)}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="Copiar linha">⎘</button>
+      return escapeHTML`<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:.5px solid rgba(255,255,255,.04)">
+        <span style="color:rgba(255,255,255,.38);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" title="${k}">${k}</span>
+        <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${val}">${val}</span>
+        <button data-copy-line="${line}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="Copiar linha">⎘</button>
       </div>`;
-    }).join(''));
+    }));
     list.querySelectorAll('[data-copy-line]').forEach(btn => btn.addEventListener('click', () => {
       navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB('⎘ copiado'), () => {});
     }));
@@ -1587,12 +1617,12 @@
   function updateLoopStatus() {
     const el = cpEl?.querySelector('#vcc-loop-status'); if (!el) return;
     if (loopA === null && loopB === null) {
-      el.innerHTML = toHTML('<span class="none">nenhum loop configurado</span>'); return;
+      setSafeHTML(el, escapeHTML`<span class="none">nenhum loop configurado</span>`); return;
     }
-    const aStr = loopA !== null ? `<span class="pt">${fmtTimecode(loopA)}</span>` : '<span class="none">não definido</span>';
-    const bStr = loopB !== null ? `<span class="pt">${fmtTimecode(loopB)}</span>` : '<span class="none">não definido</span>';
+    const aStr = loopA !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopA)}</span>` : escapeHTML`<span class="none">não definido</span>`;
+    const bStr = loopB !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopB)}</span>` : escapeHTML`<span class="none">não definido</span>`;
     const active = loopA !== null && loopB !== null;
-    el.innerHTML = toHTML(`A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? ' &nbsp;<span style="color:#5DCAA5;font-size:9px">● ativo</span>' : ''}`);
+    setSafeHTML(el, `A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? escapeHTML` &nbsp;<span style="color:#5DCAA5;font-size:9px">● ativo</span>` : ''}`);
   }
 
   // ─────────────────────────────────────────────
@@ -1629,14 +1659,14 @@
 
   function renderCompatibility() {
     const el = cpEl?.querySelector('#vcc-compat'); if (!el) return;
-    el.innerHTML = toHTML(COMPAT_CHECKS.map(c => {
+    setSafeHTML(el, COMPAT_CHECKS.map(c => {
       const st = c.check ? c.check() : 'ok';
       const [dot, cls, tag] = st === 'ok' ? ['#5DCAA5','vcc-ok','disponível'] : st === 'partial' ? ['#EF9F27','vcc-warn','parcial'] : ['#E24B4A','vcc-err','indisponível'];
-      return `<div class="vcc-ci">
+      return escapeHTML`<div class="vcc-ci">
         <div class="vcc-cdot" style="background:${dot}"></div>
         <div class="vcc-ct">${c.label} — <span class="vcc-ctag ${cls}">${tag}</span>${(c.note && st !== 'ok') ? ' — ' + c.note : ''}</div>
       </div>`;
-    }).join(''));
+    }));
   }
 
   // ─────────────────────────────────────────────
