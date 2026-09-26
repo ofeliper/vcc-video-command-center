@@ -1,19 +1,3 @@
-// ==UserScript==
-// @name         VCC — Video Command Center
-// @namespace    https://github.com/vcc-userscript
-// @version      0.6.1
-// @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
-// @author       VCC
-// @match        *://*/*
-// @grant        GM_setValue
-// @grant        GM_getValue
-// @grant        GM_deleteValue
-// @grant        GM_listValues
-// @run-at       document-idle
-// @updateURL    https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/userscript/tampermonkey-vcc.user.js
-// @downloadURL  https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/userscript/tampermonkey-vcc.user.js
-// ==/UserScript==
-
 (function () {
   'use strict';
 

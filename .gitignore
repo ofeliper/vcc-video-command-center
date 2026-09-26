@@ -1,4 +1,6 @@
-dist/
+# Saída do build. Só o userscript é versionado (o Tampermonkey o baixa do GitHub).
+dist/*
+!dist/userscript/
 releases/
 node_modules/
 *.zip

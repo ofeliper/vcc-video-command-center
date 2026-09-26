@@ -1,0 +1,17 @@
+// ==UserScript==
+// @name         VCC — Video Command Center
+// @namespace    https://github.com/ofeliper/vcc-video-command-center
+// @version      {{version}}
+// @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
+// @author       ofeliper
+// @homepageURL  https://github.com/ofeliper/vcc-video-command-center
+// @supportURL   https://github.com/ofeliper/vcc-video-command-center/issues
+// @match        *://*/*
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_deleteValue
+// @grant        GM_listValues
+// @run-at       document-idle
+// @updateURL    https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/dist/userscript/vcc.user.js
+// @downloadURL  https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/dist/userscript/vcc.user.js
+// ==/UserScript==

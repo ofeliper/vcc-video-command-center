@@ -1,11 +1,17 @@
 {
   "name": "vcc-video-command-center",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "description": "Centro de controle local para players HTML5.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ofeliper/vcc-video-command-center.git"
+  },
   "scripts": {
-    "build:extension": "node tools/build-extension.js",
-    "package:extension": "node tools/build-extension.js && node tools/package-extension.js",
-    "check": "node --check userscript/tampermonkey-vcc.user.js && node --check extension/src/gm-compat.js && node --check extension/src/popup.js && node --check tools/build-extension.js && node --check tools/package-extension.js"
+    "build": "node tools/build.js",
+    "package": "node tools/build.js && node tools/package.js",
+    "check": "node tools/check.js",
+    "lint:firefox": "npx --yes web-ext@latest lint -s dist/firefox",
+    "release": "node tools/build.js && node tools/check.js && node tools/package.js && npx --yes web-ext@latest lint -s dist/firefox"
   }
 }

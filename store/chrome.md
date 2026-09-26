@@ -1,5 +1,11 @@
 # Chrome Web Store Listing Draft
 
+- **Package:** `releases/vcc-chrome-<version>.zip` (built by `npm run package`)
+- **Screenshots:** [`screenshots/`](screenshots/) — 1280×800, same set as the Firefox listing
+- **Store icon:** `assets/icons/icon-128.png`
+- **Small promo tile (440×280):** not created yet
+- Descriptions in Portuguese: reuse the texts in [`firefox.md`](firefox.md)
+
 ## Name
 
 VCC - Video Command Center

@@ -1,8 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+// Compacta dist/chrome e dist/firefox em releases/vcc-<navegador>-<versão>.zip,
+// prontos para enviar às lojas. Rode depois de tools/build.js.
+const { version, TARGETS: targets } = require('./build');
+
 const root = path.resolve(__dirname, '..');
-const targets = ['chrome', 'firefox'];
 
 const crcTable = new Uint32Array(256).map((_, n) => {
   let c = n;
@@ -96,9 +99,9 @@ function writeZip(sourceDir, zipPath) {
 for (const target of targets) {
   const sourceDir = path.join(root, 'dist', target);
   if (!fs.existsSync(sourceDir)) {
-    throw new Error(`Missing ${sourceDir}. Run build-extension first.`);
+    throw new Error(`Missing ${sourceDir}. Run "npm run build" first.`);
   }
-  const zipPath = path.join(root, 'releases', `vcc-${target}.zip`);
-  writeZip(sourceDir, zipPath);
-  console.log(`Packaged releases/vcc-${target}.zip`);
+  const zipName = `vcc-${target}-${version}.zip`;
+  writeZip(sourceDir, path.join(root, 'releases', zipName));
+  console.log(`Packaged releases/${zipName}`);
 }
