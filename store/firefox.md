@@ -8,6 +8,7 @@ Textos usados na página do VCC. Mantenha este arquivo em dia quando mudar a pá
   (não usar `video downloader`, `video converter` nem `user scripts`: o VCC não faz nada disso)
 - **Página inicial:** https://github.com/ofeliper/vcc-video-command-center
 - **Site de suporte:** https://github.com/ofeliper/vcc-video-command-center/issues
+- **E-mail de suporte:** ofeliper.dev@gmail.com
 - **Política de privacidade:** conteúdo de [`PRIVACY.md`](../PRIVACY.md)
 - **Ícone:** `assets/icons/icon-128.png`
 - **Capturas:** 1280×800, nesta ordem (a primeira é o destaque) —

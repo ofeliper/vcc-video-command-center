@@ -23,3 +23,8 @@ and an explicit action to activate video controls for that domain.
 The broad site permission is used only to run this local interface and, on domains explicitly
 activated by the user, control HTML5 video elements already loaded in the page. Browsing activity
 and page content are not transmitted or shared.
+
+## Contact
+
+Questions about this policy or about VCC: ofeliper.dev@gmail.com, or open an issue at
+https://github.com/ofeliper/vcc-video-command-center/issues.

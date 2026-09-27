@@ -257,4 +257,4 @@ desenvolvedor e legendas das capturas) e as capturas nos dois idiomas estão em 
 
 Encontrou um problema ou tem uma sugestão? Abra uma
 [issue](https://github.com/ofeliper/vcc-video-command-center/issues) informando o site, o navegador
-e a versão do VCC.
+e a versão do VCC. Para assuntos que não cabem numa issue: ofeliper.dev@gmail.com.

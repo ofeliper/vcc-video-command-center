@@ -135,6 +135,7 @@ Ordem das capturas: 1 painel, 2 menu do ícone, 3 atalhos, 4 vários vídeos.
   entra nisso.
 - **URL da página inicial:** https://github.com/ofeliper/vcc-video-command-center
 - **URL de suporte:** https://github.com/ofeliper/vcc-video-command-center/issues
+- **E-mail de contato do publisher** (em Configurações da conta, precisa ser verificado): ofeliper.dev@gmail.com
 - **Conteúdo adulto:** não.
 
 ---
