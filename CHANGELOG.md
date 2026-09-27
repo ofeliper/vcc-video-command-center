@@ -3,6 +3,18 @@
 Todas as mudanças relevantes do VCC. A versão é a mesma para a extensão (Firefox e Chrome) e para o
 userscript do Tampermonkey.
 
+## [0.7.1] — 2026-09-27
+
+### Corrigido
+- Não dava para arrastar a barra de controle: a posição nova era anulada pela proteção de estilo da
+  barra (`all: initial !important`) e ela ia parar fora da tela, e essa posição errada ficava salva.
+- A posição salva da barra agora é sempre mantida dentro da janela, o que também recupera barras que
+  ficaram fora da tela por causa do bug acima.
+
+### Alterado
+- Opacidade padrão da barra de controle e do painel: 90% (antes 30% e 75%), para facilitar a
+  leitura. Quem já tinha ajustado a opacidade mantém o valor escolhido.
+
 ## [0.7.0] — 2026-09-26
 
 ### Adicionado

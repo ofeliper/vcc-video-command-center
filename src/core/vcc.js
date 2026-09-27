@@ -81,8 +81,8 @@
   // ─────────────────────────────────────────────
   const SPEED_MIN          = 0.1;
   const SPEED_MAX          = 16.0;
-  const CB_OPACITY_DEFAULT = 0.30;
-  const CP_OPACITY_DEFAULT = 0.75;
+  const CB_OPACITY_DEFAULT = 0.90;
+  const CP_OPACITY_DEFAULT = 0.90;
   const PRESET_SPEEDS      = [1.0, 1.25, 1.5, 1.75, 2.0, 3.0, 4.0];
   const SPEED_MAP          = {'1':1.0,'2':1.25,'3':1.5,'4':1.75,'5':2.0,'6':3.0,'7':4.0};
 
@@ -710,9 +710,10 @@
       <span id="vcc-cb-mode-badge"></span>
     `);
 
-    // Posição salva por domínio
-    const x = state.cbPos?.x ?? 12;
-    const y = state.cbPos?.y ?? 12;
+    // Posição salva por domínio, sempre dentro da janela (corrige posições
+    // inválidas salvas por versões antigas ou por uma janela maior).
+    const x = clampToViewport(state.cbPos?.x ?? 12, 40, 'x');
+    const y = clampToViewport(state.cbPos?.y ?? 12, 24, 'y');
     cbEl.style.cssText = `
       all: initial !important;
       position: fixed !important;
@@ -810,6 +811,13 @@
   // ─────────────────────────────────────────────
   // DRAG & DROP
   // ─────────────────────────────────────────────
+  // Mantém uma coordenada dentro da janela, deixando pelo menos `margin` px visíveis.
+  function clampToViewport(v, margin, axis) {
+    const max = (axis === 'x' ? window.innerWidth : window.innerHeight) - margin;
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.max(0, Math.min(Math.max(0, max), Math.round(n))) : 12;
+  }
+
   function makeDraggable(el, handle, onDrop) {
     let startX, startY, origX, origY, dragging = false;
     handle.addEventListener('mousedown', e => {
@@ -822,7 +830,11 @@
       if (!dragging) return;
       const nx = Math.max(0, Math.min(window.innerWidth  - el.offsetWidth,  origX + e.clientX - startX));
       const ny = Math.max(0, Math.min(window.innerHeight - el.offsetHeight, origY + e.clientY - startY));
-      el.style.left = nx + 'px'; el.style.top = ny + 'px'; el.style.transform = 'none';
+      // Com !important: a barra usa "all: initial !important" no estilo próprio,
+      // que anularia uma posição gravada sem prioridade.
+      el.style.setProperty('left', nx + 'px', 'important');
+      el.style.setProperty('top', ny + 'px', 'important');
+      el.style.setProperty('transform', 'none', 'important');
     });
     document.addEventListener('mouseup', () => {
       if (!dragging) return; dragging = false;
@@ -1788,7 +1800,11 @@
         body.style.display = open ? 'block' : 'none';
         cpEl.querySelector('#vcc-arr-' + body.id.slice('vcc-body-'.length))?.classList.toggle('open', open);
       });
-      if (left) Object.assign(cpEl.style, { left, top, transform });
+      if (left) {
+        cpEl.style.setProperty('left', left, 'important');
+        cpEl.style.setProperty('top', top, 'important');
+        cpEl.style.setProperty('transform', transform || 'none', 'important');
+      }
       const scroller = cpEl.querySelector('#vcc-cp-scroll');
       if (scroller) scroller.scrollTop = scrollTop;
       if (state.cpVisible) {
