@@ -10,7 +10,9 @@ Textos usados na página do VCC. Mantenha este arquivo em dia quando mudar a pá
 - **Site de suporte:** https://github.com/ofeliper/vcc-video-command-center/issues
 - **Política de privacidade:** conteúdo de [`PRIVACY.md`](../PRIVACY.md)
 - **Ícone:** `assets/icons/icon-128.png`
-- **Capturas:** [`screenshots/`](screenshots/), 1280×800, nesta ordem (a primeira é o destaque)
+- **Capturas:** 1280×800, nesta ordem (a primeira é o destaque) —
+  [`screenshots/pt-BR/`](screenshots/pt-BR/) para a página em português e
+  [`screenshots/en-US/`](screenshots/en-US/) para a página em inglês
 
 ## Resumo (até 250 caracteres)
 
@@ -48,6 +50,7 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 • Copiar o momento atual do vídeo (timestamp)
 • Brilho e inversão de cores para assistir no escuro
 • Páginas com vários vídeos: escolha o principal, controle alguns ou todos, oculte ou silencie cada um
+• Em português e inglês, com troca de idioma pelo painel ou pelo menu do ícone
 
 🧭 COMO USAR
 1. Abra uma página com vídeo e clique no ícone do VCC na barra de ferramentas.
@@ -92,6 +95,7 @@ Great for watching lectures faster, replaying a section over and over, or simply
 • Copy the current video timestamp
 • Brightness and color inversion for night viewing
 • Pages with several videos: pick the main one, control some or all, hide or mute each
+• Available in English and Portuguese — switch languages from the panel or the toolbar menu
 
 🧭 HOW TO USE
 1. Open a page with a video and click the VCC icon in the toolbar.
@@ -135,10 +139,19 @@ Encontrou um problema? Abra uma issue no GitHub informando o site e a versão do
 
 ## Legendas das capturas
 
+**Português** (`screenshots/pt-BR/`)
+
 1. `vcc-1-painel.png` — Painel de controle: velocidade de 0,1× a 16×, presets e tempo restante na velocidade atual.
-2. `vcc-2-menu.png` — Menu do ícone: abra o painel e ligue ou desligue os controles em cada site.
+2. `vcc-2-menu.png` — Menu do ícone: abra o painel, ligue ou desligue os controles em cada site e escolha o idioma.
 3. `vcc-3-atalhos.png` — Atalhos de teclado personalizáveis, globais ou por site.
 4. `vcc-4-varios-videos.png` — Páginas com vários vídeos: escolha o principal e controle os que quiser.
+
+**English** (`screenshots/en-US/`)
+
+1. `vcc-1-panel.png` — Control panel: 0.1×–16× speed, presets and time left at the current speed.
+2. `vcc-2-menu.png` — Toolbar menu: open the panel, turn controls on or off per site and pick the language.
+3. `vcc-3-shortcuts.png` — Customizable keyboard shortcuts, global or per site.
+4. `vcc-4-multiple-videos.png` — Pages with several videos: pick the main one and control the ones you want.
 
 ## Envio de versões
 

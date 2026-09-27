@@ -5,7 +5,8 @@ teclado personalizáveis, loop A→B, Picture-in-Picture, volume, brilho e contr
 vários vídeos. Funciona no YouTube e na maioria dos sites com vídeo.
 
 Está disponível como **extensão para Firefox**, **extensão para Chrome** (e Edge) e **userscript
-para Tampermonkey**, todos gerados a partir do mesmo código.
+para Tampermonkey**, todos gerados a partir do mesmo código, em **português (pt-BR)** e
+**inglês (en-US)**.
 
 > O VCC é um controle pessoal de reprodução. Ele **não** baixa vídeos, não extrai streams, não remove
 > anúncios, não contorna paywalls e não interfere em proteções de conteúdo (DRM). Também não coleta
@@ -14,6 +15,7 @@ para Tampermonkey**, todos gerados a partir do mesmo código.
 - [Recursos](#recursos)
 - [Instalação](#instalação)
 - [Como usar](#como-usar)
+- [Idioma](#idioma)
 - [Permissões e privacidade](#permissões-e-privacidade)
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Desenvolvimento](#desenvolvimento)
@@ -110,6 +112,24 @@ configurações gerais e um botão para ativá-lo.
 Os atalhos não disparam enquanto você digita em campos de texto. Troque qualquer um em
 **Painel → Atalhos de teclado**.
 
+## Idioma
+
+O VCC tem interface em **português (pt-BR)** e **inglês (en-US)**.
+
+- **Automático (padrão):** segue o idioma do navegador. Navegador em português → pt-BR; qualquer
+  outro idioma → en-US.
+- **Escolha manual**, em dois lugares:
+  - **Painel (tecla H) → Comportamento e idioma → 🌐 Idioma / Language**;
+  - **menu do ícone**, no seletor *🌐 Idioma* do rodapé (só na extensão).
+
+As opções aparecem no próprio idioma ("Português (Brasil)", "English"), para facilitar a troca de
+volta mesmo sem entender o idioma atual. A escolha vale para todos os sites e é aplicada na hora,
+sem recarregar a página; na extensão, também nas abas já abertas. No Tampermonkey, as outras abas
+passam a usar o novo idioma quando forem recarregadas.
+
+O nome e a descrição da extensão no gerenciador de extensões seguem sempre o idioma do navegador
+(pasta `_locales`), independentemente da escolha acima.
+
 ### Onde ficam as configurações
 
 Atalhos, velocidade, volume, opacidades, sites ativados e demais preferências ficam no
@@ -134,10 +154,13 @@ carrega código remoto. Veja a [política de privacidade](PRIVACY.md).
 
 ```text
 src/
-  core/vcc.js                 Código principal do VCC (usado pela extensão e pelo userscript)
+  core/
+    vcc.js                    Código principal do VCC (usado pela extensão e pelo userscript)
+    i18n.js                   Traduções pt-BR e en-US e detecção do idioma
   extension/
     gm-compat.js              Adapta o armazenamento da extensão às funções GM_* do Tampermonkey
     popup/                    Menu do ícone (popup.html, popup.js, popup.css)
+    _locales/                 Nome e descrição da extensão por idioma (en, pt_BR)
   userscript/header.txt       Cabeçalho ==UserScript== (a versão é preenchida pelo build)
 manifests/
   base.json                   Manifest comum aos dois navegadores
@@ -147,19 +170,22 @@ assets/icons/                 Ícones 16, 32, 48 e 128 px
 store/
   firefox.md                  Textos da página na loja da Mozilla
   chrome.md                   Textos da página na Chrome Web Store
-  screenshots/                Capturas de 1280×800 para as lojas
+  screenshots/pt-BR/           Capturas de 1280×800 em português
+  screenshots/en-US/           Capturas de 1280×800 em inglês
 tools/
   build.js                    Gera dist/ (extensões e userscript)
   package.js                  Gera os zips das lojas em releases/
   check.js                    Checagens antes de publicar
 dist/                         Gerado pelo build (fora do git, exceto o userscript)
   chrome/  firefox/
-  userscript/vcc.user.js      Versionado no git: é daqui que o Tampermonkey instala e atualiza
+  userscript/vcc.user.js      i18n.js + vcc.js num arquivo só. Versionado no git: é daqui
+                              que o Tampermonkey instala e atualiza
 releases/                     Zips gerados (fora do git)
 CHANGELOG.md  PRIVACY.md  package.json
 ```
 
-**Por que um código só:** a extensão e o userscript usam o mesmo `src/core/vcc.js`. A extensão
+**Por que um código só:** a extensão e o userscript usam o mesmo `src/core/vcc.js` (e as mesmas
+traduções de `src/core/i18n.js`). A extensão
 fornece as funções `GM_getValue`/`GM_setValue`/… por meio do `gm-compat.js`, então o código
 principal não precisa saber onde está rodando. Uma correção vale para todas as versões.
 
@@ -177,7 +203,7 @@ Requisito: [Node.js](https://nodejs.org/) 18 ou mais recente. Não há dependên
 
 ```bash
 npm run build          # gera dist/chrome, dist/firefox e dist/userscript/vcc.user.js
-npm run check          # sintaxe, manifests e userscript em dia com o código
+npm run check          # sintaxe, manifests, traduções e userscript em dia com o código
 npm run package        # build + zips em releases/vcc-<navegador>-<versão>.zip
 npm run lint:firefox   # verificador oficial da Mozilla (web-ext) sobre dist/firefox
 npm run release        # tudo acima em sequência
@@ -192,6 +218,13 @@ Para testar mudanças, rode `npm run build` e recarregue a extensão (no Firefox
   interpolados, e inserido com `setSafeHTML()` / `appendSafeHTML()`. Não use `innerHTML` nem
   `insertAdjacentHTML`: o verificador da Mozilla aponta como alerta e sites como o YouTube bloqueiam
   (Trusted Types).
+- **Nenhum texto visível fica direto no código.** Todo texto passa por `t('chave')`, com a chave
+  definida em `src/core/i18n.js` **nos dois idiomas** (`{nome}` vira parâmetro:
+  `t('ks.copyTo', { domain })`). Para textos com partes em negrito, use `tStrong()`. No menu do
+  ícone, use o atributo `data-i18n="chave"` no HTML. O `npm run check` falha se um idioma tiver
+  chaves que o outro não tem ou se o código usar uma chave inexistente.
+- O idioma atual está em `lang` e a preferência em `langPref`; `applyLanguage()` reconstrói a barra e
+  o painel quando ele muda.
 - O menu do ícone conversa com a página por mensagens `VCC_GET_STATUS`, `VCC_OPEN_PANEL`,
   `VCC_TOGGLE_PANEL` e `VCC_SET_SITE_ACTIVE`, tratadas no fim de `src/core/vcc.js`.
 
@@ -199,7 +232,7 @@ Para testar mudanças, rode `npm run build` e recarregue a extensão (no Firefox
 
 1. Atualize a versão (só no `package.json`):
    ```bash
-   npm version patch --no-git-tag-version   # 0.6.2 → 0.6.3 (use minor para 0.7.0)
+   npm version patch --no-git-tag-version   # 0.7.0 → 0.7.1 (use minor para 0.8.0)
    ```
 2. Descreva as mudanças no [CHANGELOG.md](CHANGELOG.md).
 3. Gere e verifique tudo:
@@ -216,7 +249,7 @@ Para testar mudanças, rode `npm run build` e recarregue a extensão (no Firefox
    - **Chrome:** no painel da Chrome Web Store, envie `releases/vcc-chrome-<versão>.zip`.
 
 Os textos das páginas das lojas (descrições em português e inglês, tags, comentários do
-desenvolvedor e legendas das capturas) estão em [`store/`](store/).
+desenvolvedor e legendas das capturas) e as capturas nos dois idiomas estão em [`store/`](store/).
 
 ## Suporte
 

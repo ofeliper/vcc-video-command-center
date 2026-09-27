@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "VCC - Video Command Center",
+    "description": "Extension name. Keep the product name as is."
+  },
+  "extDescription": {
+    "message": "Speed from 0.1× to 16×, keyboard shortcuts, A→B loop and more for any HTML5 video. Works on YouTube.",
+    "description": "Short description shown in the browser's extension manager (max. 132 characters)."
+  },
+  "actionTitle": {
+    "message": "VCC - Video Command Center",
+    "description": "Tooltip of the toolbar button."
+  }
+}

@@ -1,7 +1,8 @@
 # Chrome Web Store Listing Draft
 
 - **Package:** `releases/vcc-chrome-<version>.zip` (built by `npm run package`)
-- **Screenshots:** [`screenshots/`](screenshots/) — 1280×800, same set as the Firefox listing
+- **Screenshots:** 1280×800 — [`screenshots/en-US/`](screenshots/en-US/) (English) and [`screenshots/pt-BR/`](screenshots/pt-BR/) (Portuguese)
+- **Languages:** the extension ships in English and Portuguese (Brazil); add both listing languages in the dashboard
 - **Store icon:** `assets/icons/icon-128.png`
 - **Small promo tile (440×280):** not created yet
 - Descriptions in Portuguese: reuse the texts in [`firefox.md`](firefox.md)

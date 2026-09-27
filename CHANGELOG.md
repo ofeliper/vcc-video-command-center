@@ -3,6 +3,26 @@
 Todas as mudanças relevantes do VCC. A versão é a mesma para a extensão (Firefox e Chrome) e para o
 userscript do Tampermonkey.
 
+## [0.7.0] — 2026-09-26
+
+### Adicionado
+- Interface em inglês (en-US) além de português (pt-BR): painel, barra de controle, menu do ícone,
+  alertas e confirmações.
+- Idioma automático pelo navegador (português → pt-BR; qualquer outro idioma → en-US), com escolha
+  manual em **Painel → Comportamento e idioma** e no rodapé do **menu do ícone**. A troca vale para
+  todos os sites e é aplicada na hora, inclusive nas abas já abertas.
+- Nome e descrição da extensão traduzidos no gerenciador de extensões (`_locales`).
+- `npm run check` confere se os dois idiomas têm os mesmos textos e se toda chave usada existe.
+
+### Alterado
+- Termos em inglês que apareciam no português foram traduzidos: "Control Box"/"CB" → "barra de
+  controle", "Control Panel"/"CP" → "painel", "Toggle 2×" → "Alternar 2×".
+- Capturas de tela das lojas em português e inglês (`store/screenshots/pt-BR` e `en-US`).
+
+### Corrigido
+- O status do loop A→B mostrava as tags HTML como texto depois de marcar os pontos A e B
+  (regressão da 0.6.1).
+
 ## [0.6.2] — 2026-09-26
 
 ### Alterado

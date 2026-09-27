@@ -62,6 +62,21 @@
   function appendSafeHTML(el, v) { el.append(...safeHTMLToNodes(v)); }
 
   // ─────────────────────────────────────────────
+  // IDIOMA (textos em src/core/i18n.js)
+  // ─────────────────────────────────────────────
+  const I18N = globalThis.VCC_I18N;
+  let langPref = 'auto';                 // 'auto' | 'pt-BR' | 'en-US'
+  let lang = I18N.resolve(langPref);
+  let t = I18N.translator(lang);
+
+  // Texto traduzido com os parâmetros em negrito, como HTML seguro.
+  // Ex.: 'Faltam {time} na velocidade…' → Faltam <strong>7m 11s</strong> na velocidade…
+  function tStrong(key, params) {
+    const parts = t(key).split(/\{(\w+)\}/);
+    return parts.map((part, i) => (i % 2 ? escapeHTML`<strong>${params[part] ?? ''}</strong>` : escapeHTML`${part}`));
+  }
+
+  // ─────────────────────────────────────────────
   // CONSTANTES
   // ─────────────────────────────────────────────
   const SPEED_MIN          = 0.1;
@@ -94,19 +109,11 @@
     toggleCP:   'H',
   };
 
+  // Ações com atalho configurável (os nomes vêm de 'key.<id>' em i18n.js)
   const KEY_ACTIONS = [
-    { id:'slowDown',   label:'Diminuir velocidade' },
-    { id:'speedUp',    label:'Aumentar velocidade' },
-    { id:'resetSpeed', label:'Resetar para 1×'    },
-    { id:'toggle2x',   label:'Toggle 2×'          },
-    { id:'seekBack',   label:'Retroceder'          },
-    { id:'seekFwd',    label:'Avançar'             },
-    { id:'volumeDown', label:'Diminuir volume'     },
-    { id:'volumeUp',   label:'Aumentar volume'     },
-    { id:'toggleMute', label:'Mudo / volume atual' },
-    { id:'toggleCB',   label:'Modo do CB (cicla)'  },
-    { id:'toggleCP',   label:'Abrir/fechar CP'     },
-  ];
+    'slowDown', 'speedUp', 'resetSpeed', 'toggle2x', 'seekBack', 'seekFwd',
+    'volumeDown', 'volumeUp', 'toggleMute', 'toggleCB', 'toggleCP',
+  ].map(id => ({ id }));
 
   // ─────────────────────────────────────────────
   // ESTADO
@@ -246,7 +253,7 @@
     saveVolume();
     updateCBVolume();
     updateCPVolume();
-    flashCB(state.muted ? 'MUDO' : `volume ${Math.round(state.volume * 100)}%`, true);
+    flashCB(state.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(state.volume * 100) }), true);
   }
 
   function changeVolume(percent) {
@@ -269,7 +276,7 @@
     saveVolume();
     updateCBVolume();
     updateCPVolume();
-    flashCB(state.muted ? 'MUDO' : `volume ${Math.round(state.volume * 100)}%`, true);
+    flashCB(state.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(state.volume * 100) }), true);
   }
 
   function togglePrimaryPlayback() {
@@ -284,7 +291,7 @@
         vid.pause();
       }
     } catch {}
-    flashCB(shouldPlay ? '▶ play' : '⏸ pause', true);
+    flashCB(t(shouldPlay ? 'flash.play' : 'flash.pause'), true);
     setTimeout(updateVideoList, 80);
   }
 
@@ -679,21 +686,27 @@
   let flashTimer = null;
   let flashHideTimer = null;
 
+  // Dica dos botões: "Z — retroceder", usando a tecla configurada no momento.
+  function keyTitle(action, key) {
+    return KEYS[action] ? `${KEYS[action]} — ${t(key)}` : t(key);
+  }
+
   function buildCB() {
     cbEl = document.createElement('div');
     cbEl.id = 'vcc-cb';
+    cbEl.lang = lang;
     setSafeHTML(cbEl, escapeHTML`
-      <button id="vcc-cb-back" title="Z — retroceder">«</button>
-      <button id="vcc-cb-slow" title="S — velocidade −">−</button>
-      <span   id="vcc-cb-speed" title="Arraste para mover">1.0×</span>
-      <button id="vcc-cb-fast" title="D — velocidade +">+</button>
-      <button id="vcc-cb-fwd"  title="X — avançar">»</button>
+      <button id="vcc-cb-back" title="${keyTitle('seekBack', 'cb.back')}">«</button>
+      <button id="vcc-cb-slow" title="${keyTitle('slowDown', 'cb.slower')}">−</button>
+      <span   id="vcc-cb-speed" title="${t('cb.drag')}">1.0×</span>
+      <button id="vcc-cb-fast" title="${keyTitle('speedUp', 'cb.faster')}">+</button>
+      <button id="vcc-cb-fwd"  title="${keyTitle('seekFwd', 'cb.fwd')}">»</button>
       <div id="vcc-cb-div"></div>
-      <button id="vcc-cb-vol-down" title="Q — volume −">🔉</button>
-      <span id="vcc-cb-volume" title="M — alternar mudo">100%</span>
-      <button id="vcc-cb-vol-up" title="E — volume +">🔊</button>
+      <button id="vcc-cb-vol-down" title="${keyTitle('volumeDown', 'cb.volDown')}">🔉</button>
+      <span id="vcc-cb-volume" title="${keyTitle('toggleMute', 'cb.muteToggle')}">100%</span>
+      <button id="vcc-cb-vol-up" title="${keyTitle('volumeUp', 'cb.volUp')}">🔊</button>
       <div id="vcc-cb-vol-div"></div>
-      <button id="vcc-cb-cfg"  title="H — painel">≡</button>
+      <button id="vcc-cb-cfg"  title="${keyTitle('toggleCP', 'cb.panel')}">≡</button>
       <span id="vcc-cb-mode-badge"></span>
     `);
 
@@ -754,7 +767,7 @@
     save(gk('cbMode'), state.cbMode);
     applyCBMode();
     updateCPCBModeBtn();
-    if (state.cbMode !== 'visible') flashCB(`modo: ${state.cbMode}`, false);
+    if (state.cbMode !== 'visible') flashCB(t('flash.mode', { mode: t(`mode.${state.cbMode}`) }), false);
   }
 
   function applyCBMode() {
@@ -766,7 +779,7 @@
       if (badge) badge.textContent = '';
     } else {
       cbEl.style.setProperty('display', 'none', 'important');
-      if (badge) badge.textContent = state.cbMode === 'alerts' ? 'alerta' : 'oculto';
+      if (badge) badge.textContent = t(state.cbMode === 'alerts' ? 'cb.badge.alerts' : 'cb.badge.hidden');
     }
   }
 
@@ -825,6 +838,7 @@
   function buildCP() {
     cpEl = document.createElement('div');
     cpEl.id = 'vcc-cp';
+    cpEl.lang = lang;
     // Opacity e display controlados por JS — não pelo CSS do site
     cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
     cpEl.style.setProperty('display', state.cpVisible ? 'flex' : 'none', 'important');
@@ -875,156 +889,160 @@
     setSafeHTML(content, [
 
       // ── Reprodução ──
-      acc('pb', '▶', 'Reprodução', escapeHTML`
+      acc('pb', '▶', t('sec.playback'), escapeHTML`
         <div class="vcc-spd-row">
           <button class="vcc-spd-btn" id="vcc-spd-minus">−</button>
           <input class="vcc-spd-in" id="vcc-spd-input" type="number" min="0.1" max="16" step="0.1" value="1.0">
           <button class="vcc-spd-btn" id="vcc-spd-plus">+</button>
-          <button class="vcc-spd-btn sm" id="vcc-spd-reset">reset</button>
-          <button class="vcc-spd-btn sm" id="vcc-spd-toggle2x">2× toggle</button>
+          <button class="vcc-spd-btn sm" id="vcc-spd-reset">${t('pb.reset')}</button>
+          <button class="vcc-spd-btn sm" id="vcc-spd-toggle2x">${t('pb.toggle2x')}</button>
         </div>
         <div class="vcc-eta" id="vcc-eta">—</div>
-        <p class="vcc-sub-title" style="margin-top:8px">Presets</p>
+        <p class="vcc-sub-title" style="margin-top:8px">${t('pb.presets')}</p>
         <div class="vcc-preset-grid" id="vcc-presets"></div>
         <div class="vcc-abts">
-          <button class="vcc-abt" id="vcc-seek-back">« retroceder</button>
-          <button class="vcc-abt" id="vcc-seek-fwd">avançar »</button>
-          <button class="vcc-abt" id="vcc-toggle-cb-btn">ciclar modo CB</button>
+          <button class="vcc-abt" id="vcc-seek-back">${t('pb.seekBack')}</button>
+          <button class="vcc-abt" id="vcc-seek-fwd">${t('pb.seekFwd')}</button>
+          <button class="vcc-abt" id="vcc-toggle-cb-btn">${t('pb.cycleBar')}</button>
         </div>
       `, true, true),
 
       // ── Áudio ──
-      acc('au', '♪', 'Áudio', escapeHTML`
-        <div class="vcc-slr"><label>Volume</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? 'MUDO' : Math.round(state.volume * 100) + '%'}</span></div>
-        <div class="vcc-abts"><button class="vcc-abt" id="vcc-volume-down">🔉 diminuir</button><button class="vcc-abt" id="vcc-volume-mute">${state.muted ? 'restaurar volume' : 'mudo'}</button><button class="vcc-abt" id="vcc-volume-up">aumentar 🔊</button></div>
-        ${tog('boost', true, 'Volume boost', 'Amplifica além de 100%')}
-        <div class="vcc-slr"><label>Nível</label><input type="range" id="vcc-boost-level" min="100" max="300" value="100" step="5"><span class="vcc-slv" id="vcc-boost-val">100%</span></div>
-        ${tog('normalize', false, 'Normalização de volume', 'Equaliza vídeos com volumes diferentes')}
-        ${tog('silence', false, 'Skip de silêncio', 'Pula trechos sem fala')}
+      acc('au', '♪', t('sec.audio'), escapeHTML`
+        <div class="vcc-slr"><label>${t('au.volume')}</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? t('au.muted') : Math.round(state.volume * 100) + '%'}</span></div>
+        <div class="vcc-abts"><button class="vcc-abt" id="vcc-volume-down">${t('au.lower')}</button><button class="vcc-abt" id="vcc-volume-mute">${t(state.muted ? 'au.unmute' : 'au.mute')}</button><button class="vcc-abt" id="vcc-volume-up">${t('au.raise')}</button></div>
+        ${tog('boost', true, t('au.boost'), t('au.boostSub'))}
+        <div class="vcc-slr"><label>${t('au.level')}</label><input type="range" id="vcc-boost-level" min="100" max="300" value="100" step="5"><span class="vcc-slv" id="vcc-boost-val">100%</span></div>
+        ${tog('normalize', false, t('au.normalize'), t('au.normalizeSub'))}
+        ${tog('silence', false, t('au.silence'), t('au.silenceSub'))}
       `, false, true),
 
       // ── Navegação avançada ──
-      acc('nv', '⊹', 'Navegação avançada', escapeHTML`
-        ${tog('loopab', false, 'Loop A→B', 'Repetir trecho entre dois pontos')}
+      acc('nv', '⊹', t('sec.nav'), escapeHTML`
+        ${tog('loopab', false, t('nv.loop'), t('nv.loopSub'))}
         <div class="vcc-abts" style="margin-bottom:4px">
-          <button class="vcc-abt" id="vcc-loop-a">marcar ponto A</button>
-          <button class="vcc-abt" id="vcc-loop-b">marcar ponto B</button>
-          <button class="vcc-abt" id="vcc-loop-clear">limpar loop</button>
+          <button class="vcc-abt" id="vcc-loop-a">${t('nv.setA')}</button>
+          <button class="vcc-abt" id="vcc-loop-b">${t('nv.setB')}</button>
+          <button class="vcc-abt" id="vcc-loop-clear">${t('nv.clear')}</button>
         </div>
         <div class="vcc-loop-status" id="vcc-loop-status">
-          <span class="none">nenhum loop configurado</span>
+          <span class="none">${t('nv.noLoop')}</span>
         </div>
-        ${tog('savepos', true, 'Salvar posição por URL', 'Retoma de onde parou ao reabrir')}
+        ${tog('savepos', true, t('nv.savePos'), t('nv.savePosSub'))}
         <div class="vcc-row">
-          <div class="vcc-row-label">Picture-in-Picture</div>
-          <button class="vcc-abt" id="vcc-pip"${!document.pictureInPictureEnabled ? ' disabled' : ''}>${document.pictureInPictureEnabled ? 'ativar PiP' : 'indisponível neste site'}</button>
+          <div class="vcc-row-label">${t('nv.pip')}</div>
+          <button class="vcc-abt" id="vcc-pip"${!document.pictureInPictureEnabled ? ' disabled' : ''}>${t(document.pictureInPictureEnabled ? 'nv.pipOn' : 'nv.pipUnavailable')}</button>
         </div>
         <div class="vcc-abts" style="margin-top:2px">
-          <button class="vcc-abt" id="vcc-timestamp">copiar timestamp</button>
+          <button class="vcc-abt" id="vcc-timestamp">${t('nv.timestamp')}</button>
         </div>
       `, false, true),
 
       // ── Visual ──
-      acc('vs', '◑', 'Visual', escapeHTML`
-        ${tog('invert', false, 'Inversão de cores', 'Útil para assistir no escuro', true)}
-        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label>Brilho</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
-        <p class="vcc-sub-title" style="margin-top:8px">Opacidade</p>
-        <div class="vcc-slr"><label>Control Box</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
-        <div class="vcc-slr"><label>Control Panel</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
+      acc('vs', '◑', t('sec.visual'), escapeHTML`
+        ${tog('invert', false, t('vs.invert'), t('vs.invertSub'), true)}
+        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label>${t('vs.brightness')}</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
+        <p class="vcc-sub-title" style="margin-top:8px">${t('vs.opacity')}</p>
+        <div class="vcc-slr"><label>${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
+        <div class="vcc-slr"><label>${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
       `),
 
       // ── Vídeos na página ──
-      acc('vi', '▣', 'Vídeos na página', escapeHTML`
+      acc('vi', '▣', t('sec.videos'), escapeHTML`
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
-          <span class="vcc-sub-title" style="margin:0" id="vcc-vid-count">0 vídeos detectados</span>
-          <button class="vcc-abt" id="vcc-vid-all">selecionar todos</button>
+          <span class="vcc-sub-title" style="margin:0" id="vcc-vid-count">${t('vi.countOther', { n: 0 })}</span>
+          <button class="vcc-abt" id="vcc-vid-all">${t('vi.selectAll')}</button>
         </div>
-        <p class="vcc-hint" style="margin:0 0 7px">Clique no indicador ★ ou no botão ★ para escolher o vídeo principal. A tecla 0 alterna play/pause nele.</p>
+        <p class="vcc-hint" style="margin:0 0 7px">${t('vi.hint')}</p>
         <div id="vcc-vid-list"></div>
       `, false, true),
 
       // ── Atalhos de teclado ──
-      acc('ks', '⌨', 'Atalhos de teclado', escapeHTML`
+      acc('ks', '⌨', t('sec.keys'), escapeHTML`
         <div class="vcc-scope-tabs" id="vcc-scope-tabs">
-          <button class="vcc-scope-tab active" data-scope="default">padrão (global)</button>
+          <button class="vcc-scope-tab active" data-scope="default">${t('ks.default')}</button>
           <button class="vcc-scope-tab" data-scope="${domain}">${domain}</button>
-          <button class="vcc-scope-tab" id="vcc-add-scope">+ domínio</button>
+          <button class="vcc-scope-tab" id="vcc-add-scope">${t('ks.addDomain')}</button>
         </div>
-        <p class="vcc-hint" id="vcc-scope-hint">Atalhos globais — usados quando não há configuração específica para o domínio.</p>
+        <p class="vcc-hint" id="vcc-scope-hint">${t('ks.hintGlobal')}</p>
         <div id="vcc-keys-list"></div>
         <div class="vcc-abts" style="margin-top:8px">
-          <button class="vcc-abt" id="vcc-keys-copy-to-domain">copiar para ${domain}</button>
-          <button class="vcc-abt" id="vcc-keys-factory">restaurar padrões de fábrica</button>
+          <button class="vcc-abt" id="vcc-keys-copy-to-domain">${t('ks.copyTo', { domain })}</button>
+          <button class="vcc-abt" id="vcc-keys-factory">${t('ks.factory')}</button>
         </div>
-        <p class="vcc-hint">Clique em qualquer tecla para reatribuir. Esc cancela. ✕ remove o atalho.</p>
+        <p class="vcc-hint">${t('ks.help')}</p>
       `),
 
-      // ── Comportamento ──
-      acc('beh', '⚙', 'Comportamento', escapeHTML`
-        <p class="vcc-sub-title">Valores de incremento</p>
+      // ── Comportamento e idioma ──
+      acc('beh', '⚙', t('sec.behavior'), escapeHTML`
+        <p class="vcc-sub-title">🌐 ${t('lang.title')}</p>
+        <div class="vcc-scope-tabs" id="vcc-lang-tabs">
+          ${['auto', ...I18N.SUPPORTED].map(code => escapeHTML`<button class="vcc-scope-tab${langPref === code ? ' active' : ''}" data-lang="${code}" lang="${code === 'auto' ? lang : code}">${code === 'auto' ? t('lang.auto', { name: I18N.SHORT_NAMES[I18N.detect()] }) : I18N.LANGUAGE_NAMES[code]}</button>`)}
+        </div>
+        <p class="vcc-sub-title" style="margin-top:10px">${t('bh.steps')}</p>
         <div class="vcc-slr">
-          <label>Passo velocidade</label>
+          <label>${t('bh.speedStep')}</label>
           <input type="number" id="vcc-speed-step" class="vcc-num-in" min="0.05" max="1" step="0.05" value="${state.speedStep}">
           <span style="font-size:10px;color:rgba(255,255,255,0.35)">×</span>
         </div>
         <div class="vcc-slr" style="margin-top:8px">
-          <label>Passo de volume</label>
+          <label>${t('bh.volumeStep')}</label>
           <input type="number" id="vcc-volume-step" class="vcc-num-in" min="1" max="25" step="1" value="${state.volumeStep}">
           <span style="font-size:10px;color:rgba(255,255,255,0.35)">%</span>
         </div>
         <div class="vcc-slr" style="margin-top:8px">
-          <label>Passo de seek</label>
+          <label>${t('bh.seekStep')}</label>
           <input type="number" id="vcc-seek-step" class="vcc-num-in" min="1" max="300" step="1" value="${state.seekStep}">
           <span style="font-size:10px;color:rgba(255,255,255,0.35)">s</span>
         </div>
-        <p class="vcc-sub-title" style="margin-top:10px">Control Box</p>
+        <p class="vcc-sub-title" style="margin-top:10px">${t('bh.bar')}</p>
         <div class="vcc-row">
           <div>
-            <div class="vcc-row-label">Modo do CB</div>
-            <div class="vcc-row-sub">V alterna entre visível, só alertas e oculto</div>
+            <div class="vcc-row-label">${t('bh.barMode')}</div>
+            <div class="vcc-row-sub">${t('bh.barModeSub', { key: KEYS.toggleCB || '—' })}</div>
           </div>
           <button class="vcc-abt" id="vcc-cb-mode-btn" style="white-space:nowrap">—</button>
         </div>
         <div class="vcc-slr" style="margin-top:6px">
-          <label>Duração do alerta</label>
+          <label>${t('bh.alertDuration')}</label>
           <input type="range" id="vcc-alert-dur" min="200" max="3000" step="100" value="${state.alertDuration}">
           <span class="vcc-slv" id="vcc-alert-dur-val">${state.alertDuration}ms</span>
         </div>
-        <p class="vcc-hint">Duração do flash no modo "apenas alertas".</p>
+        <p class="vcc-hint">${t('bh.alertHint')}</p>
       `),
 
       // ── Sites ativos ──
-      acc('si', '◈', 'Sites ativos', escapeHTML`
+      acc('si', '◈', t('sec.sites'), escapeHTML`
         <div id="vcc-sites-list">${buildSitesList()}</div>
-        <div class="vcc-abts"><button class="vcc-abt" id="vcc-add-site">+ adicionar domínio</button></div>
+        <div class="vcc-abts"><button class="vcc-abt" id="vcc-add-site">${t('si.add')}</button></div>
       `),
 
       // ── Estatísticas e compatibilidade ──
-      acc('st', '◎', 'Estatísticas e compatibilidade', escapeHTML`
+      acc('st', '◎', t('sec.stats'), escapeHTML`
         <div class="vcc-stat-grid">
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-saved">0s</div><div class="vcc-sl">tempo economizado</div></div>
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-watched">0s</div><div class="vcc-sl">assistido nesta sessão</div></div>
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-avgspd">—</div><div class="vcc-sl">velocidade média</div></div>
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-quality">—</div><div class="vcc-sl">qualidade detectada</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-saved">0s</div><div class="vcc-sl">${t('st.saved')}</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-watched">0s</div><div class="vcc-sl">${t('st.watched')}</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-avgspd">—</div><div class="vcc-sl">${t('st.avgSpeed')}</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-quality">—</div><div class="vcc-sl">${t('st.quality')}</div></div>
         </div>
-        <p class="vcc-sub-title">Compatibilidade — ${domain}</p>
+        <p class="vcc-sub-title">${t('st.compat', { domain })}</p>
         <div id="vcc-compat"></div>
       `, false, true),
 
       // ── Dados salvos ──
-      acc('data', '⊟', 'Dados salvos e redefinições', escapeHTML`
-        <p class="vcc-sub-title">Dados armazenados pelo VCC</p>
+      acc('data', '⊟', t('sec.data'), escapeHTML`
+        <p class="vcc-sub-title">${t('dt.stored')}</p>
         <div id="vcc-storage-list" style="margin-bottom:8px;font-family:monospace;font-size:10px;color:rgba(255,255,255,0.42);line-height:1.8"></div>
         <div class="vcc-abts" style="margin-bottom:12px">
-          <button class="vcc-abt" id="vcc-refresh-storage">↺ atualizar</button>
-          <button class="vcc-abt" id="vcc-copy-all-storage">⎘ copiar tudo</button>
-          <button class="vcc-abt" id="vcc-clear-storage" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">apagar todos os dados</button>
+          <button class="vcc-abt" id="vcc-refresh-storage">${t('dt.refresh')}</button>
+          <button class="vcc-abt" id="vcc-copy-all-storage">${t('dt.copyAll')}</button>
+          <button class="vcc-abt" id="vcc-clear-storage" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">${t('dt.deleteAll')}</button>
         </div>
         <div class="vcc-danger-zone">
-          <div class="vcc-danger-title">Redefinições</div>
+          <div class="vcc-danger-title">${t('dt.resets')}</div>
           <div class="vcc-abts">
-            <button class="vcc-abt" id="vcc-reset-keys">restaurar atalhos de fábrica</button>
-            <button class="vcc-abt" id="vcc-reset-all" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">restaurar todas as configs</button>
+            <button class="vcc-abt" id="vcc-reset-keys">${t('dt.resetKeys')}</button>
+            <button class="vcc-abt" id="vcc-reset-all" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">${t('dt.resetAll')}</button>
           </div>
         </div>
       `),
@@ -1047,9 +1065,9 @@
     }
     setSafeHTML(status, escapeHTML`
       <div class="vcc-site-warning" role="alert">
-        <div class="vcc-site-warning-title">⚠ VCC não está ativo neste site</div>
-        <div class="vcc-site-warning-text">Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.</div>
-        <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${domain}</button>
+        <div class="vcc-site-warning-title">${t('site.inactiveTitle')}</div>
+        <div class="vcc-site-warning-text">${t('site.inactiveText')}</div>
+        <button class="vcc-activate-site" id="vcc-activate-site">${t('site.enable', { domain })}</button>
       </div>`);
     status.querySelector('#vcc-activate-site').addEventListener('click', activateCurrentSite);
   }
@@ -1136,7 +1154,7 @@
 
     // Atalhos
     q('#vcc-add-scope').addEventListener('click', () => {
-      const d = prompt('Domínio (ex: exemplo.com):'); if (d && d.trim()) addScopeTab(d.trim());
+      const d = prompt(t('ks.domainPrompt')); if (d && d.trim()) addScopeTab(d.trim());
     });
     cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(t => {
       t.addEventListener('click', () => setScope(t.dataset.scope));
@@ -1145,10 +1163,10 @@
       const target     = currentScope === 'default' ? domain : currentScope;
       const globalKeys = { ...FACTORY_KEYS, ...load(gk('keys'), {}) };
       save(`vcc_${target}_keys`, globalKeys);
-      alert(`Atalhos globais copiados para ${target}.`);
+      alert(t('ks.copied', { domain: target }));
     });
     q('#vcc-keys-factory').addEventListener('click', () => {
-      if (!confirm('Restaurar atalhos de fábrica para este escopo?')) return;
+      if (!confirm(t('ks.factoryConfirm'))) return;
       if (currentScope === 'default') del(gk('keys'));
       else del(`vcc_${currentScope}_keys`);
       KEYS = loadKeys(domain); buildKeysList();
@@ -1181,7 +1199,7 @@
     // Sites
     cpEl.querySelectorAll('[data-site-tog]').forEach(bindSiteToggle);
     q('#vcc-add-site').addEventListener('click', () => {
-      const d = prompt('Domínio (ex: meusite.com):'); if (d && d.trim()) addSiteRow(d.trim(), true);
+      const d = prompt(t('si.prompt')); if (d && d.trim()) addSiteRow(d.trim(), true);
     });
 
     // Dados
@@ -1191,20 +1209,25 @@
         let v = ''; try { v = JSON.stringify(GM_getValue(k)); } catch {}
         return `${k}: ${v}`;
       }).join('\n');
-      navigator.clipboard.writeText(all).then(() => flashCB('⎘ copiado'));
+      navigator.clipboard.writeText(all).then(() => flashCB(t('flash.copied'), true), () => {});
     });
     q('#vcc-clear-storage').addEventListener('click', () => {
-      if (!confirm('Apagar TODOS os dados do VCC?')) return;
-      getAllVccKeys().forEach(del); refreshStorageList(); alert('Dados apagados.');
+      if (!confirm(t('dt.deleteConfirm'))) return;
+      getAllVccKeys().forEach(del); refreshStorageList(); alert(t('dt.deleted'));
     });
     q('#vcc-reset-keys').addEventListener('click', () => {
-      if (!confirm('Restaurar TODOS os atalhos para os padrões de fábrica?')) return;
+      if (!confirm(t('dt.resetKeysConfirm'))) return;
       getAllVccKeys().filter(k => k.includes('_keys')).forEach(del);
       KEYS = { ...FACTORY_KEYS }; buildKeysList();
     });
     q('#vcc-reset-all').addEventListener('click', () => {
-      if (!confirm('Restaurar TODAS as configurações? A página será recarregada.')) return;
+      if (!confirm(t('dt.resetAllConfirm'))) return;
       getAllVccKeys().forEach(del); location.reload();
+    });
+
+    // Idioma
+    cpEl.querySelectorAll('#vcc-lang-tabs [data-lang]').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
   }
 
@@ -1221,9 +1244,9 @@
       c.addEventListener('click', () => setSpeed(parseFloat(c.dataset.speed)));
     });
     grid.querySelector('#vcc-preset-add').addEventListener('click', () => {
-      const v = prompt('Velocidade do novo preset (ex: 0.5):'); if (!v) return;
+      const v = prompt(t('pb.presetPrompt')); if (!v) return;
       const n = parseFloat(v);
-      if (isNaN(n) || n < SPEED_MIN || n > SPEED_MAX) return alert('Valor inválido.');
+      if (isNaN(n) || n < SPEED_MIN || n > SPEED_MAX) return alert(t('pb.invalidValue'));
       if (!PRESET_SPEEDS.includes(n)) { PRESET_SPEEDS.push(n); PRESET_SPEEDS.sort((a, b) => a - b); }
       buildPresets();
     });
@@ -1245,10 +1268,10 @@
     const eta = cpEl.querySelector('#vcc-eta'); if (!eta) return;
     const vid = state.videos[state.primaryVideo];
     if (!vid || !isFinite(vid.duration) || vid.duration === 0) {
-      setSafeHTML(eta, escapeHTML`<span style="color:rgba(255,255,255,.28)">duração não disponível</span>`); return;
+      setSafeHTML(eta, escapeHTML`<span style="color:rgba(255,255,255,.28)">${t('pb.noDuration')}</span>`); return;
     }
     const rem = (vid.duration - vid.currentTime) / state.speed;
-    setSafeHTML(eta, escapeHTML`Faltam <strong>${fmtDuration(rem)}</strong> na velocidade atual de <strong>${fmtSpeed(state.speed)}×</strong>`);
+    setSafeHTML(eta, tStrong('pb.eta', { time: fmtDuration(rem), speed: fmtSpeed(state.speed) + '×' }));
   }
 
   // ─────────────────────────────────────────────
@@ -1264,23 +1287,23 @@
       const isTarget  = state.targetVideos.has(i);
       const dur = isFinite(vid.duration) ? fmtDuration(vid.duration) : '?';
       const res = vid.videoWidth ? `${vid.videoWidth}×${vid.videoHeight}` : '—';
-      let srcLabel = 'vídeo ' + (i + 1);
+      let srcLabel = t('vi.video', { n: i + 1 });
       try { srcLabel = new URL(vid.src).hostname || srcLabel; } catch {}
 
       const row = document.createElement('div');
       row.className = 'vcc-vrow';
       setSafeHTML(row, escapeHTML`
-        <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${isPrimary ? 'Vídeo principal' : 'Definir como vídeo principal'}">${isPrimary ? '★' : '#' + (i + 1)}</div>
+        <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${t(isPrimary ? 'vi.main' : 'vi.setMain')}">${isPrimary ? '★' : '#' + (i + 1)}</div>
         <div style="flex:1;min-width:0">
-          <div class="vcc-vname">${srcLabel}${isPrimary ? escapeHTML`<span class="vcc-primary-badge">principal</span>` : ''}</div>
+          <div class="vcc-vname">${srcLabel}${isPrimary ? escapeHTML`<span class="vcc-primary-badge">${t('vi.mainBadge')}</span>` : ''}</div>
           <div class="vcc-vmeta">${res} · ${dur}</div>
         </div>
         <div class="vcc-vid-actions">
-          <button class="vcc-vid-btn" data-act="primary" title="${isPrimary ? 'Este é o vídeo principal' : 'Definir como vídeo principal'}" style="${isPrimary ? 'color:#5DCAA5;border-color:#1D9E75' : ''}">★</button>
-          <button class="vcc-vid-btn" data-act="playpause" title="Play / Pause">${vid.paused ? '▶' : '⏸'}</button>
-          <button class="vcc-vid-btn" data-act="hide"      title="Ocultar / mostrar">◻</button>
-          <button class="vcc-vid-btn" data-act="mute"      title="Mutar">${vid.muted ? '✕♪' : '♪'}</button>
-          <button class="vcc-vid-btn danger" data-act="remove" title="Remover da página">✕</button>
+          <button class="vcc-vid-btn" data-act="primary" title="${t(isPrimary ? 'vi.isMain' : 'vi.setMain')}" style="${isPrimary ? 'color:#5DCAA5;border-color:#1D9E75' : ''}">★</button>
+          <button class="vcc-vid-btn" data-act="playpause" title="${t('vi.playPause')}">${vid.paused ? '▶' : '⏸'}</button>
+          <button class="vcc-vid-btn" data-act="hide"      title="${t('vi.hide')}">◻</button>
+          <button class="vcc-vid-btn" data-act="mute"      title="${t('vi.mute')}">${vid.muted ? '✕♪' : '♪'}</button>
+          <button class="vcc-vid-btn danger" data-act="remove" title="${t('vi.remove')}">✕</button>
         </div>
         <div class="vcc-chk${isTarget ? ' on' : ''}" data-vidx="${i}">${isTarget ? '✓' : ''}</div>
       `);
@@ -1313,7 +1336,7 @@
               try { vid.muted = !vid.muted; } catch {}
               btn.textContent = vid.muted ? '✕♪' : '♪'; break;
             case 'remove':
-              if (!confirm('Remover este elemento de vídeo da página?')) return;
+              if (!confirm(t('vi.removeConfirm'))) return;
               try { vid.remove(); } catch {}
               state.videos.splice(i, 1);
               const newSet = new Set();
@@ -1329,7 +1352,10 @@
     });
 
     const count = cpEl.querySelector('#vcc-vid-count');
-    if (count) count.textContent = `${state.videos.filter(v => v.isConnected).length} vídeo(s) detectado(s)`;
+    if (count) {
+      const n = state.videos.filter(v => v.isConnected).length;
+      count.textContent = t(n === 1 ? 'vi.countOne' : 'vi.countOther', { n });
+    }
   }
 
   function updateVideoList() { if (cpEl && state.cpVisible) buildVideoList(); }
@@ -1349,21 +1375,21 @@
 
     const keyRows = KEY_ACTIONS.map(a => escapeHTML`
       <div class="vcc-kbd-row">
-        <span class="vcc-kbd-action">${a.label}</span>
+        <span class="vcc-kbd-action">${t('key.' + a.id)}</span>
         <span style="display:flex;align-items:center;gap:3px">
           <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] || '—'}</span>
-          <button class="vcc-kbd-clear" data-clear="${a.id}" title="Remover atalho">✕</button>
+          <button class="vcc-kbd-clear" data-clear="${a.id}" title="${t('ks.remove')}">✕</button>
         </span>
       </div>`);
 
     // Numerais fixos (não editáveis)
     setSafeHTML(list, escapeHTML`${keyRows}
       <div class="vcc-kbd-row" style="opacity:.5">
-        <span class="vcc-kbd-action">Play / pause do vídeo principal (fixo)</span>
+        <span class="vcc-kbd-action">${t('ks.fixedPlay')}</span>
         <span class="vcc-kbd-key" style="cursor:default">0</span>
       </div>
       <div class="vcc-kbd-row" style="opacity:.5">
-        <span class="vcc-kbd-action">Presets 1.0×…4.0× (fixos)</span>
+        <span class="vcc-kbd-action">${t('ks.fixedPresets')}</span>
         <span style="display:flex;gap:3px">
           <span class="vcc-kbd-key" style="cursor:default">1</span>
           <span class="vcc-kbd-key" style="cursor:default">…</span>
@@ -1385,7 +1411,7 @@
     });
 
     const copyBtn = cpEl.querySelector('#vcc-keys-copy-to-domain');
-    if (copyBtn) copyBtn.textContent = `copiar para ${currentScope === 'default' ? domain : currentScope}`;
+    if (copyBtn) copyBtn.textContent = t('ks.copyTo', { domain: currentScope === 'default' ? domain : currentScope });
   }
 
   function startCapture(keyEl) {
@@ -1404,7 +1430,7 @@
       // Bloquear teclas proibidas
       if (FORBIDDEN_KEYS.has(e.key)) {
         keyEl.classList.remove('capturing'); keyEl.classList.add('error');
-        keyEl.textContent = 'inválida';
+        keyEl.textContent = t('ks.invalid');
         setTimeout(() => { keyEl.classList.remove('error'); keyEl.textContent = keyEl._orig; capturingKey = null; }, 1200);
         document.removeEventListener('keydown', handler, true); return;
       }
@@ -1420,7 +1446,7 @@
       );
       if (dup) {
         keyEl.classList.remove('capturing'); keyEl.classList.add('error');
-        keyEl.textContent = 'em uso';
+        keyEl.textContent = t('ks.inUse');
         setTimeout(() => { keyEl.classList.remove('error'); keyEl.textContent = keyEl._orig; capturingKey = null; }, 1400);
         document.removeEventListener('keydown', handler, true); return;
       }
@@ -1441,9 +1467,7 @@
     cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(t => t.classList.toggle('active', t.dataset.scope === scope));
     KEYS = loadKeys(scope === 'default' ? 'default' : scope);
     const hint = cpEl.querySelector('#vcc-scope-hint');
-    if (hint) hint.textContent = scope === 'default'
-      ? 'Atalhos globais — usados quando não há configuração específica para o domínio.'
-      : `Atalhos específicos para ${scope} — substituem o padrão neste domínio.`;
+    if (hint) hint.textContent = scope === 'default' ? t('ks.hintGlobal') : t('ks.hintScope', { scope });
     buildKeysList();
   }
 
@@ -1477,14 +1501,14 @@
     const value = cpEl.querySelector('#vcc-volume-val');
     const button = cpEl.querySelector('#vcc-volume-mute');
     if (slider) slider.value = Math.round(state.volume * 100);
-    if (value) value.textContent = state.muted ? 'MUDO' : `${Math.round(state.volume * 100)}%`;
-    if (button) button.textContent = state.muted ? 'restaurar volume' : 'mudo';
+    if (value) value.textContent = state.muted ? t('au.muted') : `${Math.round(state.volume * 100)}%`;
+    if (button) button.textContent = t(state.muted ? 'au.unmute' : 'au.mute');
   }
 
   function updateCBVolume() {
     if (!cbEl) return;
     const el = cbEl.querySelector('#vcc-cb-volume');
-    if (el) el.textContent = state.muted ? 'MUDO' : `${Math.round(state.volume * 100)}%`;
+    if (el) el.textContent = state.muted ? t('flash.muted') : `${Math.round(state.volume * 100)}%`;
   }
 
   function getActiveSites() {
@@ -1544,9 +1568,9 @@
         if (on) {
           startVideoEngine();
           buildCPContent();
-          flashCB('✓ site ativado', true);
+          flashCB(t('flash.siteEnabled'), true);
         } else {
-          alert('VCC desativado para este domínio. Recarregue a página para interromper os controles já iniciados.');
+          alert(t('site.disabledAlert'));
         }
       }
     });
@@ -1558,18 +1582,18 @@
   function refreshStorageList() {
     const list = cpEl?.querySelector('#vcc-storage-list'); if (!list) return;
     const keys = getAllVccKeys();
-    if (!keys.length) { setSafeHTML(list, escapeHTML`<span style="color:rgba(255,255,255,.25)">(nenhum dado salvo)</span>`); return; }
+    if (!keys.length) { setSafeHTML(list, escapeHTML`<span style="color:rgba(255,255,255,.25)">${t('dt.empty')}</span>`); return; }
     setSafeHTML(list, keys.map(k => {
       let val = ''; try { val = JSON.stringify(GM_getValue(k)); } catch {}
       const line = `${k}: ${val}`;
       return escapeHTML`<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:.5px solid rgba(255,255,255,.04)">
         <span style="color:rgba(255,255,255,.38);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" title="${k}">${k}</span>
         <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${val}">${val}</span>
-        <button data-copy-line="${line}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="Copiar linha">⎘</button>
+        <button data-copy-line="${line}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="${t('dt.copyLine')}">⎘</button>
       </div>`;
     }));
     list.querySelectorAll('[data-copy-line]').forEach(btn => btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB('⎘ copiado'), () => {});
+      navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB(t('flash.copied'), true), () => {});
     }));
   }
 
@@ -1601,12 +1625,12 @@
   function updateLoopStatus() {
     const el = cpEl?.querySelector('#vcc-loop-status'); if (!el) return;
     if (loopA === null && loopB === null) {
-      setSafeHTML(el, escapeHTML`<span class="none">nenhum loop configurado</span>`); return;
+      setSafeHTML(el, escapeHTML`<span class="none">${t('nv.noLoop')}</span>`); return;
     }
-    const aStr = loopA !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopA)}</span>` : escapeHTML`<span class="none">não definido</span>`;
-    const bStr = loopB !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopB)}</span>` : escapeHTML`<span class="none">não definido</span>`;
+    const aStr = loopA !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopA)}</span>` : escapeHTML`<span class="none">${t('nv.notSet')}</span>`;
+    const bStr = loopB !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopB)}</span>` : escapeHTML`<span class="none">${t('nv.notSet')}</span>`;
     const active = loopA !== null && loopB !== null;
-    setSafeHTML(el, `A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? escapeHTML` &nbsp;<span style="color:#5DCAA5;font-size:9px">● ativo</span>` : ''}`);
+    setSafeHTML(el, escapeHTML`A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? escapeHTML` &nbsp;<span style="color:#5DCAA5;font-size:9px">${t('nv.active')}</span>` : ''}`);
   }
 
   // ─────────────────────────────────────────────
@@ -1615,13 +1639,13 @@
   async function activatePiP() {
     const vid = state.videos[state.primaryVideo]; if (!vid) return;
     try { document.pictureInPictureElement ? await document.exitPictureInPicture() : await vid.requestPictureInPicture(); }
-    catch (e) { alert('PiP indisponível: ' + e.message); }
+    catch (e) { alert(t('nv.pipError', { error: e.message })); }
   }
 
   function copyTimestamp() {
     const vid = state.videos[state.primaryVideo]; if (!vid) return;
     const t = Math.floor(vid.currentTime);
-    navigator.clipboard.writeText(`${location.href.split('?')[0]}?t=${t}`).then(() => flashCB('✓ copiado'));
+    navigator.clipboard.writeText(`${location.href.split('?')[0]}?t=${t}`).then(() => flashCB(t('flash.copied'), true), () => {});
   }
 
   function applyVideoFilter() {
@@ -1633,22 +1657,23 @@
   // ─────────────────────────────────────────────
   // COMPATIBILIDADE
   // ─────────────────────────────────────────────
+  const hasWebAudio = () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } };
   const COMPAT_CHECKS = [
-    { label: 'Controle de velocidade', check: () => 'ok' },
-    { label: 'Volume boost',           check: () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } } },
-    { label: 'Picture-in-Picture',     check: () => document.pictureInPictureEnabled ? 'ok' : 'unavailable' },
-    { label: 'Skip de silêncio',       check: () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } }, note: 'requer Web Audio API' },
-    { label: 'Normalização de volume', check: () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } }, note: 'requer acesso ao stream de áudio' },
+    { label: 'st.speedControl', check: () => 'ok' },
+    { label: 'st.boost',        check: hasWebAudio },
+    { label: 'st.pip',          check: () => document.pictureInPictureEnabled ? 'ok' : 'unavailable' },
+    { label: 'st.silence',      check: hasWebAudio, note: 'st.needsWebAudio' },
+    { label: 'st.normalize',    check: hasWebAudio, note: 'st.needsAudioStream' },
   ];
 
   function renderCompatibility() {
     const el = cpEl?.querySelector('#vcc-compat'); if (!el) return;
     setSafeHTML(el, COMPAT_CHECKS.map(c => {
       const st = c.check ? c.check() : 'ok';
-      const [dot, cls, tag] = st === 'ok' ? ['#5DCAA5','vcc-ok','disponível'] : st === 'partial' ? ['#EF9F27','vcc-warn','parcial'] : ['#E24B4A','vcc-err','indisponível'];
+      const [dot, cls, tag] = st === 'ok' ? ['#5DCAA5','vcc-ok',t('st.available')] : st === 'partial' ? ['#EF9F27','vcc-warn',t('st.partial')] : ['#E24B4A','vcc-err',t('st.unavailable')];
       return escapeHTML`<div class="vcc-ci">
         <div class="vcc-cdot" style="background:${dot}"></div>
-        <div class="vcc-ct">${c.label} — <span class="vcc-ctag ${cls}">${tag}</span>${(c.note && st !== 'ok') ? ' — ' + c.note : ''}</div>
+        <div class="vcc-ct">${t(c.label)} — <span class="vcc-ctag ${cls}">${tag}</span>${(c.note && st !== 'ok') ? ' — ' + t(c.note) : ''}</div>
       </div>`;
     }));
   }
@@ -1695,8 +1720,7 @@
 
   function updateCPCBModeBtn() {
     const btn = cpEl?.querySelector('#vcc-cb-mode-btn'); if (!btn) return;
-    const labels = { visible:'visível', alerts:'apenas alertas', hidden:'oculto' };
-    btn.textContent = `modo atual: ${labels[state.cbMode] || state.cbMode}`;
+    btn.textContent = t('bh.barModeBtn', { mode: t(`mode.${state.cbMode}`) });
   }
 
   // ─────────────────────────────────────────────
@@ -1734,11 +1758,56 @@
     buildCB();
   }
 
+  // ─────────────────────────────────────────────
+  // TROCA DE IDIOMA
+  // ─────────────────────────────────────────────
+  // Aplica o idioma sem recarregar a página: reconstrói a barra e o painel,
+  // mantendo seções abertas, rolagem e posição do painel.
+  function applyLanguage(pref) {
+    const nextPref = I18N.SUPPORTED.includes(pref) ? pref : 'auto';
+    const nextLang = I18N.resolve(nextPref);
+    if (nextPref === langPref && nextLang === lang) return;
+    langPref = nextPref;
+    lang = nextLang;
+    t = I18N.translator(lang);
+
+    if (cbEl) { cbEl.remove(); buildCB(); }
+
+    if (cpEl) {
+      const openIds = [...cpEl.querySelectorAll('.vcc-acc-body.open')].map(b => b.id);
+      const scrollTop = cpEl.querySelector('#vcc-cp-scroll')?.scrollTop || 0;
+      const { left, top, transform } = cpEl.style;
+      cpEl.remove();
+      if (capturingKey) capturingKey = null;
+      currentScope = 'default';
+      KEYS = loadKeys(domain);
+      buildCP();
+      cpEl.querySelectorAll('.vcc-acc-body').forEach(body => {
+        const open = openIds.includes(body.id);
+        body.classList.toggle('open', open);
+        body.style.display = open ? 'block' : 'none';
+        cpEl.querySelector('#vcc-arr-' + body.id.slice('vcc-body-'.length))?.classList.toggle('open', open);
+      });
+      if (left) Object.assign(cpEl.style, { left, top, transform });
+      const scroller = cpEl.querySelector('#vcc-cp-scroll');
+      if (scroller) scroller.scrollTop = scrollTop;
+      if (state.cpVisible) {
+        updateStats(); refreshStorageList(); updateCPCBModeBtn(); updateLoopStatus();
+      }
+    }
+  }
+
+  // Escolha feita no painel: salva (vale para todos os sites) e aplica.
+  function setLanguage(pref) {
+    save(gk('language'), pref);
+    applyLanguage(pref);
+  }
+
   function activateCurrentSite() {
     setSiteActive(domain, true);
     startVideoEngine();
     if (cpEl) buildCPContent();
-    flashCB('✓ site ativado', true);
+    flashCB(t('flash.siteEnabled'), true);
   }
 
   // ─────────────────────────────────────────────
@@ -1746,6 +1815,9 @@
   // ─────────────────────────────────────────────
   function init() {
     loadState();
+    langPref = load(gk('language'), 'auto');
+    lang = I18N.resolve(langPref);
+    t = I18N.translator(lang);
     KEYS = loadKeys(domain);
     injectStyles();
     state.videoControlsActive = isSiteActive();
@@ -1780,6 +1852,15 @@
       default:
         return null;
     }
+  }
+
+  // Idioma trocado em outra aba ou no menu do ícone: aplica aqui também.
+  const extensionStorage = (globalThis.browser || globalThis.chrome)?.storage;
+  if (extensionStorage?.onChanged?.addListener) {
+    extensionStorage.onChanged.addListener((changes, area) => {
+      if (area !== 'local' || !(I18N.STORAGE_KEY in changes)) return;
+      storageReady.then(() => applyLanguage(changes[I18N.STORAGE_KEY].newValue ?? 'auto'));
+    });
   }
 
   if (extensionRuntime?.onMessage?.addListener) {

@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "VCC - Video Command Center",
+  "name": "__MSG_extName__",
   "version": "",
-  "description": "Centro de controle local para players HTML5, voltado a uso pessoal.",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "homepage_url": "https://github.com/ofeliper/vcc-video-command-center",
   "permissions": [
     "storage",
@@ -18,13 +19,14 @@
       ],
       "js": [
         "js/gm-compat.js",
+        "js/i18n.js",
         "js/vcc.js"
       ],
       "run_at": "document_idle"
     }
   ],
   "action": {
-    "default_title": "VCC - Video Command Center",
+    "default_title": "__MSG_actionTitle__",
     "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "icons/icon-16.png",

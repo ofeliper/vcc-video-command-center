@@ -54,6 +54,15 @@
     storage.remove(key);
   }
 
+  // Mantém o cache em dia quando outra aba ou o menu do ícone mudam algo.
+  ext?.storage?.onChanged?.addListener((changes, area) => {
+    if (area !== 'local') return;
+    for (const [key, change] of Object.entries(changes)) {
+      if (change.newValue === undefined) delete cache[key];
+      else cache[key] = change.newValue;
+    }
+  });
+
   root.VCC_STORAGE_READY = storageGetAll();
   root.GM_getValue = function (key, fallback) {
     return Object.prototype.hasOwnProperty.call(cache, key) ? cache[key] : fallback;

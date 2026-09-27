@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "VCC - Video Command Center",
+    "description": "Nome da extensão. Mantenha o nome do produto."
+  },
+  "extDescription": {
+    "message": "Velocidade de 0,1× a 16×, atalhos de teclado, loop A→B e mais para qualquer vídeo HTML5. Funciona no YouTube.",
+    "description": "Descrição curta exibida no gerenciador de extensões (máx. 132 caracteres)."
+  },
+  "actionTitle": {
+    "message": "VCC - Video Command Center",
+    "description": "Dica do botão na barra de ferramentas."
+  }
+}

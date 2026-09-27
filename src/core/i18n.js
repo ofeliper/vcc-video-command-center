@@ -1,0 +1,473 @@
+// Traduções do VCC (pt-BR e en-US), usadas pelo painel, pela barra de controle
+// e pelo menu do ícone. Funciona igual na extensão e no Tampermonkey.
+//
+// Preferência salva em "vcc_global_language": 'auto' (padrão), 'pt-BR' ou 'en-US'.
+// Em 'auto', navegador em português → pt-BR; qualquer outro idioma → en-US.
+//
+// Para adicionar um texto: crie a mesma chave nos dois idiomas. {nome} é
+// substituído pelo parâmetro de mesmo nome.
+(function (root) {
+  'use strict';
+
+  const MESSAGES = {
+    'pt-BR': {
+      // Idioma
+      'lang.title': 'Idioma / Language',
+      'lang.auto': 'Automático ({name})',
+
+      // Barra de controle
+      'cb.back': 'retroceder',
+      'cb.slower': 'velocidade −',
+      'cb.drag': 'Arraste para mover',
+      'cb.faster': 'velocidade +',
+      'cb.fwd': 'avançar',
+      'cb.volDown': 'volume −',
+      'cb.muteToggle': 'alternar mudo',
+      'cb.volUp': 'volume +',
+      'cb.panel': 'painel',
+      'cb.badge.alerts': 'alerta',
+      'cb.badge.hidden': 'oculta',
+
+      // Mensagens rápidas na barra
+      'flash.muted': 'MUDO',
+      'flash.volume': 'volume {n}%',
+      'flash.play': '▶ play',
+      'flash.pause': '⏸ pause',
+      'flash.mode': 'modo: {mode}',
+      'flash.copied': '✓ copiado',
+      'flash.siteEnabled': '✓ site ativado',
+
+      // Modos da barra
+      'mode.visible': 'visível',
+      'mode.alerts': 'só alertas',
+      'mode.hidden': 'oculta',
+
+      // Aviso de site inativo
+      'site.inactiveTitle': '⚠ VCC não está ativo neste site',
+      'site.inactiveText': 'Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.',
+      'site.enable': 'Ativar VCC em {domain}',
+      'site.disabledAlert': 'VCC desativado para este domínio. Recarregue a página para interromper os controles já iniciados.',
+
+      // Reprodução
+      'sec.playback': 'Reprodução',
+      'pb.reset': 'reset',
+      'pb.toggle2x': 'alternar 2×',
+      'pb.presets': 'Presets',
+      'pb.seekBack': '« retroceder',
+      'pb.seekFwd': 'avançar »',
+      'pb.cycleBar': 'ciclar modo da barra',
+      'pb.eta': 'Faltam {time} na velocidade atual de {speed}',
+      'pb.noDuration': 'duração não disponível',
+      'pb.presetPrompt': 'Velocidade do novo preset (ex: 0.5):',
+      'pb.invalidValue': 'Valor inválido.',
+
+      // Áudio
+      'sec.audio': 'Áudio',
+      'au.volume': 'Volume',
+      'au.lower': '🔉 diminuir',
+      'au.raise': 'aumentar 🔊',
+      'au.mute': 'mudo',
+      'au.unmute': 'restaurar volume',
+      'au.muted': 'MUDO',
+      'au.boost': 'Volume boost',
+      'au.boostSub': 'Amplifica além de 100%',
+      'au.level': 'Nível',
+      'au.normalize': 'Normalização de volume',
+      'au.normalizeSub': 'Equaliza vídeos com volumes diferentes',
+      'au.silence': 'Skip de silêncio',
+      'au.silenceSub': 'Pula trechos sem fala',
+
+      // Navegação avançada
+      'sec.nav': 'Navegação avançada',
+      'nv.loop': 'Loop A→B',
+      'nv.loopSub': 'Repetir trecho entre dois pontos',
+      'nv.setA': 'marcar ponto A',
+      'nv.setB': 'marcar ponto B',
+      'nv.clear': 'limpar loop',
+      'nv.noLoop': 'nenhum loop configurado',
+      'nv.notSet': 'não definido',
+      'nv.active': '● ativo',
+      'nv.savePos': 'Salvar posição por URL',
+      'nv.savePosSub': 'Retoma de onde parou ao reabrir',
+      'nv.pip': 'Picture-in-Picture',
+      'nv.pipOn': 'ativar PiP',
+      'nv.pipUnavailable': 'indisponível neste site',
+      'nv.pipError': 'PiP indisponível: {error}',
+      'nv.timestamp': 'copiar timestamp',
+
+      // Visual
+      'sec.visual': 'Visual',
+      'vs.invert': 'Inversão de cores',
+      'vs.invertSub': 'Útil para assistir no escuro',
+      'vs.brightness': 'Brilho',
+      'vs.opacity': 'Opacidade',
+      'vs.barOpacity': 'Barra de controle',
+      'vs.panelOpacity': 'Painel',
+
+      // Vídeos na página
+      'sec.videos': 'Vídeos na página',
+      'vi.countOne': '{n} vídeo detectado',
+      'vi.countOther': '{n} vídeos detectados',
+      'vi.selectAll': 'selecionar todos',
+      'vi.hint': 'Clique no indicador ★ ou no botão ★ para escolher o vídeo principal. A tecla 0 alterna play/pause nele.',
+      'vi.video': 'vídeo {n}',
+      'vi.main': 'Vídeo principal',
+      'vi.setMain': 'Definir como vídeo principal',
+      'vi.isMain': 'Este é o vídeo principal',
+      'vi.mainBadge': 'principal',
+      'vi.playPause': 'Play / Pause',
+      'vi.hide': 'Ocultar / mostrar',
+      'vi.mute': 'Mutar',
+      'vi.remove': 'Remover da página',
+      'vi.removeConfirm': 'Remover este elemento de vídeo da página?',
+
+      // Atalhos
+      'sec.keys': 'Atalhos de teclado',
+      'ks.default': 'padrão (global)',
+      'ks.addDomain': '+ domínio',
+      'ks.domainPrompt': 'Domínio (ex: exemplo.com):',
+      'ks.hintGlobal': 'Atalhos globais — usados quando não há configuração específica para o domínio.',
+      'ks.hintScope': 'Atalhos específicos para {scope} — substituem o padrão neste domínio.',
+      'ks.copyTo': 'copiar para {domain}',
+      'ks.copied': 'Atalhos globais copiados para {domain}.',
+      'ks.factory': 'restaurar padrões de fábrica',
+      'ks.factoryConfirm': 'Restaurar atalhos de fábrica para este escopo?',
+      'ks.help': 'Clique em qualquer tecla para reatribuir. Esc cancela. ✕ remove o atalho.',
+      'ks.remove': 'Remover atalho',
+      'ks.fixedPlay': 'Play / pause do vídeo principal (fixo)',
+      'ks.fixedPresets': 'Presets 1.0×…4.0× (fixos)',
+      'ks.invalid': 'inválida',
+      'ks.inUse': 'em uso',
+      'key.slowDown': 'Diminuir velocidade',
+      'key.speedUp': 'Aumentar velocidade',
+      'key.resetSpeed': 'Voltar para 1×',
+      'key.toggle2x': 'Alternar 2×',
+      'key.seekBack': 'Retroceder',
+      'key.seekFwd': 'Avançar',
+      'key.volumeDown': 'Diminuir volume',
+      'key.volumeUp': 'Aumentar volume',
+      'key.toggleMute': 'Mudo / restaurar volume',
+      'key.toggleCB': 'Modo da barra (cicla)',
+      'key.toggleCP': 'Abrir/fechar painel',
+
+      // Comportamento e idioma
+      'sec.behavior': 'Comportamento e idioma',
+      'bh.steps': 'Valores de incremento',
+      'bh.speedStep': 'Passo de velocidade',
+      'bh.volumeStep': 'Passo de volume',
+      'bh.seekStep': 'Passo de avanço',
+      'bh.bar': 'Barra de controle',
+      'bh.barMode': 'Modo da barra',
+      'bh.barModeSub': '{key} alterna entre visível, só alertas e oculta',
+      'bh.barModeBtn': 'modo atual: {mode}',
+      'bh.alertDuration': 'Duração do alerta',
+      'bh.alertHint': 'Duração do aviso no modo "só alertas".',
+
+      // Sites ativos
+      'sec.sites': 'Sites ativos',
+      'si.add': '+ adicionar domínio',
+      'si.prompt': 'Domínio (ex: meusite.com):',
+
+      // Estatísticas e compatibilidade
+      'sec.stats': 'Estatísticas e compatibilidade',
+      'st.saved': 'tempo economizado',
+      'st.watched': 'assistido nesta sessão',
+      'st.avgSpeed': 'velocidade média',
+      'st.quality': 'qualidade detectada',
+      'st.compat': 'Compatibilidade — {domain}',
+      'st.speedControl': 'Controle de velocidade',
+      'st.boost': 'Volume boost',
+      'st.pip': 'Picture-in-Picture',
+      'st.silence': 'Skip de silêncio',
+      'st.normalize': 'Normalização de volume',
+      'st.needsWebAudio': 'requer Web Audio API',
+      'st.needsAudioStream': 'requer acesso ao stream de áudio',
+      'st.available': 'disponível',
+      'st.partial': 'parcial',
+      'st.unavailable': 'indisponível',
+
+      // Dados salvos
+      'sec.data': 'Dados salvos e redefinições',
+      'dt.stored': 'Dados armazenados pelo VCC',
+      'dt.refresh': '↺ atualizar',
+      'dt.copyAll': '⎘ copiar tudo',
+      'dt.deleteAll': 'apagar todos os dados',
+      'dt.resets': 'Redefinições',
+      'dt.resetKeys': 'restaurar atalhos de fábrica',
+      'dt.resetAll': 'restaurar todas as configurações',
+      'dt.empty': '(nenhum dado salvo)',
+      'dt.copyLine': 'Copiar linha',
+      'dt.deleteConfirm': 'Apagar TODOS os dados do VCC?',
+      'dt.deleted': 'Dados apagados.',
+      'dt.resetKeysConfirm': 'Restaurar TODOS os atalhos para os padrões de fábrica?',
+      'dt.resetAllConfirm': 'Restaurar TODAS as configurações? A página será recarregada.',
+
+      // Menu do ícone
+      'pop.unsupported': 'O VCC não funciona nesta página. Abra um site comum para usar o painel.',
+      'pop.noAccess': '● Sem acesso a este site',
+      'pop.noAccessText': 'Para o VCC funcionar aqui, permita que ele acesse o site.',
+      'pop.grantSite': 'Permitir neste site',
+      'pop.grantAll': 'Permitir em todos os sites',
+      'pop.deniedTitle': 'Permissão não concedida.',
+      'pop.deniedText': 'Para liberar depois, clique no botão de extensões da barra (ícone de peça de quebra-cabeça), procure o VCC e ative o acesso ao site — ou vá em Gerenciar extensão → Permissões e ative o acesso a todos os sites.',
+      'pop.accessGranted': '● Acesso liberado',
+      'pop.reloadText': 'Recarregue a página para o VCC começar a funcionar nela.',
+      'pop.reload': 'Recarregar página',
+      'pop.openPanel': 'Abrir painel',
+      'pop.videoControls': 'Controles de vídeo',
+      'pop.videoControlsAria': 'Controles de vídeo neste site',
+      'pop.activeOn': 'ativos neste site',
+      'pop.activeOff': 'desativados neste site',
+      'pop.reloadHint': 'Desativado. Recarregue a página para interromper os controles já iniciados.',
+      'pop.reloadNow': 'Recarregar agora',
+      'pop.accessAll': 'Acesso: todos os sites',
+      'pop.accessSome': 'Acesso: sites escolhidos',
+      'pop.allowAll': 'Liberar todos',
+      'pop.language': 'Idioma',
+    },
+
+    'en-US': {
+      'lang.title': 'Language / Idioma',
+      'lang.auto': 'Automatic ({name})',
+
+      'cb.back': 'seek back',
+      'cb.slower': 'speed −',
+      'cb.drag': 'Drag to move',
+      'cb.faster': 'speed +',
+      'cb.fwd': 'seek forward',
+      'cb.volDown': 'volume −',
+      'cb.muteToggle': 'toggle mute',
+      'cb.volUp': 'volume +',
+      'cb.panel': 'panel',
+      'cb.badge.alerts': 'alerts',
+      'cb.badge.hidden': 'hidden',
+
+      'flash.muted': 'MUTED',
+      'flash.volume': 'volume {n}%',
+      'flash.play': '▶ play',
+      'flash.pause': '⏸ pause',
+      'flash.mode': 'mode: {mode}',
+      'flash.copied': '✓ copied',
+      'flash.siteEnabled': '✓ site enabled',
+
+      'mode.visible': 'visible',
+      'mode.alerts': 'alerts only',
+      'mode.hidden': 'hidden',
+
+      'site.inactiveTitle': '⚠ VCC is not enabled on this site',
+      'site.inactiveText': 'While this domain is disabled, VCC can’t detect or control the videos on this page. General settings are still available.',
+      'site.enable': 'Enable VCC on {domain}',
+      'site.disabledAlert': 'VCC disabled for this domain. Reload the page to stop controls that are already running.',
+
+      'sec.playback': 'Playback',
+      'pb.reset': 'reset',
+      'pb.toggle2x': 'toggle 2×',
+      'pb.presets': 'Presets',
+      'pb.seekBack': '« back',
+      'pb.seekFwd': 'forward »',
+      'pb.cycleBar': 'cycle bar mode',
+      'pb.eta': '{time} left at the current speed of {speed}',
+      'pb.noDuration': 'duration unavailable',
+      'pb.presetPrompt': 'Speed for the new preset (e.g. 0.5):',
+      'pb.invalidValue': 'Invalid value.',
+
+      'sec.audio': 'Audio',
+      'au.volume': 'Volume',
+      'au.lower': '🔉 lower',
+      'au.raise': 'raise 🔊',
+      'au.mute': 'mute',
+      'au.unmute': 'unmute',
+      'au.muted': 'MUTED',
+      'au.boost': 'Volume boost',
+      'au.boostSub': 'Amplifies beyond 100%',
+      'au.level': 'Level',
+      'au.normalize': 'Volume normalization',
+      'au.normalizeSub': 'Evens out videos with different loudness',
+      'au.silence': 'Skip silence',
+      'au.silenceSub': 'Skips parts without speech',
+
+      'sec.nav': 'Advanced navigation',
+      'nv.loop': 'A→B loop',
+      'nv.loopSub': 'Repeat a section between two points',
+      'nv.setA': 'set point A',
+      'nv.setB': 'set point B',
+      'nv.clear': 'clear loop',
+      'nv.noLoop': 'no loop set',
+      'nv.notSet': 'not set',
+      'nv.active': '● active',
+      'nv.savePos': 'Save position per URL',
+      'nv.savePosSub': 'Resumes where you left off',
+      'nv.pip': 'Picture-in-Picture',
+      'nv.pipOn': 'toggle PiP',
+      'nv.pipUnavailable': 'unavailable on this site',
+      'nv.pipError': 'PiP unavailable: {error}',
+      'nv.timestamp': 'copy timestamp',
+
+      'sec.visual': 'Visual',
+      'vs.invert': 'Invert colors',
+      'vs.invertSub': 'Handy for watching in the dark',
+      'vs.brightness': 'Brightness',
+      'vs.opacity': 'Opacity',
+      'vs.barOpacity': 'Control bar',
+      'vs.panelOpacity': 'Panel',
+
+      'sec.videos': 'Videos on this page',
+      'vi.countOne': '{n} video detected',
+      'vi.countOther': '{n} videos detected',
+      'vi.selectAll': 'select all',
+      'vi.hint': 'Click the ★ marker or the ★ button to choose the main video. Key 0 toggles play/pause on it.',
+      'vi.video': 'video {n}',
+      'vi.main': 'Main video',
+      'vi.setMain': 'Set as main video',
+      'vi.isMain': 'This is the main video',
+      'vi.mainBadge': 'main',
+      'vi.playPause': 'Play / Pause',
+      'vi.hide': 'Hide / show',
+      'vi.mute': 'Mute',
+      'vi.remove': 'Remove from page',
+      'vi.removeConfirm': 'Remove this video element from the page?',
+
+      'sec.keys': 'Keyboard shortcuts',
+      'ks.default': 'default (global)',
+      'ks.addDomain': '+ domain',
+      'ks.domainPrompt': 'Domain (e.g. example.com):',
+      'ks.hintGlobal': 'Global shortcuts — used when a domain has no specific setup.',
+      'ks.hintScope': 'Shortcuts for {scope} — they override the defaults on this domain.',
+      'ks.copyTo': 'copy to {domain}',
+      'ks.copied': 'Global shortcuts copied to {domain}.',
+      'ks.factory': 'restore factory defaults',
+      'ks.factoryConfirm': 'Restore factory shortcuts for this scope?',
+      'ks.help': 'Click any key to reassign it. Esc cancels. ✕ removes the shortcut.',
+      'ks.remove': 'Remove shortcut',
+      'ks.fixedPlay': 'Play / pause main video (fixed)',
+      'ks.fixedPresets': 'Presets 1.0×…4.0× (fixed)',
+      'ks.invalid': 'invalid',
+      'ks.inUse': 'in use',
+      'key.slowDown': 'Slow down',
+      'key.speedUp': 'Speed up',
+      'key.resetSpeed': 'Reset to 1×',
+      'key.toggle2x': 'Toggle 2×',
+      'key.seekBack': 'Seek back',
+      'key.seekFwd': 'Seek forward',
+      'key.volumeDown': 'Volume down',
+      'key.volumeUp': 'Volume up',
+      'key.toggleMute': 'Mute / unmute',
+      'key.toggleCB': 'Bar mode (cycles)',
+      'key.toggleCP': 'Open/close panel',
+
+      'sec.behavior': 'Behavior & language',
+      'bh.steps': 'Step sizes',
+      'bh.speedStep': 'Speed step',
+      'bh.volumeStep': 'Volume step',
+      'bh.seekStep': 'Seek step',
+      'bh.bar': 'Control bar',
+      'bh.barMode': 'Bar mode',
+      'bh.barModeSub': '{key} cycles between visible, alerts only and hidden',
+      'bh.barModeBtn': 'current: {mode}',
+      'bh.alertDuration': 'Alert duration',
+      'bh.alertHint': 'How long the alert stays up in "alerts only" mode.',
+
+      'sec.sites': 'Enabled sites',
+      'si.add': '+ add domain',
+      'si.prompt': 'Domain (e.g. mysite.com):',
+
+      'sec.stats': 'Stats & compatibility',
+      'st.saved': 'time saved',
+      'st.watched': 'watched this session',
+      'st.avgSpeed': 'average speed',
+      'st.quality': 'detected quality',
+      'st.compat': 'Compatibility — {domain}',
+      'st.speedControl': 'Speed control',
+      'st.boost': 'Volume boost',
+      'st.pip': 'Picture-in-Picture',
+      'st.silence': 'Skip silence',
+      'st.normalize': 'Volume normalization',
+      'st.needsWebAudio': 'requires the Web Audio API',
+      'st.needsAudioStream': 'requires access to the audio stream',
+      'st.available': 'available',
+      'st.partial': 'partial',
+      'st.unavailable': 'unavailable',
+
+      'sec.data': 'Saved data & resets',
+      'dt.stored': 'Data stored by VCC',
+      'dt.refresh': '↺ refresh',
+      'dt.copyAll': '⎘ copy all',
+      'dt.deleteAll': 'delete all data',
+      'dt.resets': 'Resets',
+      'dt.resetKeys': 'restore factory shortcuts',
+      'dt.resetAll': 'reset all settings',
+      'dt.empty': '(no saved data)',
+      'dt.copyLine': 'Copy line',
+      'dt.deleteConfirm': 'Delete ALL VCC data?',
+      'dt.deleted': 'Data deleted.',
+      'dt.resetKeysConfirm': 'Restore ALL shortcuts to factory defaults?',
+      'dt.resetAllConfirm': 'Reset ALL settings? The page will reload.',
+
+      'pop.unsupported': 'VCC can’t run on this page. Open a regular website to use the panel.',
+      'pop.noAccess': '● No access to this site',
+      'pop.noAccessText': 'To use VCC here, allow it to access this site.',
+      'pop.grantSite': 'Allow on this site',
+      'pop.grantAll': 'Allow on all sites',
+      'pop.deniedTitle': 'Permission not granted.',
+      'pop.deniedText': 'To allow it later, click the Extensions button in the toolbar (puzzle-piece icon), find VCC and allow access to the site — or go to Manage Extension → Permissions and allow access to all websites.',
+      'pop.accessGranted': '● Access granted',
+      'pop.reloadText': 'Reload the page to start VCC on it.',
+      'pop.reload': 'Reload page',
+      'pop.openPanel': 'Open panel',
+      'pop.videoControls': 'Video controls',
+      'pop.videoControlsAria': 'Video controls on this site',
+      'pop.activeOn': 'on for this site',
+      'pop.activeOff': 'off for this site',
+      'pop.reloadHint': 'Turned off. Reload the page to stop controls that are already running.',
+      'pop.reloadNow': 'Reload now',
+      'pop.accessAll': 'Access: all sites',
+      'pop.accessSome': 'Access: selected sites',
+      'pop.allowAll': 'Allow all',
+      'pop.language': 'Language',
+    },
+  };
+
+  const SUPPORTED = ['pt-BR', 'en-US'];
+  const FALLBACK = 'en-US';
+
+  // Nome de cada idioma no próprio idioma, para quem não entende o idioma atual.
+  const LANGUAGE_NAMES = { 'pt-BR': 'Português (Brasil)', 'en-US': 'English' };
+  // Versão curta, usada em "Automático (Português)".
+  const SHORT_NAMES = { 'pt-BR': 'Português', 'en-US': 'English' };
+
+  function browserLanguage() {
+    let lang = '';
+    try { lang = (root.browser || root.chrome)?.i18n?.getUILanguage?.() || ''; } catch {}
+    if (!lang) { try { lang = root.navigator?.language || ''; } catch {} }
+    return lang;
+  }
+
+  // Idioma usado em "Automático".
+  function detect() {
+    return /^pt(\b|[-_])/i.test(browserLanguage()) ? 'pt-BR' : FALLBACK;
+  }
+
+  // Converte a preferência salva ('auto' | 'pt-BR' | 'en-US') no idioma efetivo.
+  function resolve(pref) {
+    return SUPPORTED.includes(pref) ? pref : detect();
+  }
+
+  function translator(lang) {
+    const dict = MESSAGES[lang] || MESSAGES[FALLBACK];
+    return function t(key, params) {
+      const text = dict[key] ?? MESSAGES[FALLBACK][key] ?? key;
+      return params ? text.replace(/\{(\w+)\}/g, (m, k) => (k in params ? String(params[k]) : m)) : text;
+    };
+  }
+
+  root.VCC_I18N = {
+    MESSAGES,
+    SUPPORTED,
+    LANGUAGE_NAMES,
+    SHORT_NAMES,
+    STORAGE_KEY: 'vcc_global_language',
+    detect,
+    resolve,
+    translator,
+  };
+})(globalThis);

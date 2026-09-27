@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/ofeliper/vcc-video-command-center
-// @version      0.6.2
+// @version      0.7.0
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       ofeliper
 // @homepageURL  https://github.com/ofeliper/vcc-video-command-center
@@ -15,6 +15,480 @@
 // @updateURL    https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/dist/userscript/vcc.user.js
 // @downloadURL  https://raw.githubusercontent.com/ofeliper/vcc-video-command-center/main/dist/userscript/vcc.user.js
 // ==/UserScript==
+
+// Traduções do VCC (pt-BR e en-US), usadas pelo painel, pela barra de controle
+// e pelo menu do ícone. Funciona igual na extensão e no Tampermonkey.
+//
+// Preferência salva em "vcc_global_language": 'auto' (padrão), 'pt-BR' ou 'en-US'.
+// Em 'auto', navegador em português → pt-BR; qualquer outro idioma → en-US.
+//
+// Para adicionar um texto: crie a mesma chave nos dois idiomas. {nome} é
+// substituído pelo parâmetro de mesmo nome.
+(function (root) {
+  'use strict';
+
+  const MESSAGES = {
+    'pt-BR': {
+      // Idioma
+      'lang.title': 'Idioma / Language',
+      'lang.auto': 'Automático ({name})',
+
+      // Barra de controle
+      'cb.back': 'retroceder',
+      'cb.slower': 'velocidade −',
+      'cb.drag': 'Arraste para mover',
+      'cb.faster': 'velocidade +',
+      'cb.fwd': 'avançar',
+      'cb.volDown': 'volume −',
+      'cb.muteToggle': 'alternar mudo',
+      'cb.volUp': 'volume +',
+      'cb.panel': 'painel',
+      'cb.badge.alerts': 'alerta',
+      'cb.badge.hidden': 'oculta',
+
+      // Mensagens rápidas na barra
+      'flash.muted': 'MUDO',
+      'flash.volume': 'volume {n}%',
+      'flash.play': '▶ play',
+      'flash.pause': '⏸ pause',
+      'flash.mode': 'modo: {mode}',
+      'flash.copied': '✓ copiado',
+      'flash.siteEnabled': '✓ site ativado',
+
+      // Modos da barra
+      'mode.visible': 'visível',
+      'mode.alerts': 'só alertas',
+      'mode.hidden': 'oculta',
+
+      // Aviso de site inativo
+      'site.inactiveTitle': '⚠ VCC não está ativo neste site',
+      'site.inactiveText': 'Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.',
+      'site.enable': 'Ativar VCC em {domain}',
+      'site.disabledAlert': 'VCC desativado para este domínio. Recarregue a página para interromper os controles já iniciados.',
+
+      // Reprodução
+      'sec.playback': 'Reprodução',
+      'pb.reset': 'reset',
+      'pb.toggle2x': 'alternar 2×',
+      'pb.presets': 'Presets',
+      'pb.seekBack': '« retroceder',
+      'pb.seekFwd': 'avançar »',
+      'pb.cycleBar': 'ciclar modo da barra',
+      'pb.eta': 'Faltam {time} na velocidade atual de {speed}',
+      'pb.noDuration': 'duração não disponível',
+      'pb.presetPrompt': 'Velocidade do novo preset (ex: 0.5):',
+      'pb.invalidValue': 'Valor inválido.',
+
+      // Áudio
+      'sec.audio': 'Áudio',
+      'au.volume': 'Volume',
+      'au.lower': '🔉 diminuir',
+      'au.raise': 'aumentar 🔊',
+      'au.mute': 'mudo',
+      'au.unmute': 'restaurar volume',
+      'au.muted': 'MUDO',
+      'au.boost': 'Volume boost',
+      'au.boostSub': 'Amplifica além de 100%',
+      'au.level': 'Nível',
+      'au.normalize': 'Normalização de volume',
+      'au.normalizeSub': 'Equaliza vídeos com volumes diferentes',
+      'au.silence': 'Skip de silêncio',
+      'au.silenceSub': 'Pula trechos sem fala',
+
+      // Navegação avançada
+      'sec.nav': 'Navegação avançada',
+      'nv.loop': 'Loop A→B',
+      'nv.loopSub': 'Repetir trecho entre dois pontos',
+      'nv.setA': 'marcar ponto A',
+      'nv.setB': 'marcar ponto B',
+      'nv.clear': 'limpar loop',
+      'nv.noLoop': 'nenhum loop configurado',
+      'nv.notSet': 'não definido',
+      'nv.active': '● ativo',
+      'nv.savePos': 'Salvar posição por URL',
+      'nv.savePosSub': 'Retoma de onde parou ao reabrir',
+      'nv.pip': 'Picture-in-Picture',
+      'nv.pipOn': 'ativar PiP',
+      'nv.pipUnavailable': 'indisponível neste site',
+      'nv.pipError': 'PiP indisponível: {error}',
+      'nv.timestamp': 'copiar timestamp',
+
+      // Visual
+      'sec.visual': 'Visual',
+      'vs.invert': 'Inversão de cores',
+      'vs.invertSub': 'Útil para assistir no escuro',
+      'vs.brightness': 'Brilho',
+      'vs.opacity': 'Opacidade',
+      'vs.barOpacity': 'Barra de controle',
+      'vs.panelOpacity': 'Painel',
+
+      // Vídeos na página
+      'sec.videos': 'Vídeos na página',
+      'vi.countOne': '{n} vídeo detectado',
+      'vi.countOther': '{n} vídeos detectados',
+      'vi.selectAll': 'selecionar todos',
+      'vi.hint': 'Clique no indicador ★ ou no botão ★ para escolher o vídeo principal. A tecla 0 alterna play/pause nele.',
+      'vi.video': 'vídeo {n}',
+      'vi.main': 'Vídeo principal',
+      'vi.setMain': 'Definir como vídeo principal',
+      'vi.isMain': 'Este é o vídeo principal',
+      'vi.mainBadge': 'principal',
+      'vi.playPause': 'Play / Pause',
+      'vi.hide': 'Ocultar / mostrar',
+      'vi.mute': 'Mutar',
+      'vi.remove': 'Remover da página',
+      'vi.removeConfirm': 'Remover este elemento de vídeo da página?',
+
+      // Atalhos
+      'sec.keys': 'Atalhos de teclado',
+      'ks.default': 'padrão (global)',
+      'ks.addDomain': '+ domínio',
+      'ks.domainPrompt': 'Domínio (ex: exemplo.com):',
+      'ks.hintGlobal': 'Atalhos globais — usados quando não há configuração específica para o domínio.',
+      'ks.hintScope': 'Atalhos específicos para {scope} — substituem o padrão neste domínio.',
+      'ks.copyTo': 'copiar para {domain}',
+      'ks.copied': 'Atalhos globais copiados para {domain}.',
+      'ks.factory': 'restaurar padrões de fábrica',
+      'ks.factoryConfirm': 'Restaurar atalhos de fábrica para este escopo?',
+      'ks.help': 'Clique em qualquer tecla para reatribuir. Esc cancela. ✕ remove o atalho.',
+      'ks.remove': 'Remover atalho',
+      'ks.fixedPlay': 'Play / pause do vídeo principal (fixo)',
+      'ks.fixedPresets': 'Presets 1.0×…4.0× (fixos)',
+      'ks.invalid': 'inválida',
+      'ks.inUse': 'em uso',
+      'key.slowDown': 'Diminuir velocidade',
+      'key.speedUp': 'Aumentar velocidade',
+      'key.resetSpeed': 'Voltar para 1×',
+      'key.toggle2x': 'Alternar 2×',
+      'key.seekBack': 'Retroceder',
+      'key.seekFwd': 'Avançar',
+      'key.volumeDown': 'Diminuir volume',
+      'key.volumeUp': 'Aumentar volume',
+      'key.toggleMute': 'Mudo / restaurar volume',
+      'key.toggleCB': 'Modo da barra (cicla)',
+      'key.toggleCP': 'Abrir/fechar painel',
+
+      // Comportamento e idioma
+      'sec.behavior': 'Comportamento e idioma',
+      'bh.steps': 'Valores de incremento',
+      'bh.speedStep': 'Passo de velocidade',
+      'bh.volumeStep': 'Passo de volume',
+      'bh.seekStep': 'Passo de avanço',
+      'bh.bar': 'Barra de controle',
+      'bh.barMode': 'Modo da barra',
+      'bh.barModeSub': '{key} alterna entre visível, só alertas e oculta',
+      'bh.barModeBtn': 'modo atual: {mode}',
+      'bh.alertDuration': 'Duração do alerta',
+      'bh.alertHint': 'Duração do aviso no modo "só alertas".',
+
+      // Sites ativos
+      'sec.sites': 'Sites ativos',
+      'si.add': '+ adicionar domínio',
+      'si.prompt': 'Domínio (ex: meusite.com):',
+
+      // Estatísticas e compatibilidade
+      'sec.stats': 'Estatísticas e compatibilidade',
+      'st.saved': 'tempo economizado',
+      'st.watched': 'assistido nesta sessão',
+      'st.avgSpeed': 'velocidade média',
+      'st.quality': 'qualidade detectada',
+      'st.compat': 'Compatibilidade — {domain}',
+      'st.speedControl': 'Controle de velocidade',
+      'st.boost': 'Volume boost',
+      'st.pip': 'Picture-in-Picture',
+      'st.silence': 'Skip de silêncio',
+      'st.normalize': 'Normalização de volume',
+      'st.needsWebAudio': 'requer Web Audio API',
+      'st.needsAudioStream': 'requer acesso ao stream de áudio',
+      'st.available': 'disponível',
+      'st.partial': 'parcial',
+      'st.unavailable': 'indisponível',
+
+      // Dados salvos
+      'sec.data': 'Dados salvos e redefinições',
+      'dt.stored': 'Dados armazenados pelo VCC',
+      'dt.refresh': '↺ atualizar',
+      'dt.copyAll': '⎘ copiar tudo',
+      'dt.deleteAll': 'apagar todos os dados',
+      'dt.resets': 'Redefinições',
+      'dt.resetKeys': 'restaurar atalhos de fábrica',
+      'dt.resetAll': 'restaurar todas as configurações',
+      'dt.empty': '(nenhum dado salvo)',
+      'dt.copyLine': 'Copiar linha',
+      'dt.deleteConfirm': 'Apagar TODOS os dados do VCC?',
+      'dt.deleted': 'Dados apagados.',
+      'dt.resetKeysConfirm': 'Restaurar TODOS os atalhos para os padrões de fábrica?',
+      'dt.resetAllConfirm': 'Restaurar TODAS as configurações? A página será recarregada.',
+
+      // Menu do ícone
+      'pop.unsupported': 'O VCC não funciona nesta página. Abra um site comum para usar o painel.',
+      'pop.noAccess': '● Sem acesso a este site',
+      'pop.noAccessText': 'Para o VCC funcionar aqui, permita que ele acesse o site.',
+      'pop.grantSite': 'Permitir neste site',
+      'pop.grantAll': 'Permitir em todos os sites',
+      'pop.deniedTitle': 'Permissão não concedida.',
+      'pop.deniedText': 'Para liberar depois, clique no botão de extensões da barra (ícone de peça de quebra-cabeça), procure o VCC e ative o acesso ao site — ou vá em Gerenciar extensão → Permissões e ative o acesso a todos os sites.',
+      'pop.accessGranted': '● Acesso liberado',
+      'pop.reloadText': 'Recarregue a página para o VCC começar a funcionar nela.',
+      'pop.reload': 'Recarregar página',
+      'pop.openPanel': 'Abrir painel',
+      'pop.videoControls': 'Controles de vídeo',
+      'pop.videoControlsAria': 'Controles de vídeo neste site',
+      'pop.activeOn': 'ativos neste site',
+      'pop.activeOff': 'desativados neste site',
+      'pop.reloadHint': 'Desativado. Recarregue a página para interromper os controles já iniciados.',
+      'pop.reloadNow': 'Recarregar agora',
+      'pop.accessAll': 'Acesso: todos os sites',
+      'pop.accessSome': 'Acesso: sites escolhidos',
+      'pop.allowAll': 'Liberar todos',
+      'pop.language': 'Idioma',
+    },
+
+    'en-US': {
+      'lang.title': 'Language / Idioma',
+      'lang.auto': 'Automatic ({name})',
+
+      'cb.back': 'seek back',
+      'cb.slower': 'speed −',
+      'cb.drag': 'Drag to move',
+      'cb.faster': 'speed +',
+      'cb.fwd': 'seek forward',
+      'cb.volDown': 'volume −',
+      'cb.muteToggle': 'toggle mute',
+      'cb.volUp': 'volume +',
+      'cb.panel': 'panel',
+      'cb.badge.alerts': 'alerts',
+      'cb.badge.hidden': 'hidden',
+
+      'flash.muted': 'MUTED',
+      'flash.volume': 'volume {n}%',
+      'flash.play': '▶ play',
+      'flash.pause': '⏸ pause',
+      'flash.mode': 'mode: {mode}',
+      'flash.copied': '✓ copied',
+      'flash.siteEnabled': '✓ site enabled',
+
+      'mode.visible': 'visible',
+      'mode.alerts': 'alerts only',
+      'mode.hidden': 'hidden',
+
+      'site.inactiveTitle': '⚠ VCC is not enabled on this site',
+      'site.inactiveText': 'While this domain is disabled, VCC can’t detect or control the videos on this page. General settings are still available.',
+      'site.enable': 'Enable VCC on {domain}',
+      'site.disabledAlert': 'VCC disabled for this domain. Reload the page to stop controls that are already running.',
+
+      'sec.playback': 'Playback',
+      'pb.reset': 'reset',
+      'pb.toggle2x': 'toggle 2×',
+      'pb.presets': 'Presets',
+      'pb.seekBack': '« back',
+      'pb.seekFwd': 'forward »',
+      'pb.cycleBar': 'cycle bar mode',
+      'pb.eta': '{time} left at the current speed of {speed}',
+      'pb.noDuration': 'duration unavailable',
+      'pb.presetPrompt': 'Speed for the new preset (e.g. 0.5):',
+      'pb.invalidValue': 'Invalid value.',
+
+      'sec.audio': 'Audio',
+      'au.volume': 'Volume',
+      'au.lower': '🔉 lower',
+      'au.raise': 'raise 🔊',
+      'au.mute': 'mute',
+      'au.unmute': 'unmute',
+      'au.muted': 'MUTED',
+      'au.boost': 'Volume boost',
+      'au.boostSub': 'Amplifies beyond 100%',
+      'au.level': 'Level',
+      'au.normalize': 'Volume normalization',
+      'au.normalizeSub': 'Evens out videos with different loudness',
+      'au.silence': 'Skip silence',
+      'au.silenceSub': 'Skips parts without speech',
+
+      'sec.nav': 'Advanced navigation',
+      'nv.loop': 'A→B loop',
+      'nv.loopSub': 'Repeat a section between two points',
+      'nv.setA': 'set point A',
+      'nv.setB': 'set point B',
+      'nv.clear': 'clear loop',
+      'nv.noLoop': 'no loop set',
+      'nv.notSet': 'not set',
+      'nv.active': '● active',
+      'nv.savePos': 'Save position per URL',
+      'nv.savePosSub': 'Resumes where you left off',
+      'nv.pip': 'Picture-in-Picture',
+      'nv.pipOn': 'toggle PiP',
+      'nv.pipUnavailable': 'unavailable on this site',
+      'nv.pipError': 'PiP unavailable: {error}',
+      'nv.timestamp': 'copy timestamp',
+
+      'sec.visual': 'Visual',
+      'vs.invert': 'Invert colors',
+      'vs.invertSub': 'Handy for watching in the dark',
+      'vs.brightness': 'Brightness',
+      'vs.opacity': 'Opacity',
+      'vs.barOpacity': 'Control bar',
+      'vs.panelOpacity': 'Panel',
+
+      'sec.videos': 'Videos on this page',
+      'vi.countOne': '{n} video detected',
+      'vi.countOther': '{n} videos detected',
+      'vi.selectAll': 'select all',
+      'vi.hint': 'Click the ★ marker or the ★ button to choose the main video. Key 0 toggles play/pause on it.',
+      'vi.video': 'video {n}',
+      'vi.main': 'Main video',
+      'vi.setMain': 'Set as main video',
+      'vi.isMain': 'This is the main video',
+      'vi.mainBadge': 'main',
+      'vi.playPause': 'Play / Pause',
+      'vi.hide': 'Hide / show',
+      'vi.mute': 'Mute',
+      'vi.remove': 'Remove from page',
+      'vi.removeConfirm': 'Remove this video element from the page?',
+
+      'sec.keys': 'Keyboard shortcuts',
+      'ks.default': 'default (global)',
+      'ks.addDomain': '+ domain',
+      'ks.domainPrompt': 'Domain (e.g. example.com):',
+      'ks.hintGlobal': 'Global shortcuts — used when a domain has no specific setup.',
+      'ks.hintScope': 'Shortcuts for {scope} — they override the defaults on this domain.',
+      'ks.copyTo': 'copy to {domain}',
+      'ks.copied': 'Global shortcuts copied to {domain}.',
+      'ks.factory': 'restore factory defaults',
+      'ks.factoryConfirm': 'Restore factory shortcuts for this scope?',
+      'ks.help': 'Click any key to reassign it. Esc cancels. ✕ removes the shortcut.',
+      'ks.remove': 'Remove shortcut',
+      'ks.fixedPlay': 'Play / pause main video (fixed)',
+      'ks.fixedPresets': 'Presets 1.0×…4.0× (fixed)',
+      'ks.invalid': 'invalid',
+      'ks.inUse': 'in use',
+      'key.slowDown': 'Slow down',
+      'key.speedUp': 'Speed up',
+      'key.resetSpeed': 'Reset to 1×',
+      'key.toggle2x': 'Toggle 2×',
+      'key.seekBack': 'Seek back',
+      'key.seekFwd': 'Seek forward',
+      'key.volumeDown': 'Volume down',
+      'key.volumeUp': 'Volume up',
+      'key.toggleMute': 'Mute / unmute',
+      'key.toggleCB': 'Bar mode (cycles)',
+      'key.toggleCP': 'Open/close panel',
+
+      'sec.behavior': 'Behavior & language',
+      'bh.steps': 'Step sizes',
+      'bh.speedStep': 'Speed step',
+      'bh.volumeStep': 'Volume step',
+      'bh.seekStep': 'Seek step',
+      'bh.bar': 'Control bar',
+      'bh.barMode': 'Bar mode',
+      'bh.barModeSub': '{key} cycles between visible, alerts only and hidden',
+      'bh.barModeBtn': 'current: {mode}',
+      'bh.alertDuration': 'Alert duration',
+      'bh.alertHint': 'How long the alert stays up in "alerts only" mode.',
+
+      'sec.sites': 'Enabled sites',
+      'si.add': '+ add domain',
+      'si.prompt': 'Domain (e.g. mysite.com):',
+
+      'sec.stats': 'Stats & compatibility',
+      'st.saved': 'time saved',
+      'st.watched': 'watched this session',
+      'st.avgSpeed': 'average speed',
+      'st.quality': 'detected quality',
+      'st.compat': 'Compatibility — {domain}',
+      'st.speedControl': 'Speed control',
+      'st.boost': 'Volume boost',
+      'st.pip': 'Picture-in-Picture',
+      'st.silence': 'Skip silence',
+      'st.normalize': 'Volume normalization',
+      'st.needsWebAudio': 'requires the Web Audio API',
+      'st.needsAudioStream': 'requires access to the audio stream',
+      'st.available': 'available',
+      'st.partial': 'partial',
+      'st.unavailable': 'unavailable',
+
+      'sec.data': 'Saved data & resets',
+      'dt.stored': 'Data stored by VCC',
+      'dt.refresh': '↺ refresh',
+      'dt.copyAll': '⎘ copy all',
+      'dt.deleteAll': 'delete all data',
+      'dt.resets': 'Resets',
+      'dt.resetKeys': 'restore factory shortcuts',
+      'dt.resetAll': 'reset all settings',
+      'dt.empty': '(no saved data)',
+      'dt.copyLine': 'Copy line',
+      'dt.deleteConfirm': 'Delete ALL VCC data?',
+      'dt.deleted': 'Data deleted.',
+      'dt.resetKeysConfirm': 'Restore ALL shortcuts to factory defaults?',
+      'dt.resetAllConfirm': 'Reset ALL settings? The page will reload.',
+
+      'pop.unsupported': 'VCC can’t run on this page. Open a regular website to use the panel.',
+      'pop.noAccess': '● No access to this site',
+      'pop.noAccessText': 'To use VCC here, allow it to access this site.',
+      'pop.grantSite': 'Allow on this site',
+      'pop.grantAll': 'Allow on all sites',
+      'pop.deniedTitle': 'Permission not granted.',
+      'pop.deniedText': 'To allow it later, click the Extensions button in the toolbar (puzzle-piece icon), find VCC and allow access to the site — or go to Manage Extension → Permissions and allow access to all websites.',
+      'pop.accessGranted': '● Access granted',
+      'pop.reloadText': 'Reload the page to start VCC on it.',
+      'pop.reload': 'Reload page',
+      'pop.openPanel': 'Open panel',
+      'pop.videoControls': 'Video controls',
+      'pop.videoControlsAria': 'Video controls on this site',
+      'pop.activeOn': 'on for this site',
+      'pop.activeOff': 'off for this site',
+      'pop.reloadHint': 'Turned off. Reload the page to stop controls that are already running.',
+      'pop.reloadNow': 'Reload now',
+      'pop.accessAll': 'Access: all sites',
+      'pop.accessSome': 'Access: selected sites',
+      'pop.allowAll': 'Allow all',
+      'pop.language': 'Language',
+    },
+  };
+
+  const SUPPORTED = ['pt-BR', 'en-US'];
+  const FALLBACK = 'en-US';
+
+  // Nome de cada idioma no próprio idioma, para quem não entende o idioma atual.
+  const LANGUAGE_NAMES = { 'pt-BR': 'Português (Brasil)', 'en-US': 'English' };
+  // Versão curta, usada em "Automático (Português)".
+  const SHORT_NAMES = { 'pt-BR': 'Português', 'en-US': 'English' };
+
+  function browserLanguage() {
+    let lang = '';
+    try { lang = (root.browser || root.chrome)?.i18n?.getUILanguage?.() || ''; } catch {}
+    if (!lang) { try { lang = root.navigator?.language || ''; } catch {} }
+    return lang;
+  }
+
+  // Idioma usado em "Automático".
+  function detect() {
+    return /^pt(\b|[-_])/i.test(browserLanguage()) ? 'pt-BR' : FALLBACK;
+  }
+
+  // Converte a preferência salva ('auto' | 'pt-BR' | 'en-US') no idioma efetivo.
+  function resolve(pref) {
+    return SUPPORTED.includes(pref) ? pref : detect();
+  }
+
+  function translator(lang) {
+    const dict = MESSAGES[lang] || MESSAGES[FALLBACK];
+    return function t(key, params) {
+      const text = dict[key] ?? MESSAGES[FALLBACK][key] ?? key;
+      return params ? text.replace(/\{(\w+)\}/g, (m, k) => (k in params ? String(params[k]) : m)) : text;
+    };
+  }
+
+  root.VCC_I18N = {
+    MESSAGES,
+    SUPPORTED,
+    LANGUAGE_NAMES,
+    SHORT_NAMES,
+    STORAGE_KEY: 'vcc_global_language',
+    detect,
+    resolve,
+    translator,
+  };
+})(globalThis);
 
 (function () {
   'use strict';
@@ -80,6 +554,21 @@
   function appendSafeHTML(el, v) { el.append(...safeHTMLToNodes(v)); }
 
   // ─────────────────────────────────────────────
+  // IDIOMA (textos em src/core/i18n.js)
+  // ─────────────────────────────────────────────
+  const I18N = globalThis.VCC_I18N;
+  let langPref = 'auto';                 // 'auto' | 'pt-BR' | 'en-US'
+  let lang = I18N.resolve(langPref);
+  let t = I18N.translator(lang);
+
+  // Texto traduzido com os parâmetros em negrito, como HTML seguro.
+  // Ex.: 'Faltam {time} na velocidade…' → Faltam <strong>7m 11s</strong> na velocidade…
+  function tStrong(key, params) {
+    const parts = t(key).split(/\{(\w+)\}/);
+    return parts.map((part, i) => (i % 2 ? escapeHTML`<strong>${params[part] ?? ''}</strong>` : escapeHTML`${part}`));
+  }
+
+  // ─────────────────────────────────────────────
   // CONSTANTES
   // ─────────────────────────────────────────────
   const SPEED_MIN          = 0.1;
@@ -112,19 +601,11 @@
     toggleCP:   'H',
   };
 
+  // Ações com atalho configurável (os nomes vêm de 'key.<id>' em i18n.js)
   const KEY_ACTIONS = [
-    { id:'slowDown',   label:'Diminuir velocidade' },
-    { id:'speedUp',    label:'Aumentar velocidade' },
-    { id:'resetSpeed', label:'Resetar para 1×'    },
-    { id:'toggle2x',   label:'Toggle 2×'          },
-    { id:'seekBack',   label:'Retroceder'          },
-    { id:'seekFwd',    label:'Avançar'             },
-    { id:'volumeDown', label:'Diminuir volume'     },
-    { id:'volumeUp',   label:'Aumentar volume'     },
-    { id:'toggleMute', label:'Mudo / volume atual' },
-    { id:'toggleCB',   label:'Modo do CB (cicla)'  },
-    { id:'toggleCP',   label:'Abrir/fechar CP'     },
-  ];
+    'slowDown', 'speedUp', 'resetSpeed', 'toggle2x', 'seekBack', 'seekFwd',
+    'volumeDown', 'volumeUp', 'toggleMute', 'toggleCB', 'toggleCP',
+  ].map(id => ({ id }));
 
   // ─────────────────────────────────────────────
   // ESTADO
@@ -264,7 +745,7 @@
     saveVolume();
     updateCBVolume();
     updateCPVolume();
-    flashCB(state.muted ? 'MUDO' : `volume ${Math.round(state.volume * 100)}%`, true);
+    flashCB(state.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(state.volume * 100) }), true);
   }
 
   function changeVolume(percent) {
@@ -287,7 +768,7 @@
     saveVolume();
     updateCBVolume();
     updateCPVolume();
-    flashCB(state.muted ? 'MUDO' : `volume ${Math.round(state.volume * 100)}%`, true);
+    flashCB(state.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(state.volume * 100) }), true);
   }
 
   function togglePrimaryPlayback() {
@@ -302,7 +783,7 @@
         vid.pause();
       }
     } catch {}
-    flashCB(shouldPlay ? '▶ play' : '⏸ pause', true);
+    flashCB(t(shouldPlay ? 'flash.play' : 'flash.pause'), true);
     setTimeout(updateVideoList, 80);
   }
 
@@ -697,21 +1178,27 @@
   let flashTimer = null;
   let flashHideTimer = null;
 
+  // Dica dos botões: "Z — retroceder", usando a tecla configurada no momento.
+  function keyTitle(action, key) {
+    return KEYS[action] ? `${KEYS[action]} — ${t(key)}` : t(key);
+  }
+
   function buildCB() {
     cbEl = document.createElement('div');
     cbEl.id = 'vcc-cb';
+    cbEl.lang = lang;
     setSafeHTML(cbEl, escapeHTML`
-      <button id="vcc-cb-back" title="Z — retroceder">«</button>
-      <button id="vcc-cb-slow" title="S — velocidade −">−</button>
-      <span   id="vcc-cb-speed" title="Arraste para mover">1.0×</span>
-      <button id="vcc-cb-fast" title="D — velocidade +">+</button>
-      <button id="vcc-cb-fwd"  title="X — avançar">»</button>
+      <button id="vcc-cb-back" title="${keyTitle('seekBack', 'cb.back')}">«</button>
+      <button id="vcc-cb-slow" title="${keyTitle('slowDown', 'cb.slower')}">−</button>
+      <span   id="vcc-cb-speed" title="${t('cb.drag')}">1.0×</span>
+      <button id="vcc-cb-fast" title="${keyTitle('speedUp', 'cb.faster')}">+</button>
+      <button id="vcc-cb-fwd"  title="${keyTitle('seekFwd', 'cb.fwd')}">»</button>
       <div id="vcc-cb-div"></div>
-      <button id="vcc-cb-vol-down" title="Q — volume −">🔉</button>
-      <span id="vcc-cb-volume" title="M — alternar mudo">100%</span>
-      <button id="vcc-cb-vol-up" title="E — volume +">🔊</button>
+      <button id="vcc-cb-vol-down" title="${keyTitle('volumeDown', 'cb.volDown')}">🔉</button>
+      <span id="vcc-cb-volume" title="${keyTitle('toggleMute', 'cb.muteToggle')}">100%</span>
+      <button id="vcc-cb-vol-up" title="${keyTitle('volumeUp', 'cb.volUp')}">🔊</button>
       <div id="vcc-cb-vol-div"></div>
-      <button id="vcc-cb-cfg"  title="H — painel">≡</button>
+      <button id="vcc-cb-cfg"  title="${keyTitle('toggleCP', 'cb.panel')}">≡</button>
       <span id="vcc-cb-mode-badge"></span>
     `);
 
@@ -772,7 +1259,7 @@
     save(gk('cbMode'), state.cbMode);
     applyCBMode();
     updateCPCBModeBtn();
-    if (state.cbMode !== 'visible') flashCB(`modo: ${state.cbMode}`, false);
+    if (state.cbMode !== 'visible') flashCB(t('flash.mode', { mode: t(`mode.${state.cbMode}`) }), false);
   }
 
   function applyCBMode() {
@@ -784,7 +1271,7 @@
       if (badge) badge.textContent = '';
     } else {
       cbEl.style.setProperty('display', 'none', 'important');
-      if (badge) badge.textContent = state.cbMode === 'alerts' ? 'alerta' : 'oculto';
+      if (badge) badge.textContent = t(state.cbMode === 'alerts' ? 'cb.badge.alerts' : 'cb.badge.hidden');
     }
   }
 
@@ -843,6 +1330,7 @@
   function buildCP() {
     cpEl = document.createElement('div');
     cpEl.id = 'vcc-cp';
+    cpEl.lang = lang;
     // Opacity e display controlados por JS — não pelo CSS do site
     cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
     cpEl.style.setProperty('display', state.cpVisible ? 'flex' : 'none', 'important');
@@ -893,156 +1381,160 @@
     setSafeHTML(content, [
 
       // ── Reprodução ──
-      acc('pb', '▶', 'Reprodução', escapeHTML`
+      acc('pb', '▶', t('sec.playback'), escapeHTML`
         <div class="vcc-spd-row">
           <button class="vcc-spd-btn" id="vcc-spd-minus">−</button>
           <input class="vcc-spd-in" id="vcc-spd-input" type="number" min="0.1" max="16" step="0.1" value="1.0">
           <button class="vcc-spd-btn" id="vcc-spd-plus">+</button>
-          <button class="vcc-spd-btn sm" id="vcc-spd-reset">reset</button>
-          <button class="vcc-spd-btn sm" id="vcc-spd-toggle2x">2× toggle</button>
+          <button class="vcc-spd-btn sm" id="vcc-spd-reset">${t('pb.reset')}</button>
+          <button class="vcc-spd-btn sm" id="vcc-spd-toggle2x">${t('pb.toggle2x')}</button>
         </div>
         <div class="vcc-eta" id="vcc-eta">—</div>
-        <p class="vcc-sub-title" style="margin-top:8px">Presets</p>
+        <p class="vcc-sub-title" style="margin-top:8px">${t('pb.presets')}</p>
         <div class="vcc-preset-grid" id="vcc-presets"></div>
         <div class="vcc-abts">
-          <button class="vcc-abt" id="vcc-seek-back">« retroceder</button>
-          <button class="vcc-abt" id="vcc-seek-fwd">avançar »</button>
-          <button class="vcc-abt" id="vcc-toggle-cb-btn">ciclar modo CB</button>
+          <button class="vcc-abt" id="vcc-seek-back">${t('pb.seekBack')}</button>
+          <button class="vcc-abt" id="vcc-seek-fwd">${t('pb.seekFwd')}</button>
+          <button class="vcc-abt" id="vcc-toggle-cb-btn">${t('pb.cycleBar')}</button>
         </div>
       `, true, true),
 
       // ── Áudio ──
-      acc('au', '♪', 'Áudio', escapeHTML`
-        <div class="vcc-slr"><label>Volume</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? 'MUDO' : Math.round(state.volume * 100) + '%'}</span></div>
-        <div class="vcc-abts"><button class="vcc-abt" id="vcc-volume-down">🔉 diminuir</button><button class="vcc-abt" id="vcc-volume-mute">${state.muted ? 'restaurar volume' : 'mudo'}</button><button class="vcc-abt" id="vcc-volume-up">aumentar 🔊</button></div>
-        ${tog('boost', true, 'Volume boost', 'Amplifica além de 100%')}
-        <div class="vcc-slr"><label>Nível</label><input type="range" id="vcc-boost-level" min="100" max="300" value="100" step="5"><span class="vcc-slv" id="vcc-boost-val">100%</span></div>
-        ${tog('normalize', false, 'Normalização de volume', 'Equaliza vídeos com volumes diferentes')}
-        ${tog('silence', false, 'Skip de silêncio', 'Pula trechos sem fala')}
+      acc('au', '♪', t('sec.audio'), escapeHTML`
+        <div class="vcc-slr"><label>${t('au.volume')}</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? t('au.muted') : Math.round(state.volume * 100) + '%'}</span></div>
+        <div class="vcc-abts"><button class="vcc-abt" id="vcc-volume-down">${t('au.lower')}</button><button class="vcc-abt" id="vcc-volume-mute">${t(state.muted ? 'au.unmute' : 'au.mute')}</button><button class="vcc-abt" id="vcc-volume-up">${t('au.raise')}</button></div>
+        ${tog('boost', true, t('au.boost'), t('au.boostSub'))}
+        <div class="vcc-slr"><label>${t('au.level')}</label><input type="range" id="vcc-boost-level" min="100" max="300" value="100" step="5"><span class="vcc-slv" id="vcc-boost-val">100%</span></div>
+        ${tog('normalize', false, t('au.normalize'), t('au.normalizeSub'))}
+        ${tog('silence', false, t('au.silence'), t('au.silenceSub'))}
       `, false, true),
 
       // ── Navegação avançada ──
-      acc('nv', '⊹', 'Navegação avançada', escapeHTML`
-        ${tog('loopab', false, 'Loop A→B', 'Repetir trecho entre dois pontos')}
+      acc('nv', '⊹', t('sec.nav'), escapeHTML`
+        ${tog('loopab', false, t('nv.loop'), t('nv.loopSub'))}
         <div class="vcc-abts" style="margin-bottom:4px">
-          <button class="vcc-abt" id="vcc-loop-a">marcar ponto A</button>
-          <button class="vcc-abt" id="vcc-loop-b">marcar ponto B</button>
-          <button class="vcc-abt" id="vcc-loop-clear">limpar loop</button>
+          <button class="vcc-abt" id="vcc-loop-a">${t('nv.setA')}</button>
+          <button class="vcc-abt" id="vcc-loop-b">${t('nv.setB')}</button>
+          <button class="vcc-abt" id="vcc-loop-clear">${t('nv.clear')}</button>
         </div>
         <div class="vcc-loop-status" id="vcc-loop-status">
-          <span class="none">nenhum loop configurado</span>
+          <span class="none">${t('nv.noLoop')}</span>
         </div>
-        ${tog('savepos', true, 'Salvar posição por URL', 'Retoma de onde parou ao reabrir')}
+        ${tog('savepos', true, t('nv.savePos'), t('nv.savePosSub'))}
         <div class="vcc-row">
-          <div class="vcc-row-label">Picture-in-Picture</div>
-          <button class="vcc-abt" id="vcc-pip"${!document.pictureInPictureEnabled ? ' disabled' : ''}>${document.pictureInPictureEnabled ? 'ativar PiP' : 'indisponível neste site'}</button>
+          <div class="vcc-row-label">${t('nv.pip')}</div>
+          <button class="vcc-abt" id="vcc-pip"${!document.pictureInPictureEnabled ? ' disabled' : ''}>${t(document.pictureInPictureEnabled ? 'nv.pipOn' : 'nv.pipUnavailable')}</button>
         </div>
         <div class="vcc-abts" style="margin-top:2px">
-          <button class="vcc-abt" id="vcc-timestamp">copiar timestamp</button>
+          <button class="vcc-abt" id="vcc-timestamp">${t('nv.timestamp')}</button>
         </div>
       `, false, true),
 
       // ── Visual ──
-      acc('vs', '◑', 'Visual', escapeHTML`
-        ${tog('invert', false, 'Inversão de cores', 'Útil para assistir no escuro', true)}
-        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label>Brilho</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
-        <p class="vcc-sub-title" style="margin-top:8px">Opacidade</p>
-        <div class="vcc-slr"><label>Control Box</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
-        <div class="vcc-slr"><label>Control Panel</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
+      acc('vs', '◑', t('sec.visual'), escapeHTML`
+        ${tog('invert', false, t('vs.invert'), t('vs.invertSub'), true)}
+        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label>${t('vs.brightness')}</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
+        <p class="vcc-sub-title" style="margin-top:8px">${t('vs.opacity')}</p>
+        <div class="vcc-slr"><label>${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
+        <div class="vcc-slr"><label>${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
       `),
 
       // ── Vídeos na página ──
-      acc('vi', '▣', 'Vídeos na página', escapeHTML`
+      acc('vi', '▣', t('sec.videos'), escapeHTML`
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
-          <span class="vcc-sub-title" style="margin:0" id="vcc-vid-count">0 vídeos detectados</span>
-          <button class="vcc-abt" id="vcc-vid-all">selecionar todos</button>
+          <span class="vcc-sub-title" style="margin:0" id="vcc-vid-count">${t('vi.countOther', { n: 0 })}</span>
+          <button class="vcc-abt" id="vcc-vid-all">${t('vi.selectAll')}</button>
         </div>
-        <p class="vcc-hint" style="margin:0 0 7px">Clique no indicador ★ ou no botão ★ para escolher o vídeo principal. A tecla 0 alterna play/pause nele.</p>
+        <p class="vcc-hint" style="margin:0 0 7px">${t('vi.hint')}</p>
         <div id="vcc-vid-list"></div>
       `, false, true),
 
       // ── Atalhos de teclado ──
-      acc('ks', '⌨', 'Atalhos de teclado', escapeHTML`
+      acc('ks', '⌨', t('sec.keys'), escapeHTML`
         <div class="vcc-scope-tabs" id="vcc-scope-tabs">
-          <button class="vcc-scope-tab active" data-scope="default">padrão (global)</button>
+          <button class="vcc-scope-tab active" data-scope="default">${t('ks.default')}</button>
           <button class="vcc-scope-tab" data-scope="${domain}">${domain}</button>
-          <button class="vcc-scope-tab" id="vcc-add-scope">+ domínio</button>
+          <button class="vcc-scope-tab" id="vcc-add-scope">${t('ks.addDomain')}</button>
         </div>
-        <p class="vcc-hint" id="vcc-scope-hint">Atalhos globais — usados quando não há configuração específica para o domínio.</p>
+        <p class="vcc-hint" id="vcc-scope-hint">${t('ks.hintGlobal')}</p>
         <div id="vcc-keys-list"></div>
         <div class="vcc-abts" style="margin-top:8px">
-          <button class="vcc-abt" id="vcc-keys-copy-to-domain">copiar para ${domain}</button>
-          <button class="vcc-abt" id="vcc-keys-factory">restaurar padrões de fábrica</button>
+          <button class="vcc-abt" id="vcc-keys-copy-to-domain">${t('ks.copyTo', { domain })}</button>
+          <button class="vcc-abt" id="vcc-keys-factory">${t('ks.factory')}</button>
         </div>
-        <p class="vcc-hint">Clique em qualquer tecla para reatribuir. Esc cancela. ✕ remove o atalho.</p>
+        <p class="vcc-hint">${t('ks.help')}</p>
       `),
 
-      // ── Comportamento ──
-      acc('beh', '⚙', 'Comportamento', escapeHTML`
-        <p class="vcc-sub-title">Valores de incremento</p>
+      // ── Comportamento e idioma ──
+      acc('beh', '⚙', t('sec.behavior'), escapeHTML`
+        <p class="vcc-sub-title">🌐 ${t('lang.title')}</p>
+        <div class="vcc-scope-tabs" id="vcc-lang-tabs">
+          ${['auto', ...I18N.SUPPORTED].map(code => escapeHTML`<button class="vcc-scope-tab${langPref === code ? ' active' : ''}" data-lang="${code}" lang="${code === 'auto' ? lang : code}">${code === 'auto' ? t('lang.auto', { name: I18N.SHORT_NAMES[I18N.detect()] }) : I18N.LANGUAGE_NAMES[code]}</button>`)}
+        </div>
+        <p class="vcc-sub-title" style="margin-top:10px">${t('bh.steps')}</p>
         <div class="vcc-slr">
-          <label>Passo velocidade</label>
+          <label>${t('bh.speedStep')}</label>
           <input type="number" id="vcc-speed-step" class="vcc-num-in" min="0.05" max="1" step="0.05" value="${state.speedStep}">
           <span style="font-size:10px;color:rgba(255,255,255,0.35)">×</span>
         </div>
         <div class="vcc-slr" style="margin-top:8px">
-          <label>Passo de volume</label>
+          <label>${t('bh.volumeStep')}</label>
           <input type="number" id="vcc-volume-step" class="vcc-num-in" min="1" max="25" step="1" value="${state.volumeStep}">
           <span style="font-size:10px;color:rgba(255,255,255,0.35)">%</span>
         </div>
         <div class="vcc-slr" style="margin-top:8px">
-          <label>Passo de seek</label>
+          <label>${t('bh.seekStep')}</label>
           <input type="number" id="vcc-seek-step" class="vcc-num-in" min="1" max="300" step="1" value="${state.seekStep}">
           <span style="font-size:10px;color:rgba(255,255,255,0.35)">s</span>
         </div>
-        <p class="vcc-sub-title" style="margin-top:10px">Control Box</p>
+        <p class="vcc-sub-title" style="margin-top:10px">${t('bh.bar')}</p>
         <div class="vcc-row">
           <div>
-            <div class="vcc-row-label">Modo do CB</div>
-            <div class="vcc-row-sub">V alterna entre visível, só alertas e oculto</div>
+            <div class="vcc-row-label">${t('bh.barMode')}</div>
+            <div class="vcc-row-sub">${t('bh.barModeSub', { key: KEYS.toggleCB || '—' })}</div>
           </div>
           <button class="vcc-abt" id="vcc-cb-mode-btn" style="white-space:nowrap">—</button>
         </div>
         <div class="vcc-slr" style="margin-top:6px">
-          <label>Duração do alerta</label>
+          <label>${t('bh.alertDuration')}</label>
           <input type="range" id="vcc-alert-dur" min="200" max="3000" step="100" value="${state.alertDuration}">
           <span class="vcc-slv" id="vcc-alert-dur-val">${state.alertDuration}ms</span>
         </div>
-        <p class="vcc-hint">Duração do flash no modo "apenas alertas".</p>
+        <p class="vcc-hint">${t('bh.alertHint')}</p>
       `),
 
       // ── Sites ativos ──
-      acc('si', '◈', 'Sites ativos', escapeHTML`
+      acc('si', '◈', t('sec.sites'), escapeHTML`
         <div id="vcc-sites-list">${buildSitesList()}</div>
-        <div class="vcc-abts"><button class="vcc-abt" id="vcc-add-site">+ adicionar domínio</button></div>
+        <div class="vcc-abts"><button class="vcc-abt" id="vcc-add-site">${t('si.add')}</button></div>
       `),
 
       // ── Estatísticas e compatibilidade ──
-      acc('st', '◎', 'Estatísticas e compatibilidade', escapeHTML`
+      acc('st', '◎', t('sec.stats'), escapeHTML`
         <div class="vcc-stat-grid">
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-saved">0s</div><div class="vcc-sl">tempo economizado</div></div>
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-watched">0s</div><div class="vcc-sl">assistido nesta sessão</div></div>
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-avgspd">—</div><div class="vcc-sl">velocidade média</div></div>
-          <div class="vcc-sc"><div class="vcc-sv" id="stat-quality">—</div><div class="vcc-sl">qualidade detectada</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-saved">0s</div><div class="vcc-sl">${t('st.saved')}</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-watched">0s</div><div class="vcc-sl">${t('st.watched')}</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-avgspd">—</div><div class="vcc-sl">${t('st.avgSpeed')}</div></div>
+          <div class="vcc-sc"><div class="vcc-sv" id="stat-quality">—</div><div class="vcc-sl">${t('st.quality')}</div></div>
         </div>
-        <p class="vcc-sub-title">Compatibilidade — ${domain}</p>
+        <p class="vcc-sub-title">${t('st.compat', { domain })}</p>
         <div id="vcc-compat"></div>
       `, false, true),
 
       // ── Dados salvos ──
-      acc('data', '⊟', 'Dados salvos e redefinições', escapeHTML`
-        <p class="vcc-sub-title">Dados armazenados pelo VCC</p>
+      acc('data', '⊟', t('sec.data'), escapeHTML`
+        <p class="vcc-sub-title">${t('dt.stored')}</p>
         <div id="vcc-storage-list" style="margin-bottom:8px;font-family:monospace;font-size:10px;color:rgba(255,255,255,0.42);line-height:1.8"></div>
         <div class="vcc-abts" style="margin-bottom:12px">
-          <button class="vcc-abt" id="vcc-refresh-storage">↺ atualizar</button>
-          <button class="vcc-abt" id="vcc-copy-all-storage">⎘ copiar tudo</button>
-          <button class="vcc-abt" id="vcc-clear-storage" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">apagar todos os dados</button>
+          <button class="vcc-abt" id="vcc-refresh-storage">${t('dt.refresh')}</button>
+          <button class="vcc-abt" id="vcc-copy-all-storage">${t('dt.copyAll')}</button>
+          <button class="vcc-abt" id="vcc-clear-storage" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">${t('dt.deleteAll')}</button>
         </div>
         <div class="vcc-danger-zone">
-          <div class="vcc-danger-title">Redefinições</div>
+          <div class="vcc-danger-title">${t('dt.resets')}</div>
           <div class="vcc-abts">
-            <button class="vcc-abt" id="vcc-reset-keys">restaurar atalhos de fábrica</button>
-            <button class="vcc-abt" id="vcc-reset-all" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">restaurar todas as configs</button>
+            <button class="vcc-abt" id="vcc-reset-keys">${t('dt.resetKeys')}</button>
+            <button class="vcc-abt" id="vcc-reset-all" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">${t('dt.resetAll')}</button>
           </div>
         </div>
       `),
@@ -1065,9 +1557,9 @@
     }
     setSafeHTML(status, escapeHTML`
       <div class="vcc-site-warning" role="alert">
-        <div class="vcc-site-warning-title">⚠ VCC não está ativo neste site</div>
-        <div class="vcc-site-warning-text">Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.</div>
-        <button class="vcc-activate-site" id="vcc-activate-site">Ativar VCC em ${domain}</button>
+        <div class="vcc-site-warning-title">${t('site.inactiveTitle')}</div>
+        <div class="vcc-site-warning-text">${t('site.inactiveText')}</div>
+        <button class="vcc-activate-site" id="vcc-activate-site">${t('site.enable', { domain })}</button>
       </div>`);
     status.querySelector('#vcc-activate-site').addEventListener('click', activateCurrentSite);
   }
@@ -1154,7 +1646,7 @@
 
     // Atalhos
     q('#vcc-add-scope').addEventListener('click', () => {
-      const d = prompt('Domínio (ex: exemplo.com):'); if (d && d.trim()) addScopeTab(d.trim());
+      const d = prompt(t('ks.domainPrompt')); if (d && d.trim()) addScopeTab(d.trim());
     });
     cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(t => {
       t.addEventListener('click', () => setScope(t.dataset.scope));
@@ -1163,10 +1655,10 @@
       const target     = currentScope === 'default' ? domain : currentScope;
       const globalKeys = { ...FACTORY_KEYS, ...load(gk('keys'), {}) };
       save(`vcc_${target}_keys`, globalKeys);
-      alert(`Atalhos globais copiados para ${target}.`);
+      alert(t('ks.copied', { domain: target }));
     });
     q('#vcc-keys-factory').addEventListener('click', () => {
-      if (!confirm('Restaurar atalhos de fábrica para este escopo?')) return;
+      if (!confirm(t('ks.factoryConfirm'))) return;
       if (currentScope === 'default') del(gk('keys'));
       else del(`vcc_${currentScope}_keys`);
       KEYS = loadKeys(domain); buildKeysList();
@@ -1199,7 +1691,7 @@
     // Sites
     cpEl.querySelectorAll('[data-site-tog]').forEach(bindSiteToggle);
     q('#vcc-add-site').addEventListener('click', () => {
-      const d = prompt('Domínio (ex: meusite.com):'); if (d && d.trim()) addSiteRow(d.trim(), true);
+      const d = prompt(t('si.prompt')); if (d && d.trim()) addSiteRow(d.trim(), true);
     });
 
     // Dados
@@ -1209,20 +1701,25 @@
         let v = ''; try { v = JSON.stringify(GM_getValue(k)); } catch {}
         return `${k}: ${v}`;
       }).join('\n');
-      navigator.clipboard.writeText(all).then(() => flashCB('⎘ copiado'));
+      navigator.clipboard.writeText(all).then(() => flashCB(t('flash.copied'), true), () => {});
     });
     q('#vcc-clear-storage').addEventListener('click', () => {
-      if (!confirm('Apagar TODOS os dados do VCC?')) return;
-      getAllVccKeys().forEach(del); refreshStorageList(); alert('Dados apagados.');
+      if (!confirm(t('dt.deleteConfirm'))) return;
+      getAllVccKeys().forEach(del); refreshStorageList(); alert(t('dt.deleted'));
     });
     q('#vcc-reset-keys').addEventListener('click', () => {
-      if (!confirm('Restaurar TODOS os atalhos para os padrões de fábrica?')) return;
+      if (!confirm(t('dt.resetKeysConfirm'))) return;
       getAllVccKeys().filter(k => k.includes('_keys')).forEach(del);
       KEYS = { ...FACTORY_KEYS }; buildKeysList();
     });
     q('#vcc-reset-all').addEventListener('click', () => {
-      if (!confirm('Restaurar TODAS as configurações? A página será recarregada.')) return;
+      if (!confirm(t('dt.resetAllConfirm'))) return;
       getAllVccKeys().forEach(del); location.reload();
+    });
+
+    // Idioma
+    cpEl.querySelectorAll('#vcc-lang-tabs [data-lang]').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
   }
 
@@ -1239,9 +1736,9 @@
       c.addEventListener('click', () => setSpeed(parseFloat(c.dataset.speed)));
     });
     grid.querySelector('#vcc-preset-add').addEventListener('click', () => {
-      const v = prompt('Velocidade do novo preset (ex: 0.5):'); if (!v) return;
+      const v = prompt(t('pb.presetPrompt')); if (!v) return;
       const n = parseFloat(v);
-      if (isNaN(n) || n < SPEED_MIN || n > SPEED_MAX) return alert('Valor inválido.');
+      if (isNaN(n) || n < SPEED_MIN || n > SPEED_MAX) return alert(t('pb.invalidValue'));
       if (!PRESET_SPEEDS.includes(n)) { PRESET_SPEEDS.push(n); PRESET_SPEEDS.sort((a, b) => a - b); }
       buildPresets();
     });
@@ -1263,10 +1760,10 @@
     const eta = cpEl.querySelector('#vcc-eta'); if (!eta) return;
     const vid = state.videos[state.primaryVideo];
     if (!vid || !isFinite(vid.duration) || vid.duration === 0) {
-      setSafeHTML(eta, escapeHTML`<span style="color:rgba(255,255,255,.28)">duração não disponível</span>`); return;
+      setSafeHTML(eta, escapeHTML`<span style="color:rgba(255,255,255,.28)">${t('pb.noDuration')}</span>`); return;
     }
     const rem = (vid.duration - vid.currentTime) / state.speed;
-    setSafeHTML(eta, escapeHTML`Faltam <strong>${fmtDuration(rem)}</strong> na velocidade atual de <strong>${fmtSpeed(state.speed)}×</strong>`);
+    setSafeHTML(eta, tStrong('pb.eta', { time: fmtDuration(rem), speed: fmtSpeed(state.speed) + '×' }));
   }
 
   // ─────────────────────────────────────────────
@@ -1282,23 +1779,23 @@
       const isTarget  = state.targetVideos.has(i);
       const dur = isFinite(vid.duration) ? fmtDuration(vid.duration) : '?';
       const res = vid.videoWidth ? `${vid.videoWidth}×${vid.videoHeight}` : '—';
-      let srcLabel = 'vídeo ' + (i + 1);
+      let srcLabel = t('vi.video', { n: i + 1 });
       try { srcLabel = new URL(vid.src).hostname || srcLabel; } catch {}
 
       const row = document.createElement('div');
       row.className = 'vcc-vrow';
       setSafeHTML(row, escapeHTML`
-        <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${isPrimary ? 'Vídeo principal' : 'Definir como vídeo principal'}">${isPrimary ? '★' : '#' + (i + 1)}</div>
+        <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${t(isPrimary ? 'vi.main' : 'vi.setMain')}">${isPrimary ? '★' : '#' + (i + 1)}</div>
         <div style="flex:1;min-width:0">
-          <div class="vcc-vname">${srcLabel}${isPrimary ? escapeHTML`<span class="vcc-primary-badge">principal</span>` : ''}</div>
+          <div class="vcc-vname">${srcLabel}${isPrimary ? escapeHTML`<span class="vcc-primary-badge">${t('vi.mainBadge')}</span>` : ''}</div>
           <div class="vcc-vmeta">${res} · ${dur}</div>
         </div>
         <div class="vcc-vid-actions">
-          <button class="vcc-vid-btn" data-act="primary" title="${isPrimary ? 'Este é o vídeo principal' : 'Definir como vídeo principal'}" style="${isPrimary ? 'color:#5DCAA5;border-color:#1D9E75' : ''}">★</button>
-          <button class="vcc-vid-btn" data-act="playpause" title="Play / Pause">${vid.paused ? '▶' : '⏸'}</button>
-          <button class="vcc-vid-btn" data-act="hide"      title="Ocultar / mostrar">◻</button>
-          <button class="vcc-vid-btn" data-act="mute"      title="Mutar">${vid.muted ? '✕♪' : '♪'}</button>
-          <button class="vcc-vid-btn danger" data-act="remove" title="Remover da página">✕</button>
+          <button class="vcc-vid-btn" data-act="primary" title="${t(isPrimary ? 'vi.isMain' : 'vi.setMain')}" style="${isPrimary ? 'color:#5DCAA5;border-color:#1D9E75' : ''}">★</button>
+          <button class="vcc-vid-btn" data-act="playpause" title="${t('vi.playPause')}">${vid.paused ? '▶' : '⏸'}</button>
+          <button class="vcc-vid-btn" data-act="hide"      title="${t('vi.hide')}">◻</button>
+          <button class="vcc-vid-btn" data-act="mute"      title="${t('vi.mute')}">${vid.muted ? '✕♪' : '♪'}</button>
+          <button class="vcc-vid-btn danger" data-act="remove" title="${t('vi.remove')}">✕</button>
         </div>
         <div class="vcc-chk${isTarget ? ' on' : ''}" data-vidx="${i}">${isTarget ? '✓' : ''}</div>
       `);
@@ -1331,7 +1828,7 @@
               try { vid.muted = !vid.muted; } catch {}
               btn.textContent = vid.muted ? '✕♪' : '♪'; break;
             case 'remove':
-              if (!confirm('Remover este elemento de vídeo da página?')) return;
+              if (!confirm(t('vi.removeConfirm'))) return;
               try { vid.remove(); } catch {}
               state.videos.splice(i, 1);
               const newSet = new Set();
@@ -1347,7 +1844,10 @@
     });
 
     const count = cpEl.querySelector('#vcc-vid-count');
-    if (count) count.textContent = `${state.videos.filter(v => v.isConnected).length} vídeo(s) detectado(s)`;
+    if (count) {
+      const n = state.videos.filter(v => v.isConnected).length;
+      count.textContent = t(n === 1 ? 'vi.countOne' : 'vi.countOther', { n });
+    }
   }
 
   function updateVideoList() { if (cpEl && state.cpVisible) buildVideoList(); }
@@ -1367,21 +1867,21 @@
 
     const keyRows = KEY_ACTIONS.map(a => escapeHTML`
       <div class="vcc-kbd-row">
-        <span class="vcc-kbd-action">${a.label}</span>
+        <span class="vcc-kbd-action">${t('key.' + a.id)}</span>
         <span style="display:flex;align-items:center;gap:3px">
           <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] || '—'}</span>
-          <button class="vcc-kbd-clear" data-clear="${a.id}" title="Remover atalho">✕</button>
+          <button class="vcc-kbd-clear" data-clear="${a.id}" title="${t('ks.remove')}">✕</button>
         </span>
       </div>`);
 
     // Numerais fixos (não editáveis)
     setSafeHTML(list, escapeHTML`${keyRows}
       <div class="vcc-kbd-row" style="opacity:.5">
-        <span class="vcc-kbd-action">Play / pause do vídeo principal (fixo)</span>
+        <span class="vcc-kbd-action">${t('ks.fixedPlay')}</span>
         <span class="vcc-kbd-key" style="cursor:default">0</span>
       </div>
       <div class="vcc-kbd-row" style="opacity:.5">
-        <span class="vcc-kbd-action">Presets 1.0×…4.0× (fixos)</span>
+        <span class="vcc-kbd-action">${t('ks.fixedPresets')}</span>
         <span style="display:flex;gap:3px">
           <span class="vcc-kbd-key" style="cursor:default">1</span>
           <span class="vcc-kbd-key" style="cursor:default">…</span>
@@ -1403,7 +1903,7 @@
     });
 
     const copyBtn = cpEl.querySelector('#vcc-keys-copy-to-domain');
-    if (copyBtn) copyBtn.textContent = `copiar para ${currentScope === 'default' ? domain : currentScope}`;
+    if (copyBtn) copyBtn.textContent = t('ks.copyTo', { domain: currentScope === 'default' ? domain : currentScope });
   }
 
   function startCapture(keyEl) {
@@ -1422,7 +1922,7 @@
       // Bloquear teclas proibidas
       if (FORBIDDEN_KEYS.has(e.key)) {
         keyEl.classList.remove('capturing'); keyEl.classList.add('error');
-        keyEl.textContent = 'inválida';
+        keyEl.textContent = t('ks.invalid');
         setTimeout(() => { keyEl.classList.remove('error'); keyEl.textContent = keyEl._orig; capturingKey = null; }, 1200);
         document.removeEventListener('keydown', handler, true); return;
       }
@@ -1438,7 +1938,7 @@
       );
       if (dup) {
         keyEl.classList.remove('capturing'); keyEl.classList.add('error');
-        keyEl.textContent = 'em uso';
+        keyEl.textContent = t('ks.inUse');
         setTimeout(() => { keyEl.classList.remove('error'); keyEl.textContent = keyEl._orig; capturingKey = null; }, 1400);
         document.removeEventListener('keydown', handler, true); return;
       }
@@ -1459,9 +1959,7 @@
     cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(t => t.classList.toggle('active', t.dataset.scope === scope));
     KEYS = loadKeys(scope === 'default' ? 'default' : scope);
     const hint = cpEl.querySelector('#vcc-scope-hint');
-    if (hint) hint.textContent = scope === 'default'
-      ? 'Atalhos globais — usados quando não há configuração específica para o domínio.'
-      : `Atalhos específicos para ${scope} — substituem o padrão neste domínio.`;
+    if (hint) hint.textContent = scope === 'default' ? t('ks.hintGlobal') : t('ks.hintScope', { scope });
     buildKeysList();
   }
 
@@ -1495,14 +1993,14 @@
     const value = cpEl.querySelector('#vcc-volume-val');
     const button = cpEl.querySelector('#vcc-volume-mute');
     if (slider) slider.value = Math.round(state.volume * 100);
-    if (value) value.textContent = state.muted ? 'MUDO' : `${Math.round(state.volume * 100)}%`;
-    if (button) button.textContent = state.muted ? 'restaurar volume' : 'mudo';
+    if (value) value.textContent = state.muted ? t('au.muted') : `${Math.round(state.volume * 100)}%`;
+    if (button) button.textContent = t(state.muted ? 'au.unmute' : 'au.mute');
   }
 
   function updateCBVolume() {
     if (!cbEl) return;
     const el = cbEl.querySelector('#vcc-cb-volume');
-    if (el) el.textContent = state.muted ? 'MUDO' : `${Math.round(state.volume * 100)}%`;
+    if (el) el.textContent = state.muted ? t('flash.muted') : `${Math.round(state.volume * 100)}%`;
   }
 
   function getActiveSites() {
@@ -1562,9 +2060,9 @@
         if (on) {
           startVideoEngine();
           buildCPContent();
-          flashCB('✓ site ativado', true);
+          flashCB(t('flash.siteEnabled'), true);
         } else {
-          alert('VCC desativado para este domínio. Recarregue a página para interromper os controles já iniciados.');
+          alert(t('site.disabledAlert'));
         }
       }
     });
@@ -1576,18 +2074,18 @@
   function refreshStorageList() {
     const list = cpEl?.querySelector('#vcc-storage-list'); if (!list) return;
     const keys = getAllVccKeys();
-    if (!keys.length) { setSafeHTML(list, escapeHTML`<span style="color:rgba(255,255,255,.25)">(nenhum dado salvo)</span>`); return; }
+    if (!keys.length) { setSafeHTML(list, escapeHTML`<span style="color:rgba(255,255,255,.25)">${t('dt.empty')}</span>`); return; }
     setSafeHTML(list, keys.map(k => {
       let val = ''; try { val = JSON.stringify(GM_getValue(k)); } catch {}
       const line = `${k}: ${val}`;
       return escapeHTML`<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:.5px solid rgba(255,255,255,.04)">
         <span style="color:rgba(255,255,255,.38);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" title="${k}">${k}</span>
         <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${val}">${val}</span>
-        <button data-copy-line="${line}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="Copiar linha">⎘</button>
+        <button data-copy-line="${line}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="${t('dt.copyLine')}">⎘</button>
       </div>`;
     }));
     list.querySelectorAll('[data-copy-line]').forEach(btn => btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB('⎘ copiado'), () => {});
+      navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB(t('flash.copied'), true), () => {});
     }));
   }
 
@@ -1619,12 +2117,12 @@
   function updateLoopStatus() {
     const el = cpEl?.querySelector('#vcc-loop-status'); if (!el) return;
     if (loopA === null && loopB === null) {
-      setSafeHTML(el, escapeHTML`<span class="none">nenhum loop configurado</span>`); return;
+      setSafeHTML(el, escapeHTML`<span class="none">${t('nv.noLoop')}</span>`); return;
     }
-    const aStr = loopA !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopA)}</span>` : escapeHTML`<span class="none">não definido</span>`;
-    const bStr = loopB !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopB)}</span>` : escapeHTML`<span class="none">não definido</span>`;
+    const aStr = loopA !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopA)}</span>` : escapeHTML`<span class="none">${t('nv.notSet')}</span>`;
+    const bStr = loopB !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopB)}</span>` : escapeHTML`<span class="none">${t('nv.notSet')}</span>`;
     const active = loopA !== null && loopB !== null;
-    setSafeHTML(el, `A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? escapeHTML` &nbsp;<span style="color:#5DCAA5;font-size:9px">● ativo</span>` : ''}`);
+    setSafeHTML(el, escapeHTML`A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? escapeHTML` &nbsp;<span style="color:#5DCAA5;font-size:9px">${t('nv.active')}</span>` : ''}`);
   }
 
   // ─────────────────────────────────────────────
@@ -1633,13 +2131,13 @@
   async function activatePiP() {
     const vid = state.videos[state.primaryVideo]; if (!vid) return;
     try { document.pictureInPictureElement ? await document.exitPictureInPicture() : await vid.requestPictureInPicture(); }
-    catch (e) { alert('PiP indisponível: ' + e.message); }
+    catch (e) { alert(t('nv.pipError', { error: e.message })); }
   }
 
   function copyTimestamp() {
     const vid = state.videos[state.primaryVideo]; if (!vid) return;
     const t = Math.floor(vid.currentTime);
-    navigator.clipboard.writeText(`${location.href.split('?')[0]}?t=${t}`).then(() => flashCB('✓ copiado'));
+    navigator.clipboard.writeText(`${location.href.split('?')[0]}?t=${t}`).then(() => flashCB(t('flash.copied'), true), () => {});
   }
 
   function applyVideoFilter() {
@@ -1651,22 +2149,23 @@
   // ─────────────────────────────────────────────
   // COMPATIBILIDADE
   // ─────────────────────────────────────────────
+  const hasWebAudio = () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } };
   const COMPAT_CHECKS = [
-    { label: 'Controle de velocidade', check: () => 'ok' },
-    { label: 'Volume boost',           check: () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } } },
-    { label: 'Picture-in-Picture',     check: () => document.pictureInPictureEnabled ? 'ok' : 'unavailable' },
-    { label: 'Skip de silêncio',       check: () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } }, note: 'requer Web Audio API' },
-    { label: 'Normalização de volume', check: () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } }, note: 'requer acesso ao stream de áudio' },
+    { label: 'st.speedControl', check: () => 'ok' },
+    { label: 'st.boost',        check: hasWebAudio },
+    { label: 'st.pip',          check: () => document.pictureInPictureEnabled ? 'ok' : 'unavailable' },
+    { label: 'st.silence',      check: hasWebAudio, note: 'st.needsWebAudio' },
+    { label: 'st.normalize',    check: hasWebAudio, note: 'st.needsAudioStream' },
   ];
 
   function renderCompatibility() {
     const el = cpEl?.querySelector('#vcc-compat'); if (!el) return;
     setSafeHTML(el, COMPAT_CHECKS.map(c => {
       const st = c.check ? c.check() : 'ok';
-      const [dot, cls, tag] = st === 'ok' ? ['#5DCAA5','vcc-ok','disponível'] : st === 'partial' ? ['#EF9F27','vcc-warn','parcial'] : ['#E24B4A','vcc-err','indisponível'];
+      const [dot, cls, tag] = st === 'ok' ? ['#5DCAA5','vcc-ok',t('st.available')] : st === 'partial' ? ['#EF9F27','vcc-warn',t('st.partial')] : ['#E24B4A','vcc-err',t('st.unavailable')];
       return escapeHTML`<div class="vcc-ci">
         <div class="vcc-cdot" style="background:${dot}"></div>
-        <div class="vcc-ct">${c.label} — <span class="vcc-ctag ${cls}">${tag}</span>${(c.note && st !== 'ok') ? ' — ' + c.note : ''}</div>
+        <div class="vcc-ct">${t(c.label)} — <span class="vcc-ctag ${cls}">${tag}</span>${(c.note && st !== 'ok') ? ' — ' + t(c.note) : ''}</div>
       </div>`;
     }));
   }
@@ -1713,8 +2212,7 @@
 
   function updateCPCBModeBtn() {
     const btn = cpEl?.querySelector('#vcc-cb-mode-btn'); if (!btn) return;
-    const labels = { visible:'visível', alerts:'apenas alertas', hidden:'oculto' };
-    btn.textContent = `modo atual: ${labels[state.cbMode] || state.cbMode}`;
+    btn.textContent = t('bh.barModeBtn', { mode: t(`mode.${state.cbMode}`) });
   }
 
   // ─────────────────────────────────────────────
@@ -1752,11 +2250,56 @@
     buildCB();
   }
 
+  // ─────────────────────────────────────────────
+  // TROCA DE IDIOMA
+  // ─────────────────────────────────────────────
+  // Aplica o idioma sem recarregar a página: reconstrói a barra e o painel,
+  // mantendo seções abertas, rolagem e posição do painel.
+  function applyLanguage(pref) {
+    const nextPref = I18N.SUPPORTED.includes(pref) ? pref : 'auto';
+    const nextLang = I18N.resolve(nextPref);
+    if (nextPref === langPref && nextLang === lang) return;
+    langPref = nextPref;
+    lang = nextLang;
+    t = I18N.translator(lang);
+
+    if (cbEl) { cbEl.remove(); buildCB(); }
+
+    if (cpEl) {
+      const openIds = [...cpEl.querySelectorAll('.vcc-acc-body.open')].map(b => b.id);
+      const scrollTop = cpEl.querySelector('#vcc-cp-scroll')?.scrollTop || 0;
+      const { left, top, transform } = cpEl.style;
+      cpEl.remove();
+      if (capturingKey) capturingKey = null;
+      currentScope = 'default';
+      KEYS = loadKeys(domain);
+      buildCP();
+      cpEl.querySelectorAll('.vcc-acc-body').forEach(body => {
+        const open = openIds.includes(body.id);
+        body.classList.toggle('open', open);
+        body.style.display = open ? 'block' : 'none';
+        cpEl.querySelector('#vcc-arr-' + body.id.slice('vcc-body-'.length))?.classList.toggle('open', open);
+      });
+      if (left) Object.assign(cpEl.style, { left, top, transform });
+      const scroller = cpEl.querySelector('#vcc-cp-scroll');
+      if (scroller) scroller.scrollTop = scrollTop;
+      if (state.cpVisible) {
+        updateStats(); refreshStorageList(); updateCPCBModeBtn(); updateLoopStatus();
+      }
+    }
+  }
+
+  // Escolha feita no painel: salva (vale para todos os sites) e aplica.
+  function setLanguage(pref) {
+    save(gk('language'), pref);
+    applyLanguage(pref);
+  }
+
   function activateCurrentSite() {
     setSiteActive(domain, true);
     startVideoEngine();
     if (cpEl) buildCPContent();
-    flashCB('✓ site ativado', true);
+    flashCB(t('flash.siteEnabled'), true);
   }
 
   // ─────────────────────────────────────────────
@@ -1764,6 +2307,9 @@
   // ─────────────────────────────────────────────
   function init() {
     loadState();
+    langPref = load(gk('language'), 'auto');
+    lang = I18N.resolve(langPref);
+    t = I18N.translator(lang);
     KEYS = loadKeys(domain);
     injectStyles();
     state.videoControlsActive = isSiteActive();
@@ -1798,6 +2344,15 @@
       default:
         return null;
     }
+  }
+
+  // Idioma trocado em outra aba ou no menu do ícone: aplica aqui também.
+  const extensionStorage = (globalThis.browser || globalThis.chrome)?.storage;
+  if (extensionStorage?.onChanged?.addListener) {
+    extensionStorage.onChanged.addListener((changes, area) => {
+      if (area !== 'local' || !(I18N.STORAGE_KEY in changes)) return;
+      storageReady.then(() => applyLanguage(changes[I18N.STORAGE_KEY].newValue ?? 'auto'));
+    });
   }
 
   if (extensionRuntime?.onMessage?.addListener) {
