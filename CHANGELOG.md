@@ -15,6 +15,8 @@ userscript do Tampermonkey.
 - `npm run check` confere se os dois idiomas têm os mesmos textos e se toda chave usada existe.
 
 ### Alterado
+- Novo ícone: botão de play dentro de um medidor de velocidade, com cantos arredondados e versão
+  simplificada para 16 px (barra de ferramentas). Fontes em `assets/icons/source/`.
 - Termos em inglês que apareciam no português foram traduzidos: "Control Box"/"CB" → "barra de
   controle", "Control Panel"/"CP" → "painel", "Toggle 2×" → "Alternar 2×".
 - Capturas de tela das lojas em português e inglês (`store/screenshots/pt-BR` e `en-US`).

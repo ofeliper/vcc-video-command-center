@@ -166,7 +166,9 @@ manifests/
   base.json                   Manifest comum aos dois navegadores
   chrome.json                 Diferenças do Chrome
   firefox.json                Diferenças do Firefox (ID, versão mínima, coleta de dados)
-assets/icons/                 Ícones 16, 32, 48 e 128 px
+assets/icons/                 Ícones 16, 32, 48 e 128 px (PNG usados pela extensão)
+  source/                     Desenhos originais em SVG: icon.svg (32 px ou mais) e
+                              icon-16.svg (versão simplificada para 16 px)
 store/
   firefox.md                  Textos da página na loja da Mozilla
   chrome.md                   Textos da página na Chrome Web Store
