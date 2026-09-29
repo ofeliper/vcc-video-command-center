@@ -1007,7 +1007,13 @@
 
   function applySeek(seconds) {
     targetVideoList().forEach(vid => seekVideo(vid, seconds));
-    flashCB(seconds > 0 ? `+${seconds}s` : `${seconds}s`);
+    flashCB(bar => seekFlashText(seconds, bar));
+  }
+
+  // Aviso de avanço/retrocesso com a velocidade atual: "+10s · 1.75×".
+  function seekFlashText(seconds, bar) {
+    const speed = bar?.video ? videoSpeed(bar.video) : state.speed;
+    return `${seconds > 0 ? '+' : ''}${seconds}s · ${fmtSpeed(speed)}×`;
   }
 
   function seekVideo(vid, seconds) {
@@ -1563,8 +1569,8 @@
     if (act === 'panel') { toggleCPVisibility(); return; }
     if (vid) {
       // Barra presa a um vídeo: controla só esse vídeo.
-      if (act === 'back')  { seekVideo(vid, -state.seekStep); flashCB(`-${state.seekStep}s`, [vid]); }
-      if (act === 'fwd')   { seekVideo(vid, +state.seekStep); flashCB(`+${state.seekStep}s`, [vid]); }
+      if (act === 'back')  { seekVideo(vid, -state.seekStep); flashCB(b => seekFlashText(-state.seekStep, b), [vid]); }
+      if (act === 'fwd')   { seekVideo(vid, +state.seekStep); flashCB(b => seekFlashText(+state.seekStep, b), [vid]); }
       if (act === 'slow')  setVideoSpeed(vid, videoSpeed(vid) - state.speedStep);
       if (act === 'fast')  setVideoSpeed(vid, videoSpeed(vid) + state.speedStep);
       if (act === 'vdown') changeVideoVolume(vid, -state.volumeStep);
@@ -1642,7 +1648,8 @@
     updateBarSectionUI();
   }
 
-  // Mostra um aviso rápido na barra (velocidade, volume…). `videos` limita às
+  // Mostra um aviso rápido na barra (velocidade, volume…). `text` pode ser uma
+  // função (barra) → texto, para avisos que dependem do vídeo de cada barra. `videos` limita às
   // barras desses vídeos no modo "uma barra por vídeo". No modo "oculta", só
   // avisos forçados (troca de modo) aparecem.
   function flashCB(text, videos = null, force = false) {
@@ -1653,7 +1660,8 @@
     const dur = state.cbMode === 'visible' ? 900 : state.alertDuration;
     targets.forEach(bar => {
       const label = bar.el.querySelector('.vcc-bar-speed');
-      if (label && text != null) label.textContent = text;
+      const msg = typeof text === 'function' ? text(bar) : text;
+      if (label && msg != null) label.textContent = msg;
       bar.flashing = true;
       positionBar(bar);
       refreshBarVisibility(bar);

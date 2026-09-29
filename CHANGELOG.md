@@ -30,8 +30,9 @@ userscript do Tampermonkey.
   cerca de 2:1) e barra de rolagem visível.
 - Na extensão, o painel (tecla H) ficou enxuto, só com os controles do vídeo; as configurações foram
   para a página de configurações. No Tampermonkey, o painel continua completo.
-- A barra mostra um aviso rápido ao mudar a velocidade (útil no modo só alertas). No modo *oculta*, só
-  a troca de modo aparece.
+- A barra mostra um aviso rápido ao mudar a velocidade (útil no modo só alertas), e os avisos de
+  avançar/voltar incluem a velocidade atual ("+10s · 1.75×"). No modo *oculta*, só a troca de modo
+  aparece.
 - Ligar ou desligar os controles num site vale na hora, sem recarregar a página.
 
 ### Removido
