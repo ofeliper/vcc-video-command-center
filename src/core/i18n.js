@@ -270,6 +270,8 @@
       'opt.issues': "Relatar um problema",
       'opt.privacy': "Política de privacidade",
       'opt.contact': "Contato",
+      'vs.opacityGlobal': "Vale para todos os sites que não têm opacidade própria.",
+      'vs.opacitySite': "Valor próprio de {domain} (definido na página de configurações).",
     },
 
     'en-US': {
@@ -516,6 +518,8 @@
       'opt.issues': "Report a problem",
       'opt.privacy': "Privacy policy",
       'opt.contact': "Contact",
+      'vs.opacityGlobal': "Applies to every site without its own opacity.",
+      'vs.opacitySite': "Own value for {domain} (set on the settings page).",
     },
   };
 

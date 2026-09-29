@@ -11,15 +11,15 @@
   // Padrões de fábrica das configurações globais (vcc_global_<nome>).
   const DEFAULTS = {
     cbMode: 'alerts',         // barra: 'visible' | 'alerts' | 'hidden'
-    cbOpacity: 1,             // opacidade padrão da barra (0.1–1)
+    cbOpacity: 0.8,           // opacidade padrão da barra (0.1–1)
     cpOpacity: 1,             // opacidade padrão do painel (0.2–1)
-    alertDuration: 500,       // ms que a barra fica visível no modo "alertas"
+    alertDuration: 700,       // ms que a barra fica visível no modo "alertas"
     seekStep: 10,             // segundos
     speedStep: 0.1,           // ×
     volumeStep: 5,            // %
     theme: 'auto',            // 'auto' | 'light' | 'dark'
     language: 'auto',         // 'auto' | 'pt-BR' | 'en-US'
-    barAuto: false,           // posicionar a barra automaticamente dentro do vídeo
+    barAuto: true,            // posicionar a barra automaticamente dentro do vídeo
     barAnchor: 'top-left',    // canto usado no posicionamento automático
     barLayout: 'single',      // 'single' (vídeo principal) | 'perVideo' (uma por vídeo)
   };

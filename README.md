@@ -41,7 +41,7 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 
 **Barra de controle**
 - Modos visível, só alertas (padrão: aparece só quando você usa um atalho) e oculta.
-- Posição livre (arrastável pela alça ⋮⋮) ou automática, dentro do vídeo, no canto escolhido.
+- Posição automática, dentro do vídeo, no canto escolhido (padrão), ou livre, arrastável pela alça ⋮⋮.
 - Uma barra só ou uma barra em cada vídeo, cada uma controlando o próprio vídeo.
 
 **Extras**
@@ -93,7 +93,7 @@ A qualquer momento, a tecla **H** abre o painel. Sem ativar o site, ele mostra u
 ### Painel (tecla H)
 
 Na extensão, o painel reúne só os controles do vídeo aberto: reprodução, áudio, navegação (loop A→B,
-PiP, timestamp), imagem, barra de controle, vídeos na página e sessão. O botão **⚙ Configurações** no
+PiP, timestamp), imagem e opacidade, barra de controle, vídeos na página e sessão. O botão **⚙ Configurações** no
 rodapé abre a página de configurações. No Tampermonkey, que não tem página de configurações, o painel
 também traz atalhos, preferências (tema, idioma, incrementos), sites ativos e dados salvos.
 
@@ -134,10 +134,13 @@ As opções ficam no **painel → Barra de controle** e na **página de configur
 - **Modo:** *visível* (sempre na tela), *só alertas* (padrão: aparece por um instante quando você usa
   um atalho ou botão) ou *oculta*. A tecla **V** alterna entre eles.
 - **Posicionar automaticamente:**
-  - *desligado* (padrão): a barra fica onde você quiser na tela; arraste pela alça **⋮⋮** da esquerda.
+  - *ligado* (padrão): a barra fica dentro do vídeo e o acompanha ao rolar a página ou redimensionar.
+    Escolha o canto: em cima ou embaixo × esquerda, centro ou direita.
+  - *desligado*: a barra fica onde você quiser na tela; arraste pela alça **⋮⋮** da esquerda.
     A posição é salva por site.
-  - *ligado*: a barra fica dentro do vídeo e o acompanha ao rolar a página ou redimensionar. Escolha o
-    canto: em cima ou embaixo × esquerda, centro ou direita.
+- **Opacidade:** padrão de 80% para a barra e 100% para o painel. Ajuste no **painel → Imagem** (muda o
+  padrão, ou o valor do site se ele tiver um próprio) ou na página de configurações.
+- **Duração do alerta:** 700 ms por padrão (página de configurações → Aparência).
 - **Uma barra em cada vídeo** (requer o posicionamento automático): cada vídeo da página ganha a
   própria barra, que controla só aquele vídeo. Os atalhos de teclado continuam valendo para os vídeos
   selecionados no painel.

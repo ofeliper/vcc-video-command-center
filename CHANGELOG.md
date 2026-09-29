@@ -18,11 +18,14 @@ userscript do Tampermonkey.
   - opção de uma barra em cada vídeo, cada uma controlando só o próprio vídeo;
   - alça ⋮⋮ para arrastar a barra no modo livre.
 - Menu do ícone com tema, botão de configurações e versão.
-- Degradê e seta no pé do painel quando há mais conteúdo abaixo.
+- Degradês com setas no topo e no pé do painel quando há mais conteúdo acima ou abaixo.
 
 ### Alterado
-- Padrões: barra no modo **só alertas** e opacidade de **100%** para a barra e o painel (quem já
-  tinha escolhido mantém o valor).
+- Padrões: barra no modo **só alertas**, com alerta de **700 ms**, **posicionada automaticamente**
+  dentro do vídeo e com opacidade de **80%**; painel com opacidade de **100%** (quem já tinha
+  escolhido mantém o valor).
+- A opacidade da barra e do painel pode ser ajustada no painel (seção Imagem) e na página de
+  configurações. No painel, ela muda o padrão global, ou o valor do site quando ele tem um próprio.
 - Nova paleta com todos os textos em contraste ≥ 4,5:1 (antes o nome do site no topo do painel tinha
   cerca de 2:1) e barra de rolagem visível.
 - Na extensão, o painel (tecla H) ficou enxuto, só com os controles do vídeo; as configurações foram

@@ -288,6 +288,8 @@
       'opt.issues': "Relatar um problema",
       'opt.privacy': "Política de privacidade",
       'opt.contact': "Contato",
+      'vs.opacityGlobal': "Vale para todos os sites que não têm opacidade própria.",
+      'vs.opacitySite': "Valor próprio de {domain} (definido na página de configurações).",
     },
 
     'en-US': {
@@ -534,6 +536,8 @@
       'opt.issues': "Report a problem",
       'opt.privacy': "Privacy policy",
       'opt.contact': "Contact",
+      'vs.opacityGlobal': "Applies to every site without its own opacity.",
+      'vs.opacitySite': "Own value for {domain} (set on the settings page).",
     },
   };
 
@@ -595,15 +599,15 @@
   // Padrões de fábrica das configurações globais (vcc_global_<nome>).
   const DEFAULTS = {
     cbMode: 'alerts',         // barra: 'visible' | 'alerts' | 'hidden'
-    cbOpacity: 1,             // opacidade padrão da barra (0.1–1)
+    cbOpacity: 0.8,           // opacidade padrão da barra (0.1–1)
     cpOpacity: 1,             // opacidade padrão do painel (0.2–1)
-    alertDuration: 500,       // ms que a barra fica visível no modo "alertas"
+    alertDuration: 700,       // ms que a barra fica visível no modo "alertas"
     seekStep: 10,             // segundos
     speedStep: 0.1,           // ×
     volumeStep: 5,            // %
     theme: 'auto',            // 'auto' | 'light' | 'dark'
     language: 'auto',         // 'auto' | 'pt-BR' | 'en-US'
-    barAuto: false,           // posicionar a barra automaticamente dentro do vídeo
+    barAuto: true,            // posicionar a barra automaticamente dentro do vídeo
     barAnchor: 'top-left',    // canto usado no posicionamento automático
     barLayout: 'single',      // 'single' (vídeo principal) | 'perVideo' (uma por vídeo)
   };
@@ -1310,6 +1314,15 @@
         opacity: 0; transition: opacity .15s;
       }
       #vcc-cp-fade.show { opacity: 1; }
+      /* Indica que há mais conteúdo acima */
+      #vcc-cp-fade-top {
+        position: absolute; left: 0; right: 12px; top: 0; height: 40px;
+        background: linear-gradient(to top, var(--vcc-fade), var(--vcc-bg) 85%);
+        pointer-events: none; display: flex; align-items: flex-start; justify-content: center;
+        padding-top: 2px; color: var(--vcc-text-3); font-size: 12px;
+        opacity: 0; transition: opacity .15s;
+      }
+      #vcc-cp-fade-top.show { opacity: 1; }
 
       #vcc-cp-foot { flex-shrink: 0; padding: 10px 16px; border-top: 1px solid var(--vcc-border); background: var(--vcc-bg-header); }
       #vcc-cp-foot button { width: 100%; justify-content: center; }
@@ -1772,6 +1785,7 @@
       </div>
       <div id="vcc-cp-body">
         <div id="vcc-cp-scroll"><div id="vcc-site-status"></div><div id="vcc-cp-content"></div></div>
+        <div id="vcc-cp-fade-top" aria-hidden="true">▴</div>
         <div id="vcc-cp-fade" aria-hidden="true">▾</div>
       </div>
       ${IS_EXTENSION ? escapeHTML`<div id="vcc-cp-foot"><button class="vcc-abt" id="vcc-open-settings">⚙ ${t('cp.settings')}</button></div>` : ''}
@@ -1793,12 +1807,12 @@
     updateCPSpeed(); updateETA(); buildVideoList(); renderCompatibility();
   }
 
-  // Degradê no pé do painel enquanto houver conteúdo abaixo.
+  // Degradês no topo e no pé do painel enquanto houver conteúdo acima ou abaixo.
   function updateScrollCue() {
     const s = cpEl?.querySelector('#vcc-cp-scroll');
-    const fade = cpEl?.querySelector('#vcc-cp-fade');
-    if (!s || !fade) return;
-    fade.classList.toggle('show', s.scrollHeight - s.scrollTop - s.clientHeight > 6);
+    if (!s) return;
+    cpEl.querySelector('#vcc-cp-fade')?.classList.toggle('show', s.scrollHeight - s.scrollTop - s.clientHeight > 6);
+    cpEl.querySelector('#vcc-cp-fade-top')?.classList.toggle('show', s.scrollTop > 6);
   }
 
   function openSettingsPage() {
@@ -1923,10 +1937,10 @@
       acc('vs', '◑', t('sec.visual'), escapeHTML`
         ${tog('invert', false, t('vs.invert'), t('vs.invertSub'), { videoControl: true })}
         <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label for="vcc-brightness">${t('vs.brightness')}</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
-        ${IS_EXTENSION ? '' : escapeHTML`
-          <p class="vcc-sub-title" style="margin-top:10px">${t('vs.opacity')}</p>
-          <div class="vcc-slr"><label for="vcc-cb-op">${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
-          <div class="vcc-slr"><label for="vcc-cp-op">${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>`}
+        <p class="vcc-sub-title" style="margin-top:10px">${t('vs.opacity')}</p>
+        <div class="vcc-slr"><label for="vcc-cb-op">${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
+        <div class="vcc-slr"><label for="vcc-cp-op">${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
+        <p class="vcc-hint">${siteHasOwnOpacity() ? t('vs.opacitySite', { domain }) : t('vs.opacityGlobal')}</p>
       `),
 
       // ── Barra de controle ──
@@ -2154,14 +2168,12 @@
       q('#vcc-brightness-val').textContent = e.target.value + '%'; applyVideoFilter();
     });
     q('#vcc-cb-op')?.addEventListener('input', e => {
-      state.cbOpacity = parseInt(e.target.value) / 100;
-      save(sk('cbOpacity'), state.cbOpacity);
+      setOpacity('cbOpacity', parseInt(e.target.value) / 100);
       bars.forEach(bar => bar.el.style.setProperty('opacity', state.cbOpacity, 'important'));
       q('#vcc-cb-op-val').textContent = e.target.value + '%';
     });
     q('#vcc-cp-op')?.addEventListener('input', e => {
-      state.cpOpacity = parseInt(e.target.value) / 100;
-      save(sk('cpOpacity'), state.cpOpacity);
+      setOpacity('cpOpacity', parseInt(e.target.value) / 100);
       cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
       q('#vcc-cp-op-val').textContent = e.target.value + '%';
     });
@@ -2181,6 +2193,17 @@
     q('#vcc-vid-all').addEventListener('click', toggleAllVideos);
 
     if (!IS_EXTENSION) bindFullPanelEvents();
+  }
+
+  // Opacidade no painel: ajusta o padrão global, ou o valor próprio do site se
+  // ele tiver um (definido na página de configurações).
+  function siteHasOwnOpacity() {
+    return load(sk('cbOpacity'), null) !== null || load(sk('cpOpacity'), null) !== null;
+  }
+
+  function setOpacity(kind, value) {
+    state[kind] = value;
+    save(load(sk(kind), null) !== null ? sk(kind) : gk(kind), value);
   }
 
   function bindFullPanelEvents() {
