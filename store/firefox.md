@@ -51,7 +51,9 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 • Copiar o momento atual do vídeo (timestamp)
 • Brilho e inversão de cores para assistir no escuro
 • Páginas com vários vídeos: escolha o principal, controle alguns ou todos, oculte ou silencie cada um
-• Em português e inglês, com troca de idioma pelo painel ou pelo menu do ícone
+• Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo
+• Tema claro e escuro, em português e inglês
+• Página de configurações completa, com ajustes próprios para cada site
 
 🧭 COMO USAR
 1. Abra uma página com vídeo e clique no ícone do VCC na barra de ferramentas.
@@ -96,7 +98,9 @@ Great for watching lectures faster, replaying a section over and over, or simply
 • Copy the current video timestamp
 • Brightness and color inversion for night viewing
 • Pages with several videos: pick the main one, control some or all, hide or mute each
-• Available in English and Portuguese — switch languages from the panel or the toolbar menu
+• Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video
+• Light and dark themes, in English and Portuguese
+• Full settings page, with per-site settings
 
 🧭 HOW TO USE
 1. Open a page with a video and click the VCC icon in the toolbar.
@@ -124,13 +128,15 @@ Dicas e limitações conhecidas
 
 • O VCC só funciona nos sites que você ativar. Clique no ícone do VCC e ligue "Controles de vídeo", ou pressione H e use o botão "Ativar VCC".
 
-• Alguns sites têm atalhos próprios que usam as mesmas teclas (por exemplo, M para mudo). Nos sites ativados, os atalhos do VCC têm prioridade. Você pode trocar qualquer atalho no painel, inclusive só para um site específico.
+• Alguns sites têm atalhos próprios que usam as mesmas teclas (por exemplo, M para mudo). Nos sites ativados, os atalhos do VCC têm prioridade. Você pode trocar qualquer atalho na página de configurações, inclusive só para um site específico.
 
 • Em transmissões ao vivo, a velocidade acima de 1× só funciona até alcançar o ponto ao vivo.
 
 • Alguns players reiniciam a velocidade ao trocar de vídeo ou de anúncio. O VCC reaplica a velocidade escolhida automaticamente, mas em players muito personalizados isso pode falhar.
 
 • Vídeos dentro de iframes de outros domínios dependem de o VCC ter acesso também a esse domínio.
+
+• Em tela cheia, a barra de controle ainda não aparece. Os atalhos continuam funcionando.
 
 • O VCC também existe como script para Tampermonkey, para quem usa outros navegadores:
 https://github.com/ofeliper/vcc-video-command-center
@@ -143,16 +149,16 @@ Encontrou um problema? Abra uma issue no GitHub informando o site e a versão do
 **Português** (`screenshots/pt-BR/`)
 
 1. `vcc-1-painel.png` — Painel de controle: velocidade de 0,1× a 16×, presets e tempo restante na velocidade atual.
-2. `vcc-2-menu.png` — Menu do ícone: abra o painel, ligue ou desligue os controles em cada site e escolha o idioma.
-3. `vcc-3-atalhos.png` — Atalhos de teclado personalizáveis, globais ou por site.
-4. `vcc-4-varios-videos.png` — Páginas com vários vídeos: escolha o principal e controle os que quiser.
+2. `vcc-2-menu.png` — Menu do ícone: abra o painel, ligue os controles no site, troque tema e idioma e abra as configurações.
+3. `vcc-3-atalhos.png` — Página de configurações: atalhos, aparência, sites e mais.
+4. `vcc-4-varios-videos.png` — Uma barra de controle dentro de cada vídeo da página.
 
 **English** (`screenshots/en-US/`)
 
 1. `vcc-1-panel.png` — Control panel: 0.1×–16× speed, presets and time left at the current speed.
-2. `vcc-2-menu.png` — Toolbar menu: open the panel, turn controls on or off per site and pick the language.
-3. `vcc-3-shortcuts.png` — Customizable keyboard shortcuts, global or per site.
-4. `vcc-4-multiple-videos.png` — Pages with several videos: pick the main one and control the ones you want.
+2. `vcc-2-menu.png` — Toolbar menu: open the panel, turn controls on for the site, switch theme and language, open settings.
+3. `vcc-3-shortcuts.png` — Settings page: shortcuts, appearance, sites and more.
+4. `vcc-4-multiple-videos.png` — A control bar inside each video on the page.
 
 ## Envio de versões
 

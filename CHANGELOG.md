@@ -3,6 +3,38 @@
 Todas as mudanças relevantes do VCC. A versão é a mesma para a extensão (Firefox e Chrome) e para o
 userscript do Tampermonkey.
 
+## [0.8.0] — 2026-09-29
+
+### Adicionado
+- **Página de configurações** (extensão): aparência, idioma, atalhos, comportamento, sites com
+  ajustes próprios (ativar, velocidade, volume, opacidade, posição da barra, atalhos, apagar), dados e
+  sobre. Abre pelo menu do ícone, pelo painel ou pelo gerenciador de extensões, e as mudanças valem na
+  hora nas abas abertas.
+- **Tema claro e escuro**, com opção automática que segue o sistema, no painel, na barra, no menu e
+  na página de configurações. `npm run check` mede o contraste dos dois temas.
+- **Barra de controle:**
+  - posicionamento automático dentro do vídeo, no canto escolhido (em cima ou embaixo × esquerda,
+    centro ou direita), acompanhando rolagem e redimensionamento;
+  - opção de uma barra em cada vídeo, cada uma controlando só o próprio vídeo;
+  - alça ⋮⋮ para arrastar a barra no modo livre.
+- Menu do ícone com tema, botão de configurações e versão.
+- Degradê e seta no pé do painel quando há mais conteúdo abaixo.
+
+### Alterado
+- Padrões: barra no modo **só alertas** e opacidade de **100%** para a barra e o painel (quem já
+  tinha escolhido mantém o valor).
+- Nova paleta com todos os textos em contraste ≥ 4,5:1 (antes o nome do site no topo do painel tinha
+  cerca de 2:1) e barra de rolagem visível.
+- Na extensão, o painel (tecla H) ficou enxuto, só com os controles do vídeo; as configurações foram
+  para a página de configurações. No Tampermonkey, o painel continua completo.
+- A barra mostra um aviso rápido ao mudar a velocidade (útil no modo só alertas). No modo *oculta*, só
+  a troca de modo aparece.
+- Ligar ou desligar os controles num site vale na hora, sem recarregar a página.
+
+### Removido
+- Opções que apareciam no painel mas não funcionavam: volume boost, normalização de volume, skip de
+  silêncio, salvar posição por URL e a chave "Loop A→B" (o loop continua pelos botões A e B).
+
 ## [0.7.1] — 2026-09-27
 
 ### Corrigido

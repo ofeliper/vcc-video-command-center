@@ -2,7 +2,7 @@
 //
 //   dist/chrome/                  extensão para Chrome/Edge (Manifest V3)
 //   dist/firefox/                 extensão para Firefox (Manifest V3)
-//   dist/userscript/vcc.user.js   script para Tampermonkey (i18n.js + vcc.js)
+//   dist/userscript/vcc.user.js   script para Tampermonkey (i18n.js + shared.js + vcc.js)
 //
 // A versão vem só do package.json e é gravada nos manifests e no
 // cabeçalho do userscript. Nenhum arquivo é transformado além disso:
@@ -59,19 +59,23 @@ function buildExtension(target) {
   fs.writeFileSync(path.join(out, 'manifest.json'), JSON.stringify(buildManifest(target), null, 2) + '\n');
   copyFile(r('src', 'extension', 'gm-compat.js'), path.join(out, 'js', 'gm-compat.js'));
   copyFile(r('src', 'core', 'i18n.js'), path.join(out, 'js', 'i18n.js'));
+  copyFile(r('src', 'core', 'shared.js'), path.join(out, 'js', 'shared.js'));
   copyFile(r('src', 'core', 'vcc.js'), path.join(out, 'js', 'vcc.js'));
+  copyFile(r('src', 'extension', 'background.js'), path.join(out, 'js', 'background.js'));
   copyDir(r('src', 'extension', 'popup'), path.join(out, 'popup'));
+  copyDir(r('src', 'extension', 'options'), path.join(out, 'options'));
   copyDir(r('src', 'extension', '_locales'), path.join(out, '_locales'));
   copyDir(r('assets', 'icons'), path.join(out, 'icons'));
   console.log(`Built dist/${target} (v${version})`);
 }
 
-// Userscript = cabeçalho + traduções + código principal, em um arquivo só.
+// Userscript = cabeçalho + traduções + definições compartilhadas + código principal, em um arquivo só.
 function userscriptSource() {
   const header = fs.readFileSync(r('src', 'userscript', 'header.txt'), 'utf8').replace('{{version}}', version);
   return [
     header,
     fs.readFileSync(r('src', 'core', 'i18n.js'), 'utf8'),
+    fs.readFileSync(r('src', 'core', 'shared.js'), 'utf8'),
     fs.readFileSync(r('src', 'core', 'vcc.js'), 'utf8'),
   ].join('\n');
 }

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/ofeliper/vcc-video-command-center
-// @version      0.7.1
+// @version      0.8.0
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       ofeliper
 // @homepageURL  https://github.com/ofeliper/vcc-video-command-center
@@ -43,8 +43,6 @@
       'cb.muteToggle': 'alternar mudo',
       'cb.volUp': 'volume +',
       'cb.panel': 'painel',
-      'cb.badge.alerts': 'alerta',
-      'cb.badge.hidden': 'oculta',
 
       // Mensagens rápidas na barra
       'flash.muted': 'MUDO',
@@ -62,9 +60,8 @@
 
       // Aviso de site inativo
       'site.inactiveTitle': '⚠ VCC não está ativo neste site',
-      'site.inactiveText': 'Enquanto este domínio estiver inativo, os vídeos da página não podem ser detectados nem controlados pelo VCC. As configurações gerais continuam disponíveis.',
+      'site.inactiveText': "Enquanto este site estiver inativo, o VCC não detecta nem controla os vídeos da página.",
       'site.enable': 'Ativar VCC em {domain}',
-      'site.disabledAlert': 'VCC desativado para este domínio. Recarregue a página para interromper os controles já iniciados.',
 
       // Reprodução
       'sec.playback': 'Reprodução',
@@ -73,7 +70,6 @@
       'pb.presets': 'Presets',
       'pb.seekBack': '« retroceder',
       'pb.seekFwd': 'avançar »',
-      'pb.cycleBar': 'ciclar modo da barra',
       'pb.eta': 'Faltam {time} na velocidade atual de {speed}',
       'pb.noDuration': 'duração não disponível',
       'pb.presetPrompt': 'Velocidade do novo preset (ex: 0.5):',
@@ -87,26 +83,17 @@
       'au.mute': 'mudo',
       'au.unmute': 'restaurar volume',
       'au.muted': 'MUDO',
-      'au.boost': 'Volume boost',
-      'au.boostSub': 'Amplifica além de 100%',
-      'au.level': 'Nível',
-      'au.normalize': 'Normalização de volume',
-      'au.normalizeSub': 'Equaliza vídeos com volumes diferentes',
-      'au.silence': 'Skip de silêncio',
-      'au.silenceSub': 'Pula trechos sem fala',
 
       // Navegação avançada
       'sec.nav': 'Navegação avançada',
-      'nv.loop': 'Loop A→B',
-      'nv.loopSub': 'Repetir trecho entre dois pontos',
+      'nv.loop': "Loop A→B",
+      'nv.loopSub': "Marque o ponto A e o ponto B para repetir o trecho entre eles.",
       'nv.setA': 'marcar ponto A',
       'nv.setB': 'marcar ponto B',
       'nv.clear': 'limpar loop',
       'nv.noLoop': 'nenhum loop configurado',
       'nv.notSet': 'não definido',
       'nv.active': '● ativo',
-      'nv.savePos': 'Salvar posição por URL',
-      'nv.savePosSub': 'Retoma de onde parou ao reabrir',
       'nv.pip': 'Picture-in-Picture',
       'nv.pipOn': 'ativar PiP',
       'nv.pipUnavailable': 'indisponível neste site',
@@ -114,7 +101,7 @@
       'nv.timestamp': 'copiar timestamp',
 
       // Visual
-      'sec.visual': 'Visual',
+      'sec.visual': "Imagem",
       'vs.invert': 'Inversão de cores',
       'vs.invertSub': 'Útil para assistir no escuro',
       'vs.brightness': 'Brilho',
@@ -169,15 +156,11 @@
       'key.toggleCP': 'Abrir/fechar painel',
 
       // Comportamento e idioma
-      'sec.behavior': 'Comportamento e idioma',
+      'sec.behavior': "Preferências",
       'bh.steps': 'Valores de incremento',
       'bh.speedStep': 'Passo de velocidade',
       'bh.volumeStep': 'Passo de volume',
       'bh.seekStep': 'Passo de avanço',
-      'bh.bar': 'Barra de controle',
-      'bh.barMode': 'Modo da barra',
-      'bh.barModeSub': '{key} alterna entre visível, só alertas e oculta',
-      'bh.barModeBtn': 'modo atual: {mode}',
       'bh.alertDuration': 'Duração do alerta',
       'bh.alertHint': 'Duração do aviso no modo "só alertas".',
 
@@ -187,19 +170,14 @@
       'si.prompt': 'Domínio (ex: meusite.com):',
 
       // Estatísticas e compatibilidade
-      'sec.stats': 'Estatísticas e compatibilidade',
+      'sec.stats': "Sessão e compatibilidade",
       'st.saved': 'tempo economizado',
       'st.watched': 'assistido nesta sessão',
       'st.avgSpeed': 'velocidade média',
       'st.quality': 'qualidade detectada',
       'st.compat': 'Compatibilidade — {domain}',
       'st.speedControl': 'Controle de velocidade',
-      'st.boost': 'Volume boost',
       'st.pip': 'Picture-in-Picture',
-      'st.silence': 'Skip de silêncio',
-      'st.normalize': 'Normalização de volume',
-      'st.needsWebAudio': 'requer Web Audio API',
-      'st.needsAudioStream': 'requer acesso ao stream de áudio',
       'st.available': 'disponível',
       'st.partial': 'parcial',
       'st.unavailable': 'indisponível',
@@ -236,12 +214,80 @@
       'pop.videoControlsAria': 'Controles de vídeo neste site',
       'pop.activeOn': 'ativos neste site',
       'pop.activeOff': 'desativados neste site',
-      'pop.reloadHint': 'Desativado. Recarregue a página para interromper os controles já iniciados.',
-      'pop.reloadNow': 'Recarregar agora',
       'pop.accessAll': 'Acesso: todos os sites',
       'pop.accessSome': 'Acesso: sites escolhidos',
       'pop.allowAll': 'Liberar todos',
       'pop.language': 'Idioma',
+
+      // 0.8.0: barra, tema, menu e página de configurações
+      'cp.close': "Fechar",
+      'cp.settings': "Configurações",
+      'site.inactiveBadge': "site inativo",
+      'pb.speedInput': "Velocidade",
+      'vi.target': "Controlar este vídeo",
+      'sec.bar': "Barra de controle",
+      'bar.mode': "Modo",
+      'bar.modeHint': "A tecla {key} alterna entre os modos.",
+      'bar.auto': "Posicionar automaticamente",
+      'bar.autoSub': "Dentro do vídeo, no canto escolhido abaixo",
+      'bar.anchor': "Posição no vídeo",
+      'bar.perVideo': "Uma barra em cada vídeo",
+      'bar.perVideoSub': "Cada barra controla só o próprio vídeo",
+      'bar.perVideoNeedsAuto': "Requer o posicionamento automático",
+      'bar.freeHint': "Arraste a barra pela alça ⋮⋮ para mudar de lugar.",
+      'anchor.top-left': "Em cima, à esquerda",
+      'anchor.top-center': "Em cima, no centro",
+      'anchor.top-right': "Em cima, à direita",
+      'anchor.bottom-left': "Embaixo, à esquerda",
+      'anchor.bottom-center': "Embaixo, no centro",
+      'anchor.bottom-right': "Embaixo, à direita",
+      'theme.title': "Tema",
+      'theme.auto': "Automático ({name})",
+      'theme.light': "Claro",
+      'theme.dark': "Escuro",
+      'pop.theme': "Tema",
+      'pop.settings': "Configurações",
+      'pop.version': "Versão {v}",
+      'opt.title': "Configurações do VCC",
+      'opt.nav.appearance': "Aparência",
+      'opt.nav.language': "Idioma",
+      'opt.nav.keys': "Atalhos",
+      'opt.nav.behavior': "Comportamento",
+      'opt.nav.sites': "Sites",
+      'opt.nav.data': "Dados",
+      'opt.nav.about': "Sobre",
+      'opt.saved': "Salvo",
+      'opt.opacityDefaults': "Opacidade padrão",
+      'opt.opacityHint': "Vale para os sites sem opacidade própria (veja Sites).",
+      'opt.langHint': "Automático segue o idioma do navegador: português → Português (Brasil); qualquer outro → English.",
+      'opt.keysHint': "Atalhos usados em todos os sites. Para mudar só em um site, use a seção Sites.",
+      'opt.sitesHint': "Sites onde o VCC está ativo ou que têm configurações salvas. Os ajustes feitos aqui valem só para o site.",
+      'opt.addSitePlaceholder': "exemplo.com",
+      'opt.invalidDomain': "Domínio inválido.",
+      'opt.noSites': "Nenhum site ainda. Ative o VCC num site pelo menu do ícone ou adicione um domínio acima.",
+      'opt.siteActive': "Controles de vídeo ativos",
+      'opt.siteOn': "ativo",
+      'opt.siteOff': "inativo",
+      'opt.siteSpeed': "Velocidade salva",
+      'opt.siteVolume': "Volume salvo",
+      'opt.siteMuted': "Mudo",
+      'opt.useDefault': "Usar o padrão ({value})",
+      'opt.siteBarPos': "Posição da barra (modo livre)",
+      'opt.posDefault': "padrão (canto superior esquerdo)",
+      'opt.resetPos': "Redefinir posição",
+      'opt.siteKeys': "Atalhos deste site",
+      'opt.siteKeysGlobal': "Usar os atalhos globais",
+      'opt.siteKeysCustom': "Personalizar para este site",
+      'opt.siteDelete': "Apagar configurações deste site",
+      'opt.siteDeleteConfirm': "Apagar todas as configurações de {domain}?",
+      'opt.dataCount': "{n} itens salvos",
+      'opt.showData': "Ver dados salvos",
+      'opt.resetAllConfirm': "Restaurar TODAS as configurações para os padrões de fábrica?",
+      'opt.aboutText': "Controle pessoal de reprodução para vídeos HTML5. O VCC não coleta nem envia dados: tudo fica no seu navegador.",
+      'opt.source': "Código-fonte (GitHub)",
+      'opt.issues': "Relatar um problema",
+      'opt.privacy': "Política de privacidade",
+      'opt.contact': "Contato",
     },
 
     'en-US': {
@@ -257,8 +303,6 @@
       'cb.muteToggle': 'toggle mute',
       'cb.volUp': 'volume +',
       'cb.panel': 'panel',
-      'cb.badge.alerts': 'alerts',
-      'cb.badge.hidden': 'hidden',
 
       'flash.muted': 'MUTED',
       'flash.volume': 'volume {n}%',
@@ -273,9 +317,8 @@
       'mode.hidden': 'hidden',
 
       'site.inactiveTitle': '⚠ VCC is not enabled on this site',
-      'site.inactiveText': 'While this domain is disabled, VCC can’t detect or control the videos on this page. General settings are still available.',
+      'site.inactiveText': "While this site is off, VCC doesn’t detect or control the videos on this page.",
       'site.enable': 'Enable VCC on {domain}',
-      'site.disabledAlert': 'VCC disabled for this domain. Reload the page to stop controls that are already running.',
 
       'sec.playback': 'Playback',
       'pb.reset': 'reset',
@@ -283,7 +326,6 @@
       'pb.presets': 'Presets',
       'pb.seekBack': '« back',
       'pb.seekFwd': 'forward »',
-      'pb.cycleBar': 'cycle bar mode',
       'pb.eta': '{time} left at the current speed of {speed}',
       'pb.noDuration': 'duration unavailable',
       'pb.presetPrompt': 'Speed for the new preset (e.g. 0.5):',
@@ -296,32 +338,23 @@
       'au.mute': 'mute',
       'au.unmute': 'unmute',
       'au.muted': 'MUTED',
-      'au.boost': 'Volume boost',
-      'au.boostSub': 'Amplifies beyond 100%',
-      'au.level': 'Level',
-      'au.normalize': 'Volume normalization',
-      'au.normalizeSub': 'Evens out videos with different loudness',
-      'au.silence': 'Skip silence',
-      'au.silenceSub': 'Skips parts without speech',
 
       'sec.nav': 'Advanced navigation',
-      'nv.loop': 'A→B loop',
-      'nv.loopSub': 'Repeat a section between two points',
+      'nv.loop': "A→B loop",
+      'nv.loopSub': "Set point A and point B to repeat the section between them.",
       'nv.setA': 'set point A',
       'nv.setB': 'set point B',
       'nv.clear': 'clear loop',
       'nv.noLoop': 'no loop set',
       'nv.notSet': 'not set',
       'nv.active': '● active',
-      'nv.savePos': 'Save position per URL',
-      'nv.savePosSub': 'Resumes where you left off',
       'nv.pip': 'Picture-in-Picture',
       'nv.pipOn': 'toggle PiP',
       'nv.pipUnavailable': 'unavailable on this site',
       'nv.pipError': 'PiP unavailable: {error}',
       'nv.timestamp': 'copy timestamp',
 
-      'sec.visual': 'Visual',
+      'sec.visual': "Picture",
       'vs.invert': 'Invert colors',
       'vs.invertSub': 'Handy for watching in the dark',
       'vs.brightness': 'Brightness',
@@ -373,15 +406,11 @@
       'key.toggleCB': 'Bar mode (cycles)',
       'key.toggleCP': 'Open/close panel',
 
-      'sec.behavior': 'Behavior & language',
+      'sec.behavior': "Preferences",
       'bh.steps': 'Step sizes',
       'bh.speedStep': 'Speed step',
       'bh.volumeStep': 'Volume step',
       'bh.seekStep': 'Seek step',
-      'bh.bar': 'Control bar',
-      'bh.barMode': 'Bar mode',
-      'bh.barModeSub': '{key} cycles between visible, alerts only and hidden',
-      'bh.barModeBtn': 'current: {mode}',
       'bh.alertDuration': 'Alert duration',
       'bh.alertHint': 'How long the alert stays up in "alerts only" mode.',
 
@@ -389,19 +418,14 @@
       'si.add': '+ add domain',
       'si.prompt': 'Domain (e.g. mysite.com):',
 
-      'sec.stats': 'Stats & compatibility',
+      'sec.stats': "Session & compatibility",
       'st.saved': 'time saved',
       'st.watched': 'watched this session',
       'st.avgSpeed': 'average speed',
       'st.quality': 'detected quality',
       'st.compat': 'Compatibility — {domain}',
       'st.speedControl': 'Speed control',
-      'st.boost': 'Volume boost',
       'st.pip': 'Picture-in-Picture',
-      'st.silence': 'Skip silence',
-      'st.normalize': 'Volume normalization',
-      'st.needsWebAudio': 'requires the Web Audio API',
-      'st.needsAudioStream': 'requires access to the audio stream',
       'st.available': 'available',
       'st.partial': 'partial',
       'st.unavailable': 'unavailable',
@@ -436,12 +460,80 @@
       'pop.videoControlsAria': 'Video controls on this site',
       'pop.activeOn': 'on for this site',
       'pop.activeOff': 'off for this site',
-      'pop.reloadHint': 'Turned off. Reload the page to stop controls that are already running.',
-      'pop.reloadNow': 'Reload now',
       'pop.accessAll': 'Access: all sites',
       'pop.accessSome': 'Access: selected sites',
       'pop.allowAll': 'Allow all',
       'pop.language': 'Language',
+
+      // 0.8.0: barra, tema, menu e página de configurações
+      'cp.close': "Close",
+      'cp.settings': "Settings",
+      'site.inactiveBadge': "site off",
+      'pb.speedInput': "Speed",
+      'vi.target': "Control this video",
+      'sec.bar': "Control bar",
+      'bar.mode': "Mode",
+      'bar.modeHint': "The {key} key cycles through the modes.",
+      'bar.auto': "Position automatically",
+      'bar.autoSub': "Inside the video, in the corner chosen below",
+      'bar.anchor': "Position in the video",
+      'bar.perVideo': "One bar per video",
+      'bar.perVideoSub': "Each bar controls only its own video",
+      'bar.perVideoNeedsAuto': "Requires automatic positioning",
+      'bar.freeHint': "Drag the bar by its ⋮⋮ handle to move it.",
+      'anchor.top-left': "Top left",
+      'anchor.top-center': "Top center",
+      'anchor.top-right': "Top right",
+      'anchor.bottom-left': "Bottom left",
+      'anchor.bottom-center': "Bottom center",
+      'anchor.bottom-right': "Bottom right",
+      'theme.title': "Theme",
+      'theme.auto': "Automatic ({name})",
+      'theme.light': "Light",
+      'theme.dark': "Dark",
+      'pop.theme': "Theme",
+      'pop.settings': "Settings",
+      'pop.version': "Version {v}",
+      'opt.title': "VCC Settings",
+      'opt.nav.appearance': "Appearance",
+      'opt.nav.language': "Language",
+      'opt.nav.keys': "Shortcuts",
+      'opt.nav.behavior': "Behavior",
+      'opt.nav.sites': "Sites",
+      'opt.nav.data': "Data",
+      'opt.nav.about': "About",
+      'opt.saved': "Saved",
+      'opt.opacityDefaults': "Default opacity",
+      'opt.opacityHint': "Applies to sites without their own opacity (see Sites).",
+      'opt.langHint': "Automatic follows the browser language: Portuguese → Português (Brasil); anything else → English.",
+      'opt.keysHint': "Shortcuts used on every site. To change them for one site only, use the Sites section.",
+      'opt.sitesHint': "Sites where VCC is on or that have saved settings. Changes made here apply to that site only.",
+      'opt.addSitePlaceholder': "example.com",
+      'opt.invalidDomain': "Invalid domain.",
+      'opt.noSites': "No sites yet. Turn VCC on for a site from the toolbar menu or add a domain above.",
+      'opt.siteActive': "Video controls on",
+      'opt.siteOn': "on",
+      'opt.siteOff': "off",
+      'opt.siteSpeed': "Saved speed",
+      'opt.siteVolume': "Saved volume",
+      'opt.siteMuted': "Muted",
+      'opt.useDefault': "Use default ({value})",
+      'opt.siteBarPos': "Bar position (free mode)",
+      'opt.posDefault': "default (top left corner)",
+      'opt.resetPos': "Reset position",
+      'opt.siteKeys': "Shortcuts for this site",
+      'opt.siteKeysGlobal': "Use the global shortcuts",
+      'opt.siteKeysCustom': "Customize for this site",
+      'opt.siteDelete': "Delete this site’s settings",
+      'opt.siteDeleteConfirm': "Delete all settings for {domain}?",
+      'opt.dataCount': "{n} saved items",
+      'opt.showData': "Show saved data",
+      'opt.resetAllConfirm': "Reset ALL settings to factory defaults?",
+      'opt.aboutText': "Personal playback controls for HTML5 videos. VCC doesn’t collect or send any data: everything stays in your browser.",
+      'opt.source': "Source code (GitHub)",
+      'opt.issues': "Report a problem",
+      'opt.privacy': "Privacy policy",
+      'opt.contact': "Contact",
     },
   };
 
@@ -487,6 +579,185 @@
     detect,
     resolve,
     translator,
+  };
+})(globalThis);
+
+// Definições compartilhadas do VCC: padrões, atalhos de fábrica, temas e
+// utilidades usadas pelo painel na página (vcc.js), pela página de
+// configurações e pelo menu do ícone. Funciona igual na extensão e no
+// Tampermonkey.
+(function (root) {
+  'use strict';
+
+  const SPEED_MIN = 0.1;
+  const SPEED_MAX = 16.0;
+
+  // Padrões de fábrica das configurações globais (vcc_global_<nome>).
+  const DEFAULTS = {
+    cbMode: 'alerts',         // barra: 'visible' | 'alerts' | 'hidden'
+    cbOpacity: 1,             // opacidade padrão da barra (0.1–1)
+    cpOpacity: 1,             // opacidade padrão do painel (0.2–1)
+    alertDuration: 500,       // ms que a barra fica visível no modo "alertas"
+    seekStep: 10,             // segundos
+    speedStep: 0.1,           // ×
+    volumeStep: 5,            // %
+    theme: 'auto',            // 'auto' | 'light' | 'dark'
+    language: 'auto',         // 'auto' | 'pt-BR' | 'en-US'
+    barAuto: false,           // posicionar a barra automaticamente dentro do vídeo
+    barAnchor: 'top-left',    // canto usado no posicionamento automático
+    barLayout: 'single',      // 'single' (vídeo principal) | 'perVideo' (uma por vídeo)
+  };
+
+  const MODES = ['visible', 'alerts', 'hidden'];
+  const THEMES_PREFS = ['auto', 'light', 'dark'];
+  const BAR_ANCHORS = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
+
+  // Configurações guardadas por site (vcc_<domínio>_<nome>).
+  const SITE_KEYS = ['speed', 'volume', 'lastVolume', 'muted', 'cbOpacity', 'cpOpacity', 'cbPos', 'keys'];
+
+  const FACTORY_KEYS = {
+    slowDown:   'S',
+    speedUp:    'D',
+    resetSpeed: 'R',
+    toggle2x:   'G',
+    seekBack:   'Z',
+    seekFwd:    'X',
+    volumeDown: 'Q',
+    volumeUp:   'E',
+    toggleMute: 'M',
+    toggleCB:   'V',
+    toggleCP:   'H',
+  };
+  const KEY_ACTION_IDS = Object.keys(FACTORY_KEYS);
+
+  const FORBIDDEN_KEYS = new Set([
+    'Alt', 'Control', 'Shift', 'Meta', 'Escape', 'Tab',
+    'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
+    'Fn', 'CapsLock', 'NumLock', 'ScrollLock', 'Pause', 'PrintScreen',
+  ]);
+
+  // Converte um keydown no formato salvo ("S", "Ctrl+K", "Shift+ArrowUp").
+  // Retorna null para teclas que não podem ser usadas.
+  function bindingFromEvent(e) {
+    if (FORBIDDEN_KEYS.has(e.key)) return null;
+    let k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
+    if (e.ctrlKey) k = 'Ctrl+' + k;
+    if (e.altKey) k = 'Alt+' + k;
+    if (e.shiftKey && e.key.length > 1) k = 'Shift+' + k;
+    return k;
+  }
+
+  function normalizeSite(s) {
+    return String(s || '')
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, '')
+      .replace(/^www\./, '')
+      .split('/')[0];
+  }
+
+  // ── Temas ──
+  // Paletas com contraste de texto ≥ 4,5:1 (WCAG AA) sobre o fundo e as
+  // superfícies. Conferido por tools/check.js.
+  const THEMES = {
+    dark: {
+      'bg':            '#15181c',
+      'bg-header':     '#0f1215',
+      'surface':       '#20252b',
+      'surface-hover': '#2b3139',
+      'border':        '#3a414a',
+      'border-strong': '#6a7380',
+      'text':          '#eef0f3',
+      'text-2':        '#c6cbd2',
+      'text-3':        '#a3aab4',
+      'accent':        '#5dcaa5',
+      'accent-fill':   '#1d9e75',
+      'accent-soft':   '#173a30',
+      'on-accent':     '#06291d',
+      'danger':        '#f29a98',
+      'danger-soft':   '#3a1c1c',
+      'warn':          '#f6c26b',
+      'warn-soft':     '#382b12',
+      'warn-border':   '#8a6420',
+      'scroll-thumb':  '#6f7884',
+      'scroll-track':  '#1d2127',
+      'toggle-off':    '#56606b',
+      'knob':          '#ffffff',
+      'shadow':        '0 12px 40px rgba(0,0,0,.55)',
+      'fade':          'rgba(21,24,28,0)',
+      'scheme':        'dark',
+    },
+    light: {
+      'bg':            '#ffffff',
+      'bg-header':     '#f3f5f7',
+      'surface':       '#eef1f4',
+      'surface-hover': '#e1e6eb',
+      'border':        '#c9cfd6',
+      'border-strong': '#7f8995',
+      'text':          '#15181c',
+      'text-2':        '#3b424b',
+      'text-3':        '#555e69',
+      'accent':        '#08724f',
+      'accent-fill':   '#0a7b57',
+      'accent-soft':   '#dff3eb',
+      'on-accent':     '#ffffff',
+      'danger':        '#b3261e',
+      'danger-soft':   '#fbe7e6',
+      'warn':          '#7a4a00',
+      'warn-soft':     '#fff3dc',
+      'warn-border':   '#d9a441',
+      'scroll-thumb':  '#6f7884',
+      'scroll-track':  '#eef1f4',
+      'toggle-off':    '#7a8490',
+      'knob':          '#ffffff',
+      'shadow':        '0 12px 40px rgba(20,30,40,.22)',
+      'fade':          'rgba(255,255,255,0)',
+      'scheme':        'light',
+    },
+  };
+
+  function systemPrefersDark() {
+    try { return root.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true; } catch { return true; }
+  }
+
+  // 'auto' segue o tema do sistema/navegador.
+  function resolveTheme(pref) {
+    return pref === 'light' || pref === 'dark' ? pref : (systemPrefersDark() ? 'dark' : 'light');
+  }
+
+  // Aplica as cores do tema como variáveis CSS (--vcc-<nome>) no elemento.
+  function applyThemeVars(el, theme) {
+    const vars = THEMES[theme] || THEMES.dark;
+    for (const [name, value] of Object.entries(vars)) el.style.setProperty('--vcc-' + name, value);
+    el.style.setProperty('color-scheme', vars.scheme);
+    el.dataset.vccTheme = theme;
+  }
+
+  // Avisa quando o tema do sistema muda (para o modo 'auto').
+  function onSystemThemeChange(cb) {
+    try {
+      const mq = root.matchMedia?.('(prefers-color-scheme: dark)');
+      mq?.addEventListener?.('change', cb);
+    } catch {}
+  }
+
+  root.VCC_SHARED = {
+    SPEED_MIN,
+    SPEED_MAX,
+    DEFAULTS,
+    MODES,
+    THEMES_PREFS,
+    BAR_ANCHORS,
+    SITE_KEYS,
+    FACTORY_KEYS,
+    KEY_ACTION_IDS,
+    FORBIDDEN_KEYS,
+    bindingFromEvent,
+    normalizeSite,
+    THEMES,
+    resolveTheme,
+    applyThemeVars,
+    onSystemThemeChange,
   };
 })(globalThis);
 
@@ -554,9 +825,13 @@
   function appendSafeHTML(el, v) { el.append(...safeHTMLToNodes(v)); }
 
   // ─────────────────────────────────────────────
-  // IDIOMA (textos em src/core/i18n.js)
+  // IDIOMA E DEFINIÇÕES COMPARTILHADAS
+  // (textos em src/core/i18n.js; padrões e temas em src/core/shared.js)
   // ─────────────────────────────────────────────
   const I18N = globalThis.VCC_I18N;
+  const SHARED = globalThis.VCC_SHARED;
+  const { DEFAULTS, FACTORY_KEYS, SPEED_MIN, SPEED_MAX } = SHARED;
+
   let langPref = 'auto';                 // 'auto' | 'pt-BR' | 'en-US'
   let lang = I18N.resolve(langPref);
   let t = I18N.translator(lang);
@@ -569,43 +844,27 @@
   }
 
   // ─────────────────────────────────────────────
+  // AMBIENTE
+  // ─────────────────────────────────────────────
+  const extensionApi = globalThis.browser?.runtime?.id ? globalThis.browser
+    : globalThis.chrome?.runtime?.id ? globalThis.chrome : null;
+  const extensionRuntime = extensionApi?.runtime || null;
+  // Na extensão, as configurações ficam na página de configurações e o painel
+  // mostra só os controles do vídeo. No Tampermonkey, o painel tem tudo.
+  // (VCC_STORAGE_READY só existe na extensão, criado por gm-compat.js.)
+  const IS_EXTENSION = !!extensionRuntime && !!globalThis.VCC_STORAGE_READY;
+
+  // ─────────────────────────────────────────────
   // CONSTANTES
   // ─────────────────────────────────────────────
-  const SPEED_MIN          = 0.1;
-  const SPEED_MAX          = 16.0;
-  const CB_OPACITY_DEFAULT = 0.90;
-  const CP_OPACITY_DEFAULT = 0.90;
-  const PRESET_SPEEDS      = [1.0, 1.25, 1.5, 1.75, 2.0, 3.0, 4.0];
-  const SPEED_MAP          = {'1':1.0,'2':1.25,'3':1.5,'4':1.75,'5':2.0,'6':3.0,'7':4.0};
-
-  const FORBIDDEN_KEYS = new Set([
-    'Alt','Control','Shift','Meta','Escape','Tab',
-    'F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12',
-    'Fn','CapsLock','NumLock','ScrollLock','Pause','PrintScreen',
-  ]);
-
-  // ─────────────────────────────────────────────
-  // ATALHOS PADRÃO DE FÁBRICA
-  // ─────────────────────────────────────────────
-  const FACTORY_KEYS = {
-    slowDown:   'S',
-    speedUp:    'D',
-    resetSpeed: 'R',
-    toggle2x:   'G',
-    seekBack:   'Z',
-    seekFwd:    'X',
-    volumeDown: 'Q',
-    volumeUp:   'E',
-    toggleMute: 'M',
-    toggleCB:   'V',
-    toggleCP:   'H',
-  };
+  const PRESET_SPEEDS = [1.0, 1.25, 1.5, 1.75, 2.0, 3.0, 4.0];
+  const SPEED_MAP     = {'1':1.0,'2':1.25,'3':1.5,'4':1.75,'5':2.0,'6':3.0,'7':4.0};
+  // Menor vídeo que recebe a barra no posicionamento automático (evita miniaturas).
+  const MIN_VIDEO_W = 160, MIN_VIDEO_H = 90;
+  const BAR_MARGIN = 8;
 
   // Ações com atalho configurável (os nomes vêm de 'key.<id>' em i18n.js)
-  const KEY_ACTIONS = [
-    'slowDown', 'speedUp', 'resetSpeed', 'toggle2x', 'seekBack', 'seekFwd',
-    'volumeDown', 'volumeUp', 'toggleMute', 'toggleCB', 'toggleCP',
-  ].map(id => ({ id }));
+  const KEY_ACTIONS = SHARED.KEY_ACTION_IDS.map(id => ({ id }));
 
   // ─────────────────────────────────────────────
   // ESTADO
@@ -615,28 +874,32 @@
   const state = {
     speed:         1.0,
     prevSpeed:     1.0,
-    cbMode:        'visible',   // 'visible' | 'alerts' | 'hidden'
+    cbMode:        DEFAULTS.cbMode,  // 'visible' | 'alerts' | 'hidden'
     cpVisible:     false,
     videos:        [],
     primaryVideo:  0,
     targetVideos:  new Set(),
-    cbOpacity:     CB_OPACITY_DEFAULT,
-    cpOpacity:     CP_OPACITY_DEFAULT,
+    cbOpacity:     DEFAULTS.cbOpacity,
+    cpOpacity:     DEFAULTS.cpOpacity,
     cbPos:         null,
     sessionStart:  Date.now(),
     speedHistory:  [],
-    alertDuration: 500,
-    seekStep:      10,
-    speedStep:     0.1,
+    alertDuration: DEFAULTS.alertDuration,
+    seekStep:      DEFAULTS.seekStep,
+    speedStep:     DEFAULTS.speedStep,
     volume:        1.0,
     lastVolume:    1.0,
     muted:         false,
-    volumeStep:    5,
+    volumeStep:    DEFAULTS.volumeStep,
+    themePref:     DEFAULTS.theme,
+    barAuto:       DEFAULTS.barAuto,
+    barAnchor:     DEFAULTS.barAnchor,
+    barLayout:     DEFAULTS.barLayout,
     videoControlsActive: false,
   };
 
   // ─────────────────────────────────────────────
-  // GM STORAGE
+  // ARMAZENAMENTO (funções GM_*; na extensão, via gm-compat.js)
   // ─────────────────────────────────────────────
   function sk(k) { return `vcc_${domain}_${k}`; }
   function gk(k) { return `vcc_global_${k}`; }
@@ -651,19 +914,28 @@
     try { return GM_listValues().filter(k => k.startsWith('vcc_')); } catch { return []; }
   }
 
+  const clamp = (v, min, max, fb) => (Number.isFinite(Number(v)) ? Math.max(min, Math.min(max, Number(v))) : fb);
+  const oneOf = (v, list, fb) => (list.includes(v) ? v : fb);
+
   function loadState() {
-    state.cbOpacity     = load(sk('cbOpacity'),     CB_OPACITY_DEFAULT);
-    state.cpOpacity     = load(sk('cpOpacity'),     CP_OPACITY_DEFAULT);
+    // Opacidade: valor do site; se não houver, o padrão global; se não houver, o de fábrica.
+    state.cbOpacity     = clamp(load(sk('cbOpacity'), load(gk('cbOpacity'), DEFAULTS.cbOpacity)), 0.1, 1, DEFAULTS.cbOpacity);
+    state.cpOpacity     = clamp(load(sk('cpOpacity'), load(gk('cpOpacity'), DEFAULTS.cpOpacity)), 0.2, 1, DEFAULTS.cpOpacity);
     state.cbPos         = load(sk('cbPos'),         null);
-    state.speed         = load(sk('speed'),         1.0);
-    state.cbMode        = load(gk('cbMode'),        'visible');
-    state.alertDuration = load(gk('alertDuration'), 500);
-    state.seekStep      = load(gk('seekStep'),      10);
-    state.speedStep     = load(gk('speedStep'),     0.1);
-    state.volume        = Math.max(0, Math.min(1, load(sk('volume'), 1.0)));
-    state.lastVolume    = Math.max(0.01, Math.min(1, load(sk('lastVolume'), state.volume || 1.0)));
-    state.muted         = load(sk('muted'), false);
-    state.volumeStep    = load(gk('volumeStep'), 5);
+    state.speed         = clamp(load(sk('speed'), 1.0), SPEED_MIN, SPEED_MAX, 1.0);
+    state.cbMode        = oneOf(load(gk('cbMode'), DEFAULTS.cbMode), SHARED.MODES, DEFAULTS.cbMode);
+    state.alertDuration = clamp(load(gk('alertDuration'), DEFAULTS.alertDuration), 200, 3000, DEFAULTS.alertDuration);
+    state.seekStep      = clamp(load(gk('seekStep'),      DEFAULTS.seekStep), 1, 300, DEFAULTS.seekStep);
+    state.speedStep     = clamp(load(gk('speedStep'),     DEFAULTS.speedStep), 0.05, 1, DEFAULTS.speedStep);
+    state.volume        = clamp(load(sk('volume'), 1.0), 0, 1, 1.0);
+    state.lastVolume    = clamp(load(sk('lastVolume'), state.volume || 1.0), 0.01, 1, 1.0);
+    state.muted         = !!load(sk('muted'), false);
+    state.volumeStep    = clamp(load(gk('volumeStep'), DEFAULTS.volumeStep), 1, 25, DEFAULTS.volumeStep);
+    state.themePref     = oneOf(load(gk('theme'), DEFAULTS.theme), SHARED.THEMES_PREFS, DEFAULTS.theme);
+    state.barAuto       = !!load(gk('barAuto'), DEFAULTS.barAuto);
+    state.barAnchor     = oneOf(load(gk('barAnchor'), DEFAULTS.barAnchor), SHARED.BAR_ANCHORS, DEFAULTS.barAnchor);
+    state.barLayout     = oneOf(load(gk('barLayout'), DEFAULTS.barLayout), ['single', 'perVideo'], DEFAULTS.barLayout);
+    langPref            = load(gk('language'), 'auto');
   }
 
   function savePos(x, y) { state.cbPos = {x,y}; save(sk('cbPos'), {x,y}); }
@@ -702,50 +974,60 @@
 
   // ─────────────────────────────────────────────
   // CONTROLE DE VÍDEO
+  //
+  // A velocidade "global" (state.speed) vale para os vídeos selecionados.
+  // No modo "uma barra em cada vídeo", cada barra pode dar ao próprio vídeo
+  // uma velocidade diferente (vid._vccSpeed); os atalhos voltam a usar a global.
   // ─────────────────────────────────────────────
   function clampSpeed(v) {
     return Math.max(SPEED_MIN, Math.min(SPEED_MAX, Math.round(v * 100) / 100));
   }
 
-  function applySpeed(v) {
+  const videoSpeed = vid => vid._vccSpeed ?? state.speed;
+
+  function targetVideoList() {
+    return [...state.targetVideos].map(i => state.videos[i]).filter(v => v && v.isConnected);
+  }
+
+  function applySpeed(v, persist = true) {
     state.speed = clampSpeed(v);
-    state.targetVideos.forEach(i => {
-      const vid = state.videos[i];
-      if (vid && vid.isConnected) {
-        try { vid.playbackRate = state.speed; } catch {}
-      }
+    targetVideoList().forEach(vid => {
+      delete vid._vccSpeed;
+      try { vid.playbackRate = state.speed; } catch {}
     });
-    saveSpeed();
-    updateCBSpeed();
+    if (persist) saveSpeed();
+    updateBarsDisplay();
     updateCPSpeed();
     updateETA();
   }
 
   function applySeek(seconds) {
-    state.targetVideos.forEach(i => {
-      const vid = state.videos[i];
-      if (!vid || !vid.isConnected) return;
-      try {
-        const dur = vid.duration || 0;
-        vid.currentTime = Math.max(0, isFinite(dur) ? Math.min(dur, vid.currentTime + seconds) : vid.currentTime + seconds);
-      } catch {}
-    });
-    flashCB(seconds > 0 ? `+${seconds}s` : `${seconds}s`, true);
+    targetVideoList().forEach(vid => seekVideo(vid, seconds));
+    flashCB(seconds > 0 ? `+${seconds}s` : `${seconds}s`);
+  }
+
+  function seekVideo(vid, seconds) {
+    try {
+      const dur = vid.duration || 0;
+      vid.currentTime = Math.max(0, isFinite(dur) ? Math.min(dur, vid.currentTime + seconds) : vid.currentTime + seconds);
+    } catch {}
+  }
+
+  function volumeFlashText() {
+    return state.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(state.volume * 100) });
   }
 
   function applyVolume(value, unmute = true) {
     state.volume = Math.max(0, Math.min(1, Math.round(value * 100) / 100));
     if (state.volume > 0) state.lastVolume = state.volume;
     if (unmute) state.muted = false;
-    state.targetVideos.forEach(i => {
-      const vid = state.videos[i];
-      if (!vid || !vid.isConnected) return;
+    targetVideoList().forEach(vid => {
       try { vid.volume = state.volume; vid.muted = state.muted; } catch {}
     });
     saveVolume();
-    updateCBVolume();
+    updateBarsDisplay();
     updateCPVolume();
-    flashCB(state.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(state.volume * 100) }), true);
+    flashCB(volumeFlashText());
   }
 
   function changeVolume(percent) {
@@ -760,15 +1042,13 @@
     } else {
       state.muted = true;
     }
-    state.targetVideos.forEach(i => {
-      const vid = state.videos[i];
-      if (!vid || !vid.isConnected) return;
+    targetVideoList().forEach(vid => {
       try { vid.volume = state.volume; vid.muted = state.muted; } catch {}
     });
     saveVolume();
-    updateCBVolume();
+    updateBarsDisplay();
     updateCPVolume();
-    flashCB(state.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(state.volume * 100) }), true);
+    flashCB(volumeFlashText());
   }
 
   function togglePrimaryPlayback() {
@@ -783,35 +1063,46 @@
         vid.pause();
       }
     } catch {}
-    flashCB(t(shouldPlay ? 'flash.play' : 'flash.pause'), true);
+    flashCB(t(shouldPlay ? 'flash.play' : 'flash.pause'), [vid]);
     setTimeout(updateVideoList, 80);
   }
 
-  function setSpeed(v)    { applySpeed(v); }
-  function changeSpeed(d) { applySpeed(state.speed + d); }
-  function resetSpeed()   { applySpeed(1.0); }
+  function setSpeed(v)    { applySpeed(v); flashCB(fmtSpeed(state.speed) + '×'); }
+  function changeSpeed(d) { setSpeed(state.speed + d); }
+  function resetSpeed()   { setSpeed(1.0); }
 
   function toggle2x() {
-    if (Math.abs(state.speed - 2.0) < 0.01) applySpeed(state.prevSpeed === 2.0 ? 1.0 : state.prevSpeed);
-    else { state.prevSpeed = state.speed; applySpeed(2.0); }
+    if (Math.abs(state.speed - 2.0) < 0.01) setSpeed(state.prevSpeed === 2.0 ? 1.0 : state.prevSpeed);
+    else { state.prevSpeed = state.speed; setSpeed(2.0); }
+  }
+
+  // Ações de uma barra presa a um vídeo: valem só para esse vídeo.
+  function setVideoSpeed(vid, v) {
+    vid._vccSpeed = clampSpeed(v);
+    try { vid.playbackRate = vid._vccSpeed; } catch {}
+    flashCB(fmtSpeed(vid._vccSpeed) + '×', [vid]);
+  }
+
+  function changeVideoVolume(vid, percent) {
+    try {
+      vid.muted = false;
+      vid.volume = Math.max(0, Math.min(1, Math.round((vid.volume + percent / 100) * 100) / 100));
+    } catch {}
+    flashCB(t('flash.volume', { n: Math.round(vid.volume * 100) }), [vid]);
+  }
+
+  function toggleVideoMute(vid) {
+    try { vid.muted = !vid.muted; } catch {}
+    flashCB(vid.muted ? t('flash.muted') : t('flash.volume', { n: Math.round(vid.volume * 100) }), [vid]);
   }
 
   // ─────────────────────────────────────────────
   // DETECÇÃO DE VÍDEOS — com suporte a Shadow DOM
   //
-  // Problema: players modernos podem encapsular o player dentro de Shadow DOM
-  // ou múltiplos iframes. document.querySelectorAll('video')
-  // não atravessa Shadow DOM, então o script nunca encontrava
-  // o elemento <video> nesses sites.
-  //
-  // Solução: varredura recursiva que desce em cada shadowRoot
-  // encontrado na árvore do DOM.
+  // Players modernos podem encapsular o <video> em Shadow DOM, que
+  // document.querySelectorAll('video') não atravessa. A varredura desce
+  // recursivamente em cada shadowRoot encontrado.
   // ─────────────────────────────────────────────
-
-  /**
-   * Coleta todos os elementos <video> no documento,
-   * descendo recursivamente em shadowRoots.
-   */
   function queryAllVideos(root) {
     const found = [];
     try {
@@ -823,21 +1114,16 @@
     return found;
   }
 
-  /**
-   * Registra um elemento <video> no estado, configurando
-   * playbackRate e listeners de ciclo de vida.
-   */
   function registerVideo(vid) {
     if (state.videos.includes(vid)) return;
     const idx = state.videos.length;
     state.videos.push(vid);
     state.targetVideos.add(idx);
 
-    // Aplica velocidade imediatamente, e também quando
-    // o vídeo estiver pronto (readyState pode ser 0 ainda)
+    // Aplica velocidade imediatamente e quando o vídeo estiver pronto.
     const applyWhenReady = () => {
       try {
-        vid.playbackRate = state.speed;
+        vid.playbackRate = videoSpeed(vid);
         vid.volume = state.volume;
         vid.muted = state.muted;
       } catch {}
@@ -848,8 +1134,8 @@
     // Reaplica quando o src muda (troca de mídia, playlists ou próximo item)
     vid.addEventListener('emptied', () => {
       vid.addEventListener('loadedmetadata', function onMeta() {
-        try { vid.playbackRate = state.speed; } catch {}
-        updateCBSpeed();
+        try { vid.playbackRate = videoSpeed(vid); } catch {}
+        updateBarsDisplay();
         updateCPSpeed();
         vid.removeEventListener('loadedmetadata', onMeta);
       });
@@ -858,13 +1144,12 @@
     // Alguns players resetam playbackRate ao dar play
     vid.addEventListener('play', () => {
       try {
-        if (Math.abs(vid.playbackRate - state.speed) > 0.01) {
-          vid.playbackRate = state.speed;
-        }
+        if (Math.abs(vid.playbackRate - videoSpeed(vid)) > 0.01) vid.playbackRate = videoSpeed(vid);
       } catch {}
     });
+    vid.addEventListener('volumechange', () => updateBarsDisplay());
 
-    // Atualiza a lista no CP se estiver aberto
+    syncBars();
     updateVideoList();
   }
 
@@ -872,20 +1157,15 @@
     queryAllVideos(document).forEach(registerVideo);
   }
 
-  /**
-   * MutationObserver que monitora adições de nós e
-   * também a criação de novos shadowRoots (para players
-   * que montam o DOM dinamicamente após carregamento).
-   */
+  // MutationObserver para players que montam o DOM depois do carregamento,
+  // com varredura periódica como reserva para Shadow DOM.
   function startObserver() {
     const obs = new MutationObserver(mutations => {
       let needsScan = false;
       for (const m of mutations) {
         for (const node of m.addedNodes) {
           if (node.nodeType !== 1) continue;
-          // Novo <video> direto
           if (node.tagName === 'VIDEO') { needsScan = true; break; }
-          // Pode conter vídeos ou shadowRoots internamente
           if (node.querySelector && (node.querySelector('video') || node.shadowRoot)) {
             needsScan = true; break;
           }
@@ -896,13 +1176,10 @@
 
     obs.observe(document.documentElement, { childList: true, subtree: true });
 
-    // Polling leve como fallback para Shadow DOM que o MutationObserver
-    // não captura (alguns players criam shadowRoot sem adicionar nós observáveis)
     let pollCount = 0;
     const poll = setInterval(() => {
       scanVideos();
       pollCount++;
-      // Após 2 minutos de polling agressivo, espaça para poupar CPU
       if (pollCount > 24) clearInterval(poll);
     }, 5000);
   }
@@ -944,360 +1221,496 @@
   document.addEventListener('keydown', onKeyDown, true);
 
   // ─────────────────────────────────────────────
+  // TEMA (claro / escuro / automático)
+  // ─────────────────────────────────────────────
+  const currentTheme = () => SHARED.resolveTheme(state.themePref);
+
+  function applyThemeEverywhere() {
+    const theme = currentTheme();
+    if (cpEl) SHARED.applyThemeVars(cpEl, theme);
+    bars.forEach(bar => SHARED.applyThemeVars(bar.el, theme));
+  }
+
+  SHARED.onSystemThemeChange(() => { if (state.themePref === 'auto') applyThemeEverywhere(); });
+
+  // ─────────────────────────────────────────────
   // ESTILOS
+  // As cores vêm das variáveis --vcc-* (ver THEMES em shared.js), aplicadas
+  // no painel e em cada barra. Textos com contraste ≥ 4,5:1 nos dois temas.
   // ─────────────────────────────────────────────
   function injectStyles() {
     const css = `
-      #vcc-cb {
-        position: fixed; z-index: 2147483647;
-        top: 12px; left: 12px;
-        display: flex; align-items: center;
-        gap: 3px; padding: 4px 7px;
-        background: rgba(0,0,0,0.45);
-        border: 0.5px solid rgba(255,255,255,0.13);
-        border-radius: 6px;
-        font-family: 'JetBrains Mono','Fira Mono','Courier New',monospace;
-        font-size: 11px; line-height: 1;
-        user-select: none; transition: opacity 0.2s;
-        box-sizing: border-box;
-      }
-      #vcc-cb * { box-sizing: border-box; }
-
-      #vcc-cb button {
-        background: none; border: none;
-        color: rgba(255,255,255,0.55); font-size: 11px; line-height: 1;
-        cursor: pointer; width: 18px; height: 18px;
-        border-radius: 3px;
+      /* ── Barra de controle (o contêiner é estilizado inline, ver buildBarElement) ── */
+      .vcc-bar * { box-sizing: border-box; }
+      .vcc-bar button, .vcc-bar .vcc-bar-label {
+        all: unset; box-sizing: border-box;
         display: flex; align-items: center; justify-content: center;
-        padding: 0; margin: 0;
-        font-family: 'JetBrains Mono',monospace;
-        transition: background 0.1s, color 0.1s; flex-shrink: 0;
+        height: 22px; min-width: 22px; padding: 0 3px; border-radius: 4px;
+        color: var(--vcc-text-2); font: 500 12px/1 'JetBrains Mono','Fira Mono','Courier New',monospace;
+        cursor: pointer; flex-shrink: 0; transition: background .1s, color .1s;
       }
-      #vcc-cb button:hover  { background: rgba(255,255,255,0.1); color: #fff; }
-      #vcc-cb button:active { transform: scale(0.9); }
-
-      #vcc-cb-speed {
-        color: rgba(255,255,255,0.85); font-size: 11px; font-weight: 500;
-        min-width: 32px; height: 18px; line-height: 18px;
-        text-align: center; cursor: grab; padding: 0 2px; border-radius: 3px;
-        display: flex; align-items: center; justify-content: center;
-        transition: background 0.1s; flex-shrink: 0;
+      .vcc-bar button:hover, .vcc-bar .vcc-bar-label:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
+      .vcc-bar button:focus-visible { outline: 2px solid var(--vcc-accent); outline-offset: 1px; }
+      .vcc-bar button:active { transform: scale(0.92); }
+      .vcc-bar .vcc-bar-speed { min-width: 44px; color: var(--vcc-text); cursor: default; }
+      .vcc-bar .vcc-bar-speed:hover { background: none; }
+      .vcc-bar .vcc-bar-vol { min-width: 40px; font-size: 11px; }
+      .vcc-bar .vcc-bar-grip {
+        cursor: grab; color: var(--vcc-text-3); letter-spacing: -3px; padding: 0 6px 0 3px;
+        font-size: 14px; min-width: 18px; margin-right: 2px;
+        border-right: 1px solid var(--vcc-border); border-radius: 4px 0 0 4px;
       }
-      #vcc-cb-speed:hover  { background: rgba(255,255,255,0.07); }
-      #vcc-cb-speed:active { cursor: grabbing; }
+      .vcc-bar .vcc-bar-grip:hover { color: var(--vcc-text); }
+      .vcc-bar .vcc-bar-grip:active { cursor: grabbing; }
+      .vcc-bar .vcc-bar-div { width: 1px; height: 14px; background: var(--vcc-border); margin: 0 2px; flex-shrink: 0; }
+      .vcc-bar .vcc-bar-cfg { font-size: 14px; }
 
-      #vcc-cb-volume {
-        color: rgba(255,255,255,0.75); font-size: 10px; min-width: 34px;
-        height: 18px; line-height: 18px; text-align: center; cursor: pointer;
-        padding: 0 2px; border-radius: 3px; flex-shrink: 0;
-      }
-      #vcc-cb-volume:hover { background: rgba(255,255,255,0.07); color: #fff; }
-
-      #vcc-cb-div, #vcc-cb-vol-div {
-        width: 0.5px; height: 12px; background: rgba(255,255,255,0.13);
-        margin: 0 1px; flex-shrink: 0; align-self: center;
-      }
-
-      #vcc-cb-cfg { color: rgba(255,255,255,0.3) !important; font-size: 13px !important; }
-      #vcc-cb-cfg:hover { color: rgba(255,255,255,0.8) !important; }
-
-      #vcc-cb.vcc-flash-visible { display: flex !important; opacity: 0.75 !important; }
-
-      #vcc-cb-mode-badge {
-        font-size: 8px; font-family: monospace; color: rgba(255,255,255,0.35);
-        position: absolute; bottom: -1px; right: -1px;
-        background: rgba(0,0,0,0.6); border-radius: 2px; padding: 0 2px;
-        pointer-events: none; letter-spacing: .03em;
-      }
-
-      /* ── CP ── */
+      /* ── Painel ── */
       #vcc-cp {
         position: fixed; z-index: 2147483646;
         top: 50%; left: 50%; transform: translate(-50%,-50%);
         width: min(500px,92vw); max-height: 82vh;
         display: flex; flex-direction: column;
-        background: rgba(8,8,8,0.92);
-        border: 0.5px solid rgba(255,255,255,0.12);
-        border-radius: 12px;
-        font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-        font-size: 13px; color: rgba(255,255,255,0.72);
-        box-sizing: border-box;
+        background: var(--vcc-bg); color: var(--vcc-text-2);
+        border: 1px solid var(--vcc-border); border-radius: 12px;
+        box-shadow: var(--vcc-shadow);
+        font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+        font-size: 13px; line-height: 1.4; text-align: left;
+        box-sizing: border-box; overflow: hidden;
       }
       #vcc-cp * { box-sizing: border-box; }
+      #vcc-cp button:focus-visible, #vcc-cp input:focus-visible { outline: 2px solid var(--vcc-accent); outline-offset: 1px; }
 
       #vcc-cp-bar {
-        flex-shrink: 0; padding: 10px 16px;
-        display: flex; align-items: center; justify-content: space-between;
-        border-bottom: 0.5px solid rgba(255,255,255,0.08);
-        cursor: grab; border-radius: 12px 12px 0 0;
-        background: rgba(6,6,6,0.98);
+        flex-shrink: 0; padding: 10px 12px 10px 16px;
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        border-bottom: 1px solid var(--vcc-border);
+        cursor: grab; background: var(--vcc-bg-header);
       }
       #vcc-cp-bar:active { cursor: grabbing; }
+      #vcc-cp-title { font: 600 13px/1.2 'JetBrains Mono',monospace; color: var(--vcc-text); letter-spacing: .03em; white-space: nowrap; }
+      #vcc-cp-domain { font: 12px/1.2 monospace; color: var(--vcc-text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+      #vcc-cp-close { all: unset; box-sizing: border-box; color: var(--vcc-text-2); font-size: 14px; cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      #vcc-cp-close:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
 
+      #vcc-cp-body { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
       #vcc-cp-scroll {
-        overflow-y: auto; flex: 1;
-        scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent;
+        overflow-y: auto; flex: 1; min-height: 0;
+        scrollbar-width: auto; scrollbar-color: var(--vcc-scroll-thumb) var(--vcc-scroll-track);
       }
-      #vcc-cp-scroll::-webkit-scrollbar { width: 4px; }
-      #vcc-cp-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+      #vcc-cp-scroll::-webkit-scrollbar { width: 10px; }
+      #vcc-cp-scroll::-webkit-scrollbar-track { background: var(--vcc-scroll-track); }
+      #vcc-cp-scroll::-webkit-scrollbar-thumb { background: var(--vcc-scroll-thumb); border-radius: 5px; border: 2px solid var(--vcc-scroll-track); }
+      /* Indica que há mais conteúdo abaixo */
+      #vcc-cp-fade {
+        position: absolute; left: 0; right: 12px; bottom: 0; height: 40px;
+        background: linear-gradient(to bottom, var(--vcc-fade), var(--vcc-bg) 85%);
+        pointer-events: none; display: flex; align-items: flex-end; justify-content: center;
+        padding-bottom: 3px; color: var(--vcc-text-3); font-size: 12px;
+        opacity: 0; transition: opacity .15s;
+      }
+      #vcc-cp-fade.show { opacity: 1; }
 
-      #vcc-cp-title { font-family: 'JetBrains Mono',monospace; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.82); letter-spacing: .05em; }
-      #vcc-cp-domain { font-size: 10px; color: rgba(255,255,255,0.22); font-family: monospace; margin-right: 8px; }
-      #vcc-cp-close { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 13px; cursor: pointer; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: all .12s; }
-      #vcc-cp-close:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.88); }
+      #vcc-cp-foot { flex-shrink: 0; padding: 10px 16px; border-top: 1px solid var(--vcc-border); background: var(--vcc-bg-header); }
+      #vcc-cp-foot button { width: 100%; justify-content: center; }
 
-      .vcc-acc { border-bottom: .5px solid rgba(255,255,255,0.06); }
+      .vcc-acc { border-bottom: 1px solid var(--vcc-border); }
       .vcc-acc:last-child { border-bottom: none; }
-      .vcc-acc-hdr { width: 100%; background: none; border: none; padding: 9px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 500; font-family: inherit; text-align: left; transition: background .12s; }
-      .vcc-acc-hdr:hover { background: rgba(255,255,255,0.03); }
-      .vcc-acc-hdr-left { display: flex; align-items: center; gap: 8px; }
-      .vcc-acc-icon { font-size: 12px; width: 16px; text-align: center; color: rgba(255,255,255,0.35); }
-      .vcc-arr { font-size: 10px; color: rgba(255,255,255,0.25); transition: transform .18s; display: inline-block; }
+      .vcc-acc-hdr { all: unset; box-sizing: border-box; width: 100%; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--vcc-text); font-family: inherit; font-size: 13px; font-weight: 600; line-height: 1.3; }
+      .vcc-acc-hdr:hover { background: var(--vcc-surface); }
+      .vcc-acc-hdr-left { display: flex; align-items: center; gap: 9px; }
+      .vcc-acc-icon { font-size: 13px; width: 16px; text-align: center; color: var(--vcc-accent); }
+      .vcc-arr { font-size: 13px; color: var(--vcc-text-3); transition: transform .18s; display: inline-block; }
       .vcc-arr.open { transform: rotate(90deg); }
-      .vcc-acc-body { display: none; padding: 2px 16px 12px; }
+      .vcc-acc-body { display: none; padding: 2px 16px 14px; }
       .vcc-acc-body.open { display: block; }
 
-      .vcc-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: .5px solid rgba(255,255,255,0.04); }
+      .vcc-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--vcc-border); }
       .vcc-row:last-child { border-bottom: none; }
-      .vcc-row-label { font-size: 12px; color: rgba(255,255,255,0.62); }
-      .vcc-row-sub   { font-size: 10px; color: rgba(255,255,255,0.28); margin-top: 1px; }
+      .vcc-row-label { font-size: 13px; color: var(--vcc-text); }
+      .vcc-row-sub   { font-size: 12px; color: var(--vcc-text-3); margin-top: 2px; }
+      .vcc-row.vcc-off { opacity: .55; }
 
-      .vcc-tog { width: 30px; height: 17px; border-radius: 9px; background: rgba(255,255,255,0.14); position: relative; cursor: pointer; transition: background .18s; flex-shrink: 0; }
-      .vcc-tog.on { background: #1D9E75; }
-      .vcc-tog-t  { position: absolute; width: 13px; height: 13px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: left .16s; }
-      .vcc-tog.on .vcc-tog-t { left: 15px; }
+      .vcc-tog { all: unset; box-sizing: border-box; width: 34px; height: 20px; border-radius: 10px; background: var(--vcc-toggle-off); position: relative; cursor: pointer; transition: background .18s; flex-shrink: 0; }
+      .vcc-tog.on { background: var(--vcc-accent-fill); }
+      .vcc-tog:disabled { cursor: not-allowed; opacity: .5; }
+      .vcc-tog-t  { position: absolute; width: 16px; height: 16px; border-radius: 50%; background: var(--vcc-knob); top: 2px; left: 2px; transition: left .16s; }
+      .vcc-tog.on .vcc-tog-t { left: 16px; }
 
       .vcc-spd-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-      .vcc-spd-btn { background: rgba(255,255,255,0.07); border: .5px solid rgba(255,255,255,0.13); border-radius: 5px; color: rgba(255,255,255,0.65); font-size: 13px; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s; flex-shrink: 0; font-family: inherit; }
-      .vcc-spd-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
-      .vcc-spd-btn.sm { font-size: 11px; width: auto; padding: 0 8px; }
+      .vcc-spd-btn { all: unset; box-sizing: border-box; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; color: var(--vcc-text); font-size: 14px; min-width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: inherit; }
+      .vcc-spd-btn:hover { background: var(--vcc-surface-hover); }
+      .vcc-spd-btn.sm { font-size: 12px; padding: 0 10px; }
 
-      .vcc-spd-in { background: rgba(255,255,255,0.08); border: .5px solid rgba(255,255,255,0.15); border-radius: 5px; color: rgba(255,255,255,0.9); font-family: 'JetBrains Mono',monospace; font-size: 14px; font-weight: 500; width: 86px; text-align: center; padding: 3px 8px; outline: none; }
-      .vcc-spd-in:focus { border-color: rgba(255,255,255,0.35); }
+      .vcc-spd-in, .vcc-num-in { background: var(--vcc-surface); border: 1px solid var(--vcc-border-strong); border-radius: 6px; color: var(--vcc-text); font-family: 'JetBrains Mono',monospace; text-align: center; outline: none; }
+      .vcc-spd-in { font-size: 15px; font-weight: 600; width: 90px; height: 30px; padding: 0 8px; }
+      .vcc-num-in { font-size: 13px; width: 72px; padding: 4px 6px; }
+      .vcc-spd-in:focus, .vcc-num-in:focus { border-color: var(--vcc-accent); }
 
-      .vcc-eta { font-size: 11px; color: rgba(255,255,255,0.42); line-height: 1.5; padding: 6px 8px; background: rgba(255,255,255,0.05); border-radius: 5px; border: .5px solid rgba(255,255,255,0.07); }
-      .vcc-eta strong { color: rgba(255,255,255,0.82); font-weight: 500; }
+      .vcc-eta { font-size: 12px; color: var(--vcc-text-2); line-height: 1.5; padding: 7px 10px; background: var(--vcc-surface); border-radius: 6px; border: 1px solid var(--vcc-border); }
+      .vcc-eta strong { color: var(--vcc-text); font-weight: 600; }
 
-      .vcc-preset-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin-bottom: 8px; }
-      .vcc-pc { background: rgba(255,255,255,0.06); border: .5px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 5px 4px; text-align: center; font-family: 'JetBrains Mono',monospace; font-size: 11px; color: rgba(255,255,255,0.55); cursor: pointer; transition: all .12s; }
-      .vcc-pc:hover { background: rgba(255,255,255,0.11); color: #fff; }
-      .vcc-pc.sel   { background: rgba(29,158,117,0.2); border-color: #1D9E75; color: #5DCAA5; }
+      .vcc-preset-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 8px; }
+      .vcc-pc { all: unset; box-sizing: border-box; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; padding: 6px 4px; text-align: center; font: 12px 'JetBrains Mono',monospace; color: var(--vcc-text-2); cursor: pointer; }
+      .vcc-pc:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
+      .vcc-pc.sel   { background: var(--vcc-accent-soft); border-color: var(--vcc-accent); color: var(--vcc-accent); font-weight: 600; }
 
-      .vcc-slr { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
-      .vcc-slr label { font-size: 10px; color: rgba(255,255,255,0.35); min-width: 72px; }
-      .vcc-slr input[type=range] { flex: 1; accent-color: #1D9E75; }
-      .vcc-slv { font-size: 10px; font-family: monospace; color: rgba(255,255,255,0.5); min-width: 34px; text-align: right; }
+      .vcc-slr { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+      .vcc-slr label { font-size: 12px; color: var(--vcc-text-2); min-width: 104px; }
+      .vcc-slr input[type=range] { flex: 1; accent-color: var(--vcc-accent-fill); }
+      .vcc-slv { font: 12px monospace; color: var(--vcc-text-2); min-width: 44px; text-align: right; }
 
-      .vcc-loop-status { font-size: 10px; color: rgba(255,255,255,0.38); background: rgba(255,255,255,0.04); border: .5px solid rgba(255,255,255,0.07); border-radius: 5px; padding: 5px 8px; margin-top: 6px; line-height: 1.6; }
-      .vcc-loop-status .pt   { color: #5DCAA5; font-family: monospace; font-weight: 500; }
-      .vcc-loop-status .none { color: rgba(255,255,255,0.24); font-style: italic; }
+      .vcc-loop-status { font-size: 12px; color: var(--vcc-text-2); background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; padding: 6px 10px; margin-top: 6px; line-height: 1.6; }
+      .vcc-loop-status .pt   { color: var(--vcc-accent); font-family: monospace; font-weight: 600; }
+      .vcc-loop-status .none { color: var(--vcc-text-3); font-style: italic; }
+      .vcc-loop-status .on   { color: var(--vcc-accent); font-size: 11px; }
 
-      .vcc-abt { background: rgba(255,255,255,0.06); border: .5px solid rgba(255,255,255,0.1); border-radius: 5px; color: rgba(255,255,255,0.58); font-size: 11px; padding: 5px 9px; cursor: pointer; font-family: inherit; transition: all .12s; display: inline-flex; align-items: center; gap: 4px; }
-      .vcc-abt:hover { background: rgba(255,255,255,0.11); color: #fff; }
-      .vcc-abt:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
-      .vcc-abts { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+      .vcc-abt { all: unset; box-sizing: border-box; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; color: var(--vcc-text); font-size: 12px; padding: 6px 10px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; }
+      .vcc-abt:hover { background: var(--vcc-surface-hover); }
+      .vcc-abt:disabled { opacity: 0.5; cursor: not-allowed; }
+      .vcc-abt.primary { background: var(--vcc-accent-fill); border-color: var(--vcc-accent-fill); color: var(--vcc-on-accent); font-weight: 600; }
+      .vcc-abt.primary:hover { filter: brightness(1.08); }
+      .vcc-abt.danger { color: var(--vcc-danger); border-color: var(--vcc-danger); background: var(--vcc-danger-soft); }
+      .vcc-abts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 
-      .vcc-vrow { display: flex; align-items: center; gap: 6px; padding: 7px 0; border-bottom: .5px solid rgba(255,255,255,0.04); }
+      .vcc-seg { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 6px; }
+      .vcc-seg button { all: unset; box-sizing: border-box; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; color: var(--vcc-text-2); font-family: inherit; font-size: 12px; line-height: 1.2; padding: 6px 10px; cursor: pointer; }
+      .vcc-seg button:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
+      .vcc-seg button.active { background: var(--vcc-accent-soft); border-color: var(--vcc-accent); color: var(--vcc-accent); font-weight: 600; }
+
+      .vcc-anchor-grid { display: grid; grid-template-columns: repeat(3, 42px); gap: 4px; margin: 6px 0 4px; }
+      .vcc-anchor-grid button { all: unset; box-sizing: border-box; height: 28px; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; color: var(--vcc-text-2); font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      .vcc-anchor-grid button:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
+      .vcc-anchor-grid button.active { background: var(--vcc-accent-soft); border-color: var(--vcc-accent); color: var(--vcc-accent); }
+      .vcc-anchor-grid.vcc-off { opacity: .5; pointer-events: none; }
+
+      .vcc-vrow { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--vcc-border); }
       .vcc-vrow:last-child { border-bottom: none; }
-      .vcc-vthumb { width: 32px; height: 22px; background: rgba(255,255,255,0.07); border: .5px solid transparent; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: rgba(255,255,255,0.3); flex-shrink: 0; font-family: monospace; cursor: pointer; }
-      .vcc-vthumb:hover { background: rgba(255,255,255,0.12); color: #fff; }
-      .vcc-vthumb.primary { background: rgba(29,158,117,0.2); border-color: #1D9E75; color: #5DCAA5; }
-      .vcc-vname  { font-size: 11px; color: rgba(255,255,255,0.62); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .vcc-vmeta  { font-size: 10px; color: rgba(255,255,255,0.28); }
-      .vcc-primary-badge { font-size: 9px; background: rgba(29,158,117,0.2); color: #5DCAA5; border-radius: 3px; padding: 1px 5px; font-family: monospace; margin-left: 4px; vertical-align: middle; }
-      .vcc-chk    { width: 14px; height: 14px; border: .5px solid rgba(255,255,255,0.2); border-radius: 3px; background: rgba(255,255,255,0.06); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; color: #5DCAA5; transition: all .12s; }
-      .vcc-chk.on { background: rgba(29,158,117,0.22); border-color: #1D9E75; }
-      .vcc-vid-actions { display: flex; gap: 2px; flex-shrink: 0; }
-      .vcc-vid-btn { background: rgba(255,255,255,0.05); border: .5px solid rgba(255,255,255,0.09); border-radius: 3px; color: rgba(255,255,255,0.45); font-size: 10px; width: 22px; height: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: monospace; transition: all .1s; padding: 0; }
-      .vcc-vid-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
-      .vcc-vid-btn.danger:hover { background: rgba(226,75,74,0.2); color: #F09595; border-color: rgba(226,75,74,0.4); }
+      .vcc-vthumb { all: unset; box-sizing: border-box; width: 34px; height: 24px; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font: 11px monospace; color: var(--vcc-text-2); flex-shrink: 0; cursor: pointer; }
+      .vcc-vthumb:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
+      .vcc-vthumb.primary { background: var(--vcc-accent-soft); border-color: var(--vcc-accent); color: var(--vcc-accent); }
+      .vcc-vname  { font-size: 12px; color: var(--vcc-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .vcc-vmeta  { font-size: 11px; color: var(--vcc-text-3); }
+      .vcc-primary-badge { font: 10px monospace; background: var(--vcc-accent-soft); color: var(--vcc-accent); border-radius: 3px; padding: 1px 5px; margin-left: 5px; vertical-align: middle; }
+      .vcc-chk    { all: unset; box-sizing: border-box; width: 18px; height: 18px; border: 1px solid var(--vcc-border-strong); border-radius: 4px; background: var(--vcc-surface); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; color: var(--vcc-accent); }
+      .vcc-chk.on { background: var(--vcc-accent-soft); border-color: var(--vcc-accent); }
+      .vcc-vid-actions { display: flex; gap: 3px; flex-shrink: 0; }
+      .vcc-vid-btn { all: unset; box-sizing: border-box; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 4px; color: var(--vcc-text-2); font: 11px monospace; width: 24px; height: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+      .vcc-vid-btn:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
+      .vcc-vid-btn.on { color: var(--vcc-accent); border-color: var(--vcc-accent); }
+      .vcc-vid-btn.danger:hover { background: var(--vcc-danger-soft); color: var(--vcc-danger); border-color: var(--vcc-danger); }
 
-      .vcc-kbd-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: .5px solid rgba(255,255,255,0.04); }
+      .vcc-kbd-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--vcc-border); }
       .vcc-kbd-row:last-child { border-bottom: none; }
-      .vcc-kbd-action { font-size: 11px; color: rgba(255,255,255,0.62); flex: 1; }
-      .vcc-kbd-key { font-family: 'JetBrains Mono',monospace; font-size: 10px; background: rgba(255,255,255,0.08); border: .5px solid rgba(255,255,255,0.15); border-radius: 3px; padding: 2px 6px; color: rgba(255,255,255,0.62); cursor: pointer; min-width: 28px; text-align: center; transition: all .12s; user-select: none; }
-      .vcc-kbd-key:hover { background: rgba(255,255,255,0.14); color: #fff; }
-      .vcc-kbd-key.capturing { background: rgba(29,158,117,0.25); border-color: #1D9E75; color: #5DCAA5; animation: vcc-blink .6s infinite; }
-      .vcc-kbd-key.error { background: rgba(226,75,74,0.2); border-color: #E24B4A; color: #F09595; }
-      @keyframes vcc-blink { 0%,100%{opacity:1}50%{opacity:.4} }
-
-      .vcc-kbd-clear { background: none; border: none; color: rgba(255,255,255,0.2); font-size: 10px; cursor: pointer; padding: 2px 4px; border-radius: 3px; margin-left: 3px; transition: all .12s; line-height: 1; }
-      .vcc-kbd-clear:hover { color: rgba(226,75,74,0.8); background: rgba(226,75,74,0.1); }
+      .vcc-kbd-row.fixed { opacity: .8; }
+      .vcc-kbd-action { font-size: 12px; color: var(--vcc-text); flex: 1; }
+      .vcc-kbd-key { font: 12px 'JetBrains Mono',monospace; background: var(--vcc-surface); border: 1px solid var(--vcc-border-strong); border-radius: 4px; padding: 3px 7px; color: var(--vcc-text); cursor: pointer; min-width: 30px; text-align: center; user-select: none; }
+      .vcc-kbd-key:hover { background: var(--vcc-surface-hover); }
+      .vcc-kbd-row.fixed .vcc-kbd-key { cursor: default; }
+      .vcc-kbd-key.capturing { background: var(--vcc-accent-soft); border-color: var(--vcc-accent); color: var(--vcc-accent); animation: vcc-blink .6s infinite; }
+      .vcc-kbd-key.error { background: var(--vcc-danger-soft); border-color: var(--vcc-danger); color: var(--vcc-danger); }
+      @keyframes vcc-blink { 0%,100%{opacity:1}50%{opacity:.45} }
+      .vcc-kbd-clear { all: unset; color: var(--vcc-text-3); font-size: 11px; cursor: pointer; padding: 3px 5px; border-radius: 4px; margin-left: 4px; line-height: 1; }
+      .vcc-kbd-clear:hover { color: var(--vcc-danger); background: var(--vcc-danger-soft); }
 
       .vcc-scope-tabs { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
-      .vcc-scope-tab { background: rgba(255,255,255,0.05); border: .5px solid rgba(255,255,255,0.1); border-radius: 4px; color: rgba(255,255,255,0.42); font-size: 10px; padding: 4px 9px; cursor: pointer; font-family: inherit; transition: all .12s; }
-      .vcc-scope-tab:hover { color: rgba(255,255,255,0.72); }
-      .vcc-scope-tab.active { background: rgba(29,158,117,0.18); border-color: #1D9E75; color: #5DCAA5; }
+      .vcc-scope-tab { all: unset; box-sizing: border-box; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; color: var(--vcc-text-2); font-size: 12px; padding: 5px 10px; cursor: pointer; font-family: inherit; }
+      .vcc-scope-tab:hover { color: var(--vcc-text); }
+      .vcc-scope-tab.active { background: var(--vcc-accent-soft); border-color: var(--vcc-accent); color: var(--vcc-accent); font-weight: 600; }
 
-      .vcc-site-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: .5px solid rgba(255,255,255,0.04); }
+      .vcc-site-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--vcc-border); }
       .vcc-site-row:last-child { border-bottom: none; }
-      .vcc-site-name { font-size: 12px; color: rgba(255,255,255,0.62); }
+      .vcc-site-name { font-size: 13px; color: var(--vcc-text); }
 
-      .vcc-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; }
-      .vcc-sc { background: rgba(255,255,255,0.07); border: .5px solid rgba(255,255,255,0.09); border-radius: 6px; padding: 7px 9px; }
-      .vcc-sv { font-size: 17px; font-weight: 500; color: rgba(255,255,255,0.9); font-family: monospace; }
-      .vcc-sl { font-size: 10px; color: rgba(255,255,255,0.38); margin-top: 1px; }
+      .vcc-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+      .vcc-sc { background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; padding: 8px 10px; }
+      .vcc-sv { font: 600 17px monospace; color: var(--vcc-text); }
+      .vcc-sl { font-size: 12px; color: var(--vcc-text-2); margin-top: 2px; }
 
-      .vcc-ci   { display: flex; align-items: flex-start; gap: 7px; padding: 5px 0; border-bottom: .5px solid rgba(255,255,255,0.04); }
+      .vcc-ci   { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--vcc-border); }
       .vcc-ci:last-child { border-bottom: none; }
-      .vcc-cdot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
-      .vcc-ct   { font-size: 11px; color: rgba(255,255,255,0.55); line-height: 1.5; }
-      .vcc-ctag { font-size: 9px; font-family: monospace; padding: 1px 5px; border-radius: 3px; }
-      .vcc-ok   { background: rgba(29,158,117,0.2);  color: #5DCAA5; }
-      .vcc-warn { background: rgba(186,117,23,0.2);  color: #EF9F27; }
-      .vcc-err  { background: rgba(226,75,74,0.18);  color: #E24B4A; }
+      .vcc-cdot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+      .vcc-ct   { font-size: 12px; color: var(--vcc-text); line-height: 1.5; }
+      .vcc-ctag { font: 11px monospace; padding: 1px 6px; border-radius: 3px; }
+      .vcc-ok   { background: var(--vcc-accent-soft); color: var(--vcc-accent); }
+      .vcc-warn { background: var(--vcc-warn-soft); color: var(--vcc-warn); }
+      .vcc-err  { background: var(--vcc-danger-soft); color: var(--vcc-danger); }
+      .vcc-dot-ok { background: var(--vcc-accent); } .vcc-dot-warn { background: var(--vcc-warn); } .vcc-dot-err { background: var(--vcc-danger); }
 
-      .vcc-sub-title { font-size: 10px; color: rgba(255,255,255,0.32); margin-bottom: 5px; letter-spacing: .04em; }
-      .vcc-hint { font-size: 10px; color: rgba(255,255,255,0.26); margin-top: 6px; line-height: 1.5; }
-      .vcc-danger-zone { border: .5px solid rgba(226,75,74,0.25); border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
-      .vcc-danger-title { font-size: 11px; color: rgba(226,75,74,0.82); margin-bottom: 8px; font-weight: 500; }
+      .vcc-sub-title { font-size: 12px; font-weight: 600; color: var(--vcc-text-2); margin: 8px 0 5px; letter-spacing: .02em; }
+      .vcc-sub-title:first-child { margin-top: 2px; }
+      .vcc-hint { font-size: 12px; color: var(--vcc-text-3); margin: 6px 0 0; line-height: 1.5; }
+      .vcc-danger-zone { border: 1px solid var(--vcc-danger); border-radius: 8px; padding: 10px 12px; margin-top: 10px; }
+      .vcc-danger-title { font-size: 12px; color: var(--vcc-danger); margin-bottom: 8px; font-weight: 600; }
+      .vcc-storage-list { margin-bottom: 8px; font: 11px/1.8 monospace; color: var(--vcc-text-2); }
+      .vcc-storage-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 2px 0; border-bottom: 1px solid var(--vcc-border); }
+      .vcc-storage-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .vcc-storage-row .k { flex: 1; color: var(--vcc-text); }
+      .vcc-storage-row .v { max-width: 140px; color: var(--vcc-text-3); }
 
-      .vcc-site-warning { margin: 12px 16px 8px; padding: 12px; border: 1px solid rgba(239,159,39,0.55); border-radius: 7px; background: rgba(186,117,23,0.16); color: rgba(255,255,255,0.78); }
-      .vcc-site-warning-title { color: #FAC775; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
-      .vcc-site-warning-text { color: rgba(255,255,255,0.52); font-size: 10px; line-height: 1.5; margin-bottom: 9px; }
-      .vcc-site-warning .vcc-activate-site { background: #BA7517; border: 1px solid #EF9F27; color: #fff; border-radius: 5px; padding: 6px 10px; font: 600 11px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; cursor: pointer; }
-      .vcc-site-warning .vcc-activate-site:hover { background: #D98B1D; }
-      .vcc-video-feature.vcc-disabled > .vcc-acc-hdr { color: rgba(255,255,255,0.28); }
-      .vcc-video-feature.vcc-disabled > .vcc-acc-hdr::after { content: 'site inativo'; margin-left: auto; margin-right: 8px; color: #EF9F27; font: 9px monospace; }
-      .vcc-video-feature.vcc-disabled > .vcc-acc-body { opacity: .35; pointer-events: none; filter: grayscale(1); }
-      .vcc-video-control.vcc-disabled { opacity: .35; pointer-events: none; filter: grayscale(1); }
+      .vcc-site-warning { margin: 12px 16px 8px; padding: 12px; border: 1px solid var(--vcc-warn-border); border-radius: 8px; background: var(--vcc-warn-soft); }
+      .vcc-site-warning-title { color: var(--vcc-warn); font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+      .vcc-site-warning-text { color: var(--vcc-text); font-size: 12px; line-height: 1.5; margin-bottom: 10px; }
 
-      /* Inline number input no CP */
-      .vcc-num-in { background: rgba(255,255,255,0.08); border: .5px solid rgba(255,255,255,0.15); border-radius: 5px; color: rgba(255,255,255,0.9); font-family: monospace; font-size: 12px; text-align: center; padding: 3px 6px; outline: none; width: 68px; }
-      .vcc-num-in:focus { border-color: rgba(255,255,255,0.35); }
+      .vcc-video-feature.vcc-disabled > .vcc-acc-hdr { color: var(--vcc-text-3); }
+      .vcc-video-feature.vcc-disabled > .vcc-acc-hdr::after { content: attr(data-inactive); margin-left: auto; margin-right: 10px; color: var(--vcc-warn); font: 11px monospace; }
+      .vcc-video-feature.vcc-disabled > .vcc-acc-body { opacity: .45; pointer-events: none; }
+      .vcc-video-control.vcc-disabled { opacity: .45; pointer-events: none; }
     `;
     const s = document.createElement('style');
     s.id = 'vcc-styles'; s.textContent = css;
-    document.head.appendChild(s);
+    (document.head || document.documentElement).appendChild(s);
   }
 
   // ─────────────────────────────────────────────
-  // CONTROL BOX
+  // BARRA DE CONTROLE
+  //
+  // Uma barra só (vídeo principal/selecionados) ou, com o posicionamento
+  // automático, uma barra em cada vídeo. Cada item de `bars` é
+  // { el, video, flashing, flashTimer, placed }: video = null na barra única.
   // ─────────────────────────────────────────────
-  let cbEl = null;
-  let flashTimer = null;
-  let flashHideTimer = null;
+  let bars = [];
+  let positionTimer = null;
+
+  const perVideoBars = () => state.barAuto && state.barLayout === 'perVideo';
 
   // Dica dos botões: "Z — retroceder", usando a tecla configurada no momento.
   function keyTitle(action, key) {
     return KEYS[action] ? `${KEYS[action]} — ${t(key)}` : t(key);
   }
 
-  function buildCB() {
-    cbEl = document.createElement('div');
-    cbEl.id = 'vcc-cb';
-    cbEl.lang = lang;
-    setSafeHTML(cbEl, escapeHTML`
-      <button id="vcc-cb-back" title="${keyTitle('seekBack', 'cb.back')}">«</button>
-      <button id="vcc-cb-slow" title="${keyTitle('slowDown', 'cb.slower')}">−</button>
-      <span   id="vcc-cb-speed" title="${t('cb.drag')}">1.0×</span>
-      <button id="vcc-cb-fast" title="${keyTitle('speedUp', 'cb.faster')}">+</button>
-      <button id="vcc-cb-fwd"  title="${keyTitle('seekFwd', 'cb.fwd')}">»</button>
-      <div id="vcc-cb-div"></div>
-      <button id="vcc-cb-vol-down" title="${keyTitle('volumeDown', 'cb.volDown')}">🔉</button>
-      <span id="vcc-cb-volume" title="${keyTitle('toggleMute', 'cb.muteToggle')}">100%</span>
-      <button id="vcc-cb-vol-up" title="${keyTitle('volumeUp', 'cb.volUp')}">🔊</button>
-      <div id="vcc-cb-vol-div"></div>
-      <button id="vcc-cb-cfg"  title="${keyTitle('toggleCP', 'cb.panel')}">≡</button>
-      <span id="vcc-cb-mode-badge"></span>
+  function buildBarElement(video) {
+    const el = document.createElement('div');
+    el.className = 'vcc-bar';
+    if (!video) el.id = 'vcc-cb';
+    el.lang = lang;
+    el.setAttribute('role', 'toolbar');
+    el.setAttribute('aria-label', 'VCC');
+    setSafeHTML(el, escapeHTML`
+      ${state.barAuto ? '' : escapeHTML`<span class="vcc-bar-grip" title="${t('cb.drag')}" aria-hidden="true">⋮⋮</span>`}
+      <button data-act="back" title="${keyTitle('seekBack', 'cb.back')}" aria-label="${t('cb.back')}">«</button>
+      <button data-act="slow" title="${keyTitle('slowDown', 'cb.slower')}" aria-label="${t('cb.slower')}">−</button>
+      <span class="vcc-bar-label vcc-bar-speed" aria-live="polite">1.0×</span>
+      <button data-act="fast" title="${keyTitle('speedUp', 'cb.faster')}" aria-label="${t('cb.faster')}">+</button>
+      <button data-act="fwd"  title="${keyTitle('seekFwd', 'cb.fwd')}" aria-label="${t('cb.fwd')}">»</button>
+      <span class="vcc-bar-div"></span>
+      <button data-act="vdown" title="${keyTitle('volumeDown', 'cb.volDown')}" aria-label="${t('cb.volDown')}">🔉</button>
+      <button data-act="mute" class="vcc-bar-vol" title="${keyTitle('toggleMute', 'cb.muteToggle')}" aria-label="${t('cb.muteToggle')}">100%</button>
+      <button data-act="vup" title="${keyTitle('volumeUp', 'cb.volUp')}" aria-label="${t('cb.volUp')}">🔊</button>
+      <span class="vcc-bar-div"></span>
+      <button data-act="panel" class="vcc-bar-cfg" title="${keyTitle('toggleCP', 'cb.panel')}" aria-label="${t('cb.panel')}">≡</button>
     `);
-
-    // Posição salva por domínio, sempre dentro da janela (corrige posições
-    // inválidas salvas por versões antigas ou por uma janela maior).
-    const x = clampToViewport(state.cbPos?.x ?? 12, 40, 'x');
-    const y = clampToViewport(state.cbPos?.y ?? 12, 24, 'y');
-    cbEl.style.cssText = `
+    // O contêiner é protegido do CSS do site com "all: initial !important";
+    // por isso tudo nele é definido inline com !important.
+    el.style.cssText = `
       all: initial !important;
       position: fixed !important;
       z-index: 2147483647 !important;
-      left: ${x}px !important;
-      top:  ${y}px !important;
-      display: flex !important;
+      left: 12px !important;
+      top: 12px !important;
+      display: none !important;
       align-items: center !important;
-      gap: 3px !important;
-      padding: 4px 7px !important;
-      background: rgba(0,0,0,0.45) !important;
-      border: 0.5px solid rgba(255,255,255,0.13) !important;
-      border-radius: 6px !important;
-      font-family: 'JetBrains Mono','Fira Mono','Courier New',monospace !important;
-      font-size: 11px !important;
-      line-height: 1 !important;
+      gap: 2px !important;
+      padding: 3px 5px !important;
+      background: var(--vcc-bg) !important;
+      color: var(--vcc-text) !important;
+      border: 1px solid var(--vcc-border-strong) !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,.28) !important;
+      font: 12px/1 'JetBrains Mono','Fira Mono','Courier New',monospace !important;
       user-select: none !important;
       opacity: ${state.cbOpacity} !important;
       box-sizing: border-box !important;
       pointer-events: auto !important;
     `;
-
-    // Anexa ao <html> para escapar de qualquer overflow/clip no <body>
-    document.documentElement.appendChild(cbEl);
-
-    applyCBMode();
-
-    cbEl.querySelector('#vcc-cb-back').addEventListener('click', () => applySeek(-state.seekStep));
-    cbEl.querySelector('#vcc-cb-slow').addEventListener('click', () => changeSpeed(-state.speedStep));
-    cbEl.querySelector('#vcc-cb-fast').addEventListener('click', () => changeSpeed(+state.speedStep));
-    cbEl.querySelector('#vcc-cb-fwd' ).addEventListener('click', () => applySeek(+state.seekStep));
-    cbEl.querySelector('#vcc-cb-vol-down').addEventListener('click', () => changeVolume(-state.volumeStep));
-    cbEl.querySelector('#vcc-cb-volume').addEventListener('click', toggleMute);
-    cbEl.querySelector('#vcc-cb-vol-up').addEventListener('click', () => changeVolume(+state.volumeStep));
-    cbEl.querySelector('#vcc-cb-cfg' ).addEventListener('click', toggleCPVisibility);
-
-    makeDraggable(cbEl, cbEl.querySelector('#vcc-cb-speed'), (x, y) => savePos(x, y));
-    updateCBSpeed();
-    updateCBVolume();
+    SHARED.applyThemeVars(el, currentTheme());
+    return el;
   }
 
-  function updateCBSpeed() {
-    if (!cbEl) return;
-    const el = cbEl.querySelector('#vcc-cb-speed');
-    if (el) el.textContent = fmtSpeed(state.speed) + '×';
+  function createBar(video) {
+    const bar = { el: buildBarElement(video), video, flashing: false, flashTimer: null, placed: true };
+    // Anexa ao <html> para escapar de qualquer overflow/clip no <body>
+    document.documentElement.appendChild(bar.el);
+
+    bar.el.querySelectorAll('button[data-act]').forEach(btn => {
+      btn.addEventListener('click', e => { e.stopPropagation(); onBarAction(bar, btn.dataset.act); });
+    });
+    const grip = bar.el.querySelector('.vcc-bar-grip');
+    if (grip) makeDraggable(bar.el, grip, (x, y) => savePos(x, y));
+
+    bars.push(bar);
+    updateBarDisplay(bar);
+    positionBar(bar);
+    refreshBarVisibility(bar);
+    return bar;
+  }
+
+  function onBarAction(bar, act) {
+    const vid = bar.video;
+    if (act === 'panel') { toggleCPVisibility(); return; }
+    if (vid) {
+      // Barra presa a um vídeo: controla só esse vídeo.
+      if (act === 'back')  { seekVideo(vid, -state.seekStep); flashCB(`-${state.seekStep}s`, [vid]); }
+      if (act === 'fwd')   { seekVideo(vid, +state.seekStep); flashCB(`+${state.seekStep}s`, [vid]); }
+      if (act === 'slow')  setVideoSpeed(vid, videoSpeed(vid) - state.speedStep);
+      if (act === 'fast')  setVideoSpeed(vid, videoSpeed(vid) + state.speedStep);
+      if (act === 'vdown') changeVideoVolume(vid, -state.volumeStep);
+      if (act === 'vup')   changeVideoVolume(vid, +state.volumeStep);
+      if (act === 'mute')  toggleVideoMute(vid);
+      return;
+    }
+    if (act === 'back')  applySeek(-state.seekStep);
+    if (act === 'fwd')   applySeek(+state.seekStep);
+    if (act === 'slow')  changeSpeed(-state.speedStep);
+    if (act === 'fast')  changeSpeed(+state.speedStep);
+    if (act === 'vdown') changeVolume(-state.volumeStep);
+    if (act === 'vup')   changeVolume(+state.volumeStep);
+    if (act === 'mute')  toggleMute();
+  }
+
+  function removeAllBars() {
+    bars.forEach(bar => { clearTimeout(bar.flashTimer); bar.el.remove(); });
+    bars = [];
+  }
+
+  // Recria as barras conforme as opções atuais (uma só ou uma por vídeo).
+  function rebuildBars() {
+    removeAllBars();
+    if (!videoEngineStarted || !state.videoControlsActive) { updatePositionLoop(); return; }
+    if (perVideoBars()) state.videos.filter(v => v.isConnected).forEach(v => createBar(v));
+    else createBar(null);
+    updatePositionLoop();
+  }
+
+  // Mantém uma barra por vídeo: cria para vídeos novos, remove de vídeos que saíram.
+  function syncBars() {
+    if (!videoEngineStarted || !state.videoControlsActive) return;
+    if (!perVideoBars()) { if (!bars.length) createBar(null); return; }
+    bars.filter(b => !b.video || !b.video.isConnected).forEach(b => { clearTimeout(b.flashTimer); b.el.remove(); });
+    bars = bars.filter(b => b.video && b.video.isConnected);
+    state.videos.forEach(v => { if (v.isConnected && !bars.some(b => b.video === v)) createBar(v); });
+  }
+
+  function barSpeedText(bar) {
+    return fmtSpeed(bar.video ? videoSpeed(bar.video) : state.speed) + '×';
+  }
+
+  function barVolumeText(bar) {
+    const vid = bar.video;
+    if (vid) return vid.muted ? t('flash.muted') : `${Math.round(vid.volume * 100)}%`;
+    return state.muted ? t('flash.muted') : `${Math.round(state.volume * 100)}%`;
+  }
+
+  function updateBarDisplay(bar) {
+    const speed = bar.el.querySelector('.vcc-bar-speed');
+    const vol = bar.el.querySelector('.vcc-bar-vol');
+    if (speed && !bar.flashing) speed.textContent = barSpeedText(bar);
+    if (vol) vol.textContent = barVolumeText(bar);
+  }
+
+  function updateBarsDisplay() { bars.forEach(updateBarDisplay); }
+
+  function refreshBarVisibility(bar) {
+    const show = state.videoControlsActive && bar.placed && (state.cbMode === 'visible' || bar.flashing);
+    bar.el.style.setProperty('display', show ? 'flex' : 'none', 'important');
   }
 
   // Três modos: visible → alerts → hidden → visible
   function cycleCBMode() {
-    const modes = ['visible', 'alerts', 'hidden'];
-    state.cbMode = modes[(modes.indexOf(state.cbMode) + 1) % 3];
+    const modes = SHARED.MODES;
+    setBarMode(modes[(modes.indexOf(state.cbMode) + 1) % modes.length]);
+    flashCB(t('flash.mode', { mode: t(`mode.${state.cbMode}`) }), null, true);
+  }
+
+  function setBarMode(mode) {
+    state.cbMode = mode;
     save(gk('cbMode'), state.cbMode);
-    applyCBMode();
-    updateCPCBModeBtn();
-    if (state.cbMode !== 'visible') flashCB(t('flash.mode', { mode: t(`mode.${state.cbMode}`) }), false);
+    bars.forEach(refreshBarVisibility);
+    updateBarSectionUI();
   }
 
-  function applyCBMode() {
-    if (!cbEl) return;
-    const badge = cbEl.querySelector('#vcc-cb-mode-badge');
-    if (state.cbMode === 'visible') {
-      cbEl.style.setProperty('display', 'flex', 'important');
-      cbEl.style.setProperty('opacity', state.cbOpacity, 'important');
-      if (badge) badge.textContent = '';
-    } else {
-      cbEl.style.setProperty('display', 'none', 'important');
-      if (badge) badge.textContent = t(state.cbMode === 'alerts' ? 'cb.badge.alerts' : 'cb.badge.hidden');
-    }
+  // Mostra um aviso rápido na barra (velocidade, volume…). `videos` limita às
+  // barras desses vídeos no modo "uma barra por vídeo". No modo "oculta", só
+  // avisos forçados (troca de modo) aparecem.
+  function flashCB(text, videos = null, force = false) {
+    if (!bars.length) return;
+    if (state.cbMode === 'hidden' && !force) { updateBarsDisplay(); return; }
+    const list = videos || targetVideoList();
+    const targets = bars.filter(bar => !bar.video || list.includes(bar.video));
+    const dur = state.cbMode === 'visible' ? 900 : state.alertDuration;
+    targets.forEach(bar => {
+      const label = bar.el.querySelector('.vcc-bar-speed');
+      if (label && text != null) label.textContent = text;
+      bar.flashing = true;
+      positionBar(bar);
+      refreshBarVisibility(bar);
+      clearTimeout(bar.flashTimer);
+      bar.flashTimer = setTimeout(() => {
+        bar.flashing = false;
+        updateBarDisplay(bar);
+        refreshBarVisibility(bar);
+      }, dur);
+    });
+    bars.filter(b => !targets.includes(b)).forEach(updateBarDisplay);
   }
 
-  function flashCB(text, isAction = false) {
-    if (!cbEl) return;
-    const el = cbEl.querySelector('#vcc-cb-speed');
-    if (!el) return;
-
-    const wasHidden = state.cbMode !== 'visible';
-    if (wasHidden) {
-      cbEl.style.setProperty('display', 'flex', 'important');
-      cbEl.style.setProperty('opacity', '0.75', 'important');
+  // ── Posicionamento ──
+  function positionBar(bar) {
+    const el = bar.el;
+    if (!state.barAuto) {
+      // Posição livre, salva por site e mantida dentro da janela.
+      const x = clampToViewport(state.cbPos?.x ?? 12, 60, 'x');
+      const y = clampToViewport(state.cbPos?.y ?? 12, 30, 'y');
+      el.style.setProperty('left', x + 'px', 'important');
+      el.style.setProperty('top', y + 'px', 'important');
+      el.style.setProperty('transform', 'none', 'important');
+      bar.placed = true;
+      return;
     }
-    if (isAction) el.textContent = text;
+    const vid = bar.video || state.videos[state.primaryVideo] || state.videos.find(v => v.isConnected);
+    let r = null;
+    try { r = vid && vid.isConnected ? vid.getBoundingClientRect() : null; } catch {}
+    const visible = r && r.width >= MIN_VIDEO_W && r.height >= MIN_VIDEO_H &&
+      r.bottom > 0 && r.right > 0 && r.top < window.innerHeight && r.left < window.innerWidth;
+    bar.placed = !!visible;
+    if (!visible) return;
 
-    clearTimeout(flashTimer);
-    clearTimeout(flashHideTimer);
+    const [v, h] = state.barAnchor.split('-');
+    const x = h === 'left' ? r.left + BAR_MARGIN : h === 'right' ? r.right - BAR_MARGIN : r.left + r.width / 2;
+    const y = v === 'top' ? r.top + BAR_MARGIN : r.bottom - BAR_MARGIN;
+    const tx = h === 'left' ? '0' : h === 'right' ? '-100%' : '-50%';
+    const ty = v === 'top' ? '0' : '-100%';
+    el.style.setProperty('left', Math.round(Math.max(0, Math.min(window.innerWidth, x))) + 'px', 'important');
+    el.style.setProperty('top', Math.round(Math.max(0, Math.min(window.innerHeight, y))) + 'px', 'important');
+    el.style.setProperty('transform', `translate(${tx}, ${ty})`, 'important');
+  }
 
-    const dur = state.cbMode === 'alerts' ? state.alertDuration : 650;
-    flashTimer = setTimeout(() => {
-      el.textContent = fmtSpeed(state.speed) + '×';
-      if (wasHidden) {
-        flashHideTimer = setTimeout(() => applyCBMode(), 150);
-      }
-    }, dur);
+  function positionBars() {
+    if (state.barAuto && perVideoBars()) syncBars();
+    bars.forEach(bar => { positionBar(bar); refreshBarVisibility(bar); });
+  }
+
+  let positionFrame = 0;
+  function schedulePosition() {
+    if (positionFrame) return;
+    positionFrame = requestAnimationFrame(() => { positionFrame = 0; positionBars(); });
+  }
+  window.addEventListener('scroll', () => { if (state.barAuto) schedulePosition(); }, { capture: true, passive: true });
+  window.addEventListener('resize', schedulePosition, { passive: true });
+
+  // No posicionamento automático, acompanha mudanças de layout do player.
+  function updatePositionLoop() {
+    clearInterval(positionTimer);
+    positionTimer = null;
+    if (state.barAuto && bars.length) positionTimer = setInterval(positionBars, 400);
+  }
+
+  // Opções da barra mudaram (modo, posicionamento, uma por vídeo): aplica.
+  function setBarOption(name, value) {
+    state[name] = value;
+    save(gk(name), value);
+    rebuildBars();
+    rebuildPanel();
   }
 
   // ─────────────────────────────────────────────
@@ -1314,6 +1727,7 @@
     let startX, startY, origX, origY, dragging = false;
     handle.addEventListener('mousedown', e => {
       if (e.button !== 0) return;
+      if (e.target.closest && e.target.closest('button') && e.target.closest('button') !== handle) return;
       dragging = true; startX = e.clientX; startY = e.clientY;
       const r = el.getBoundingClientRect(); origX = r.left; origY = r.top;
       e.preventDefault();
@@ -1335,7 +1749,7 @@
   }
 
   // ─────────────────────────────────────────────
-  // CONTROL PANEL
+  // PAINEL
   // ─────────────────────────────────────────────
   let cpEl = null, capturingKey = null, currentScope = 'default';
 
@@ -1343,87 +1757,151 @@
     cpEl = document.createElement('div');
     cpEl.id = 'vcc-cp';
     cpEl.lang = lang;
+    cpEl.setAttribute('role', 'dialog');
+    cpEl.setAttribute('aria-label', 'VCC — Video Command Center');
     // Opacity e display controlados por JS — não pelo CSS do site
     cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
     cpEl.style.setProperty('display', state.cpVisible ? 'flex' : 'none', 'important');
+    SHARED.applyThemeVars(cpEl, currentTheme());
 
     setSafeHTML(cpEl, escapeHTML`
       <div id="vcc-cp-bar">
-        <span id="vcc-cp-title">VCC — Video Command Center</span>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span id="vcc-cp-domain">${domain}</span>
-          <button id="vcc-cp-close">✕</button>
-        </div>
+        <span id="vcc-cp-title">VCC</span>
+        <span id="vcc-cp-domain" title="${domain}">${domain}</span>
+        <button id="vcc-cp-close" title="${t('cp.close')}" aria-label="${t('cp.close')}">✕</button>
       </div>
-      <div id="vcc-cp-scroll"><div id="vcc-site-status"></div><div id="vcc-cp-content"></div></div>
+      <div id="vcc-cp-body">
+        <div id="vcc-cp-scroll"><div id="vcc-site-status"></div><div id="vcc-cp-content"></div></div>
+        <div id="vcc-cp-fade" aria-hidden="true">▾</div>
+      </div>
+      ${IS_EXTENSION ? escapeHTML`<div id="vcc-cp-foot"><button class="vcc-abt" id="vcc-open-settings">⚙ ${t('cp.settings')}</button></div>` : ''}
     `);
 
-    // Mesmo root que o CB: escapa overflow/clip do <body>
+    // Mesmo root que a barra: escapa overflow/clip do <body>
     document.documentElement.appendChild(cpEl);
     cpEl.querySelector('#vcc-cp-close').addEventListener('click', toggleCPVisibility);
+    cpEl.querySelector('#vcc-open-settings')?.addEventListener('click', openSettingsPage);
     makeDraggable(cpEl, cpEl.querySelector('#vcc-cp-bar'), null);
+
+    const scroller = cpEl.querySelector('#vcc-cp-scroll');
+    scroller.addEventListener('scroll', updateScrollCue, { passive: true });
+    if (typeof ResizeObserver === 'function') {
+      new ResizeObserver(updateScrollCue).observe(cpEl.querySelector('#vcc-cp-content'));
+    }
 
     buildCPContent();
     updateCPSpeed(); updateETA(); buildVideoList(); renderCompatibility();
+  }
+
+  // Degradê no pé do painel enquanto houver conteúdo abaixo.
+  function updateScrollCue() {
+    const s = cpEl?.querySelector('#vcc-cp-scroll');
+    const fade = cpEl?.querySelector('#vcc-cp-fade');
+    if (!s || !fade) return;
+    fade.classList.toggle('show', s.scrollHeight - s.scrollTop - s.clientHeight > 6);
+  }
+
+  function openSettingsPage() {
+    try {
+      const r = extensionRuntime?.sendMessage?.({ type: 'VCC_OPEN_OPTIONS' });
+      if (r?.catch) r.catch(() => {});
+    } catch {}
   }
 
   // ── helpers de template ──
   function acc(id, icon, label, content, open = false, videoFeature = false) {
     const featureClass = videoFeature ? ` vcc-video-feature${state.videoControlsActive ? '' : ' vcc-disabled'}` : '';
     return escapeHTML`<div class="vcc-acc${featureClass}">
-      <button class="vcc-acc-hdr" data-acc="${id}">
-        <span class="vcc-acc-hdr-left"><span class="vcc-acc-icon">${icon}</span>${label}</span>
-        <span class="vcc-arr${open ? ' open' : ''}" id="vcc-arr-${id}">›</span>
+      <button class="vcc-acc-hdr" data-acc="${id}" data-inactive="${t('site.inactiveBadge')}" aria-expanded="${open ? 'true' : 'false'}">
+        <span class="vcc-acc-hdr-left"><span class="vcc-acc-icon" aria-hidden="true">${icon}</span>${label}</span>
+        <span class="vcc-arr${open ? ' open' : ''}" id="vcc-arr-${id}" aria-hidden="true">›</span>
       </button>
       <div class="vcc-acc-body${open ? ' open' : ''}" id="vcc-body-${id}">${content}</div>
     </div>`;
   }
 
-  function tog(id, on, label, sub = '', videoControl = false) {
-    const controlClass = videoControl ? ` vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}` : '';
-    return escapeHTML`<div class="vcc-row${controlClass}">
-      <div><div class="vcc-row-label">${label}</div>${sub ? escapeHTML`<div class="vcc-row-sub">${sub}</div>` : ''}</div>
-      <div class="vcc-tog${on ? ' on' : ''}" id="vcc-tog-${id}"><div class="vcc-tog-t"></div></div>
+  function tog(id, on, label, sub = '', opts = {}) {
+    const rowClass = (opts.videoControl ? ` vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}` : '') + (opts.disabled ? ' vcc-off' : '');
+    return escapeHTML`<div class="vcc-row${rowClass}">
+      <div><div class="vcc-row-label" id="vcc-lbl-${id}">${label}</div>${sub ? escapeHTML`<div class="vcc-row-sub">${sub}</div>` : ''}</div>
+      <button class="vcc-tog${on ? ' on' : ''}" id="vcc-tog-${id}" role="switch" aria-checked="${on ? 'true' : 'false'}" aria-labelledby="vcc-lbl-${id}"${opts.disabled ? ' disabled' : ''}><span class="vcc-tog-t"></span></button>
     </div>`;
+  }
+
+  function seg(id, options, active) {
+    return escapeHTML`<div class="vcc-seg" id="${id}" role="group">${options.map(([value, label]) =>
+      escapeHTML`<button data-value="${value}" class="${value === active ? 'active' : ''}" aria-pressed="${value === active ? 'true' : 'false'}">${label}</button>`)}</div>`;
+  }
+
+  const ANCHOR_ARROWS = { 'top-left': '↖', 'top-center': '↑', 'top-right': '↗', 'bottom-left': '↙', 'bottom-center': '↓', 'bottom-right': '↘' };
+
+  // Seção "Barra de controle" (painel da extensão e do Tampermonkey).
+  function barSection() {
+    const auto = state.barAuto;
+    return acc('bar', '▭', t('sec.bar'), escapeHTML`
+      <p class="vcc-sub-title">${t('bar.mode')}</p>
+      ${seg('vcc-bar-mode', SHARED.MODES.map(m => [m, t(`mode.${m}`)]), state.cbMode)}
+      <p class="vcc-hint" style="margin-top:0">${t('bar.modeHint', { key: KEYS.toggleCB || '—' })}</p>
+      <div style="margin-top:8px">
+        ${tog('barauto', auto, t('bar.auto'), t('bar.autoSub'))}
+      </div>
+      <p class="vcc-sub-title">${t('bar.anchor')}</p>
+      <div class="vcc-anchor-grid${auto ? '' : ' vcc-off'}" id="vcc-bar-anchor" role="group" aria-label="${t('bar.anchor')}">
+        ${SHARED.BAR_ANCHORS.map(a => escapeHTML`<button data-anchor="${a}" class="${a === state.barAnchor ? 'active' : ''}" title="${t('anchor.' + a)}" aria-label="${t('anchor.' + a)}" aria-pressed="${a === state.barAnchor ? 'true' : 'false'}"${auto ? '' : ' disabled'}>${ANCHOR_ARROWS[a]}</button>`)}
+      </div>
+      ${tog('barpervideo', state.barLayout === 'perVideo', t('bar.perVideo'), auto ? t('bar.perVideoSub') : t('bar.perVideoNeedsAuto'), { disabled: !auto })}
+      ${auto ? '' : escapeHTML`<p class="vcc-hint">${t('bar.freeHint')}</p>`}
+      ${IS_EXTENSION ? '' : escapeHTML`
+        <div class="vcc-slr" style="margin-top:8px">
+          <label for="vcc-alert-dur">${t('bh.alertDuration')}</label>
+          <input type="range" id="vcc-alert-dur" min="200" max="3000" step="100" value="${state.alertDuration}">
+          <span class="vcc-slv" id="vcc-alert-dur-val">${state.alertDuration}ms</span>
+        </div>
+        <p class="vcc-hint">${t('bh.alertHint')}</p>`}
+    `);
+  }
+
+  // Atualiza os botões da seção da barra sem reconstruir o painel.
+  function updateBarSectionUI() {
+    cpEl?.querySelectorAll('#vcc-bar-mode button').forEach(b => {
+      const on = b.dataset.value === state.cbMode;
+      b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+    });
   }
 
   function buildCPContent() {
     const content = cpEl.querySelector('#vcc-cp-content');
     renderSiteStatus();
-    setSafeHTML(content, [
+    const sections = [
 
       // ── Reprodução ──
       acc('pb', '▶', t('sec.playback'), escapeHTML`
         <div class="vcc-spd-row">
-          <button class="vcc-spd-btn" id="vcc-spd-minus">−</button>
-          <input class="vcc-spd-in" id="vcc-spd-input" type="number" min="0.1" max="16" step="0.1" value="1.0">
-          <button class="vcc-spd-btn" id="vcc-spd-plus">+</button>
+          <button class="vcc-spd-btn" id="vcc-spd-minus" aria-label="${t('cb.slower')}">−</button>
+          <input class="vcc-spd-in" id="vcc-spd-input" type="number" min="0.1" max="16" step="0.1" value="1.0" aria-label="${t('pb.speedInput')}">
+          <button class="vcc-spd-btn" id="vcc-spd-plus" aria-label="${t('cb.faster')}">+</button>
           <button class="vcc-spd-btn sm" id="vcc-spd-reset">${t('pb.reset')}</button>
           <button class="vcc-spd-btn sm" id="vcc-spd-toggle2x">${t('pb.toggle2x')}</button>
         </div>
         <div class="vcc-eta" id="vcc-eta">—</div>
-        <p class="vcc-sub-title" style="margin-top:8px">${t('pb.presets')}</p>
+        <p class="vcc-sub-title">${t('pb.presets')}</p>
         <div class="vcc-preset-grid" id="vcc-presets"></div>
         <div class="vcc-abts">
           <button class="vcc-abt" id="vcc-seek-back">${t('pb.seekBack')}</button>
           <button class="vcc-abt" id="vcc-seek-fwd">${t('pb.seekFwd')}</button>
-          <button class="vcc-abt" id="vcc-toggle-cb-btn">${t('pb.cycleBar')}</button>
         </div>
       `, true, true),
 
       // ── Áudio ──
       acc('au', '♪', t('sec.audio'), escapeHTML`
-        <div class="vcc-slr"><label>${t('au.volume')}</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? t('au.muted') : Math.round(state.volume * 100) + '%'}</span></div>
+        <div class="vcc-slr"><label for="vcc-volume">${t('au.volume')}</label><input type="range" id="vcc-volume" min="0" max="100" value="${Math.round(state.volume * 100)}" step="1"><span class="vcc-slv" id="vcc-volume-val">${state.muted ? t('au.muted') : Math.round(state.volume * 100) + '%'}</span></div>
         <div class="vcc-abts"><button class="vcc-abt" id="vcc-volume-down">${t('au.lower')}</button><button class="vcc-abt" id="vcc-volume-mute">${t(state.muted ? 'au.unmute' : 'au.mute')}</button><button class="vcc-abt" id="vcc-volume-up">${t('au.raise')}</button></div>
-        ${tog('boost', true, t('au.boost'), t('au.boostSub'))}
-        <div class="vcc-slr"><label>${t('au.level')}</label><input type="range" id="vcc-boost-level" min="100" max="300" value="100" step="5"><span class="vcc-slv" id="vcc-boost-val">100%</span></div>
-        ${tog('normalize', false, t('au.normalize'), t('au.normalizeSub'))}
-        ${tog('silence', false, t('au.silence'), t('au.silenceSub'))}
       `, false, true),
 
-      // ── Navegação avançada ──
+      // ── Navegação ──
       acc('nv', '⊹', t('sec.nav'), escapeHTML`
-        ${tog('loopab', false, t('nv.loop'), t('nv.loopSub'))}
+        <p class="vcc-sub-title">${t('nv.loop')}</p>
+        <p class="vcc-hint" style="margin-top:0">${t('nv.loopSub')}</p>
         <div class="vcc-abts" style="margin-bottom:4px">
           <button class="vcc-abt" id="vcc-loop-a">${t('nv.setA')}</button>
           <button class="vcc-abt" id="vcc-loop-b">${t('nv.setB')}</button>
@@ -1432,8 +1910,7 @@
         <div class="vcc-loop-status" id="vcc-loop-status">
           <span class="none">${t('nv.noLoop')}</span>
         </div>
-        ${tog('savepos', true, t('nv.savePos'), t('nv.savePosSub'))}
-        <div class="vcc-row">
+        <div class="vcc-row" style="margin-top:6px">
           <div class="vcc-row-label">${t('nv.pip')}</div>
           <button class="vcc-abt" id="vcc-pip"${!document.pictureInPictureEnabled ? ' disabled' : ''}>${t(document.pictureInPictureEnabled ? 'nv.pipOn' : 'nv.pipUnavailable')}</button>
         </div>
@@ -1442,86 +1919,30 @@
         </div>
       `, false, true),
 
-      // ── Visual ──
+      // ── Imagem ──
       acc('vs', '◑', t('sec.visual'), escapeHTML`
-        ${tog('invert', false, t('vs.invert'), t('vs.invertSub'), true)}
-        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label>${t('vs.brightness')}</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
-        <p class="vcc-sub-title" style="margin-top:8px">${t('vs.opacity')}</p>
-        <div class="vcc-slr"><label>${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
-        <div class="vcc-slr"><label>${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
+        ${tog('invert', false, t('vs.invert'), t('vs.invertSub'), { videoControl: true })}
+        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label for="vcc-brightness">${t('vs.brightness')}</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
+        ${IS_EXTENSION ? '' : escapeHTML`
+          <p class="vcc-sub-title" style="margin-top:10px">${t('vs.opacity')}</p>
+          <div class="vcc-slr"><label for="vcc-cb-op">${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
+          <div class="vcc-slr"><label for="vcc-cp-op">${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>`}
       `),
+
+      // ── Barra de controle ──
+      barSection(),
 
       // ── Vídeos na página ──
       acc('vi', '▣', t('sec.videos'), escapeHTML`
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px">
           <span class="vcc-sub-title" style="margin:0" id="vcc-vid-count">${t('vi.countOther', { n: 0 })}</span>
           <button class="vcc-abt" id="vcc-vid-all">${t('vi.selectAll')}</button>
         </div>
-        <p class="vcc-hint" style="margin:0 0 7px">${t('vi.hint')}</p>
+        <p class="vcc-hint" style="margin:0 0 6px">${t('vi.hint')}</p>
         <div id="vcc-vid-list"></div>
       `, false, true),
 
-      // ── Atalhos de teclado ──
-      acc('ks', '⌨', t('sec.keys'), escapeHTML`
-        <div class="vcc-scope-tabs" id="vcc-scope-tabs">
-          <button class="vcc-scope-tab active" data-scope="default">${t('ks.default')}</button>
-          <button class="vcc-scope-tab" data-scope="${domain}">${domain}</button>
-          <button class="vcc-scope-tab" id="vcc-add-scope">${t('ks.addDomain')}</button>
-        </div>
-        <p class="vcc-hint" id="vcc-scope-hint">${t('ks.hintGlobal')}</p>
-        <div id="vcc-keys-list"></div>
-        <div class="vcc-abts" style="margin-top:8px">
-          <button class="vcc-abt" id="vcc-keys-copy-to-domain">${t('ks.copyTo', { domain })}</button>
-          <button class="vcc-abt" id="vcc-keys-factory">${t('ks.factory')}</button>
-        </div>
-        <p class="vcc-hint">${t('ks.help')}</p>
-      `),
-
-      // ── Comportamento e idioma ──
-      acc('beh', '⚙', t('sec.behavior'), escapeHTML`
-        <p class="vcc-sub-title">🌐 ${t('lang.title')}</p>
-        <div class="vcc-scope-tabs" id="vcc-lang-tabs">
-          ${['auto', ...I18N.SUPPORTED].map(code => escapeHTML`<button class="vcc-scope-tab${langPref === code ? ' active' : ''}" data-lang="${code}" lang="${code === 'auto' ? lang : code}">${code === 'auto' ? t('lang.auto', { name: I18N.SHORT_NAMES[I18N.detect()] }) : I18N.LANGUAGE_NAMES[code]}</button>`)}
-        </div>
-        <p class="vcc-sub-title" style="margin-top:10px">${t('bh.steps')}</p>
-        <div class="vcc-slr">
-          <label>${t('bh.speedStep')}</label>
-          <input type="number" id="vcc-speed-step" class="vcc-num-in" min="0.05" max="1" step="0.05" value="${state.speedStep}">
-          <span style="font-size:10px;color:rgba(255,255,255,0.35)">×</span>
-        </div>
-        <div class="vcc-slr" style="margin-top:8px">
-          <label>${t('bh.volumeStep')}</label>
-          <input type="number" id="vcc-volume-step" class="vcc-num-in" min="1" max="25" step="1" value="${state.volumeStep}">
-          <span style="font-size:10px;color:rgba(255,255,255,0.35)">%</span>
-        </div>
-        <div class="vcc-slr" style="margin-top:8px">
-          <label>${t('bh.seekStep')}</label>
-          <input type="number" id="vcc-seek-step" class="vcc-num-in" min="1" max="300" step="1" value="${state.seekStep}">
-          <span style="font-size:10px;color:rgba(255,255,255,0.35)">s</span>
-        </div>
-        <p class="vcc-sub-title" style="margin-top:10px">${t('bh.bar')}</p>
-        <div class="vcc-row">
-          <div>
-            <div class="vcc-row-label">${t('bh.barMode')}</div>
-            <div class="vcc-row-sub">${t('bh.barModeSub', { key: KEYS.toggleCB || '—' })}</div>
-          </div>
-          <button class="vcc-abt" id="vcc-cb-mode-btn" style="white-space:nowrap">—</button>
-        </div>
-        <div class="vcc-slr" style="margin-top:6px">
-          <label>${t('bh.alertDuration')}</label>
-          <input type="range" id="vcc-alert-dur" min="200" max="3000" step="100" value="${state.alertDuration}">
-          <span class="vcc-slv" id="vcc-alert-dur-val">${state.alertDuration}ms</span>
-        </div>
-        <p class="vcc-hint">${t('bh.alertHint')}</p>
-      `),
-
-      // ── Sites ativos ──
-      acc('si', '◈', t('sec.sites'), escapeHTML`
-        <div id="vcc-sites-list">${buildSitesList()}</div>
-        <div class="vcc-abts"><button class="vcc-abt" id="vcc-add-site">${t('si.add')}</button></div>
-      `),
-
-      // ── Estatísticas e compatibilidade ──
+      // ── Sessão e compatibilidade ──
       acc('st', '◎', t('sec.stats'), escapeHTML`
         <div class="vcc-stat-grid">
           <div class="vcc-sc"><div class="vcc-sv" id="stat-saved">0s</div><div class="vcc-sl">${t('st.saved')}</div></div>
@@ -1532,32 +1953,90 @@
         <p class="vcc-sub-title">${t('st.compat', { domain })}</p>
         <div id="vcc-compat"></div>
       `, false, true),
+    ];
+
+    // No Tampermonkey não há página de configurações: tudo fica no painel.
+    if (!IS_EXTENSION) sections.push(...fullPanelSections());
+
+    setSafeHTML(content, sections);
+
+    bindCPEvents();
+    buildPresets();
+    if (!IS_EXTENSION) buildKeysList();
+    buildVideoList();
+    if (!IS_EXTENSION) refreshStorageList();
+    requestAnimationFrame(updateScrollCue);
+  }
+
+  // Seções de configuração, só no painel do Tampermonkey.
+  function fullPanelSections() {
+    return [
+      // ── Atalhos de teclado ──
+      acc('ks', '⌨', t('sec.keys'), escapeHTML`
+        <div class="vcc-scope-tabs" id="vcc-scope-tabs">
+          <button class="vcc-scope-tab active" data-scope="default">${t('ks.default')}</button>
+          <button class="vcc-scope-tab" data-scope="${domain}">${domain}</button>
+          <button class="vcc-scope-tab" id="vcc-add-scope">${t('ks.addDomain')}</button>
+        </div>
+        <p class="vcc-hint" id="vcc-scope-hint" style="margin-top:0">${t('ks.hintGlobal')}</p>
+        <div id="vcc-keys-list"></div>
+        <div class="vcc-abts" style="margin-top:8px">
+          <button class="vcc-abt" id="vcc-keys-copy-to-domain">${t('ks.copyTo', { domain })}</button>
+          <button class="vcc-abt" id="vcc-keys-factory">${t('ks.factory')}</button>
+        </div>
+        <p class="vcc-hint">${t('ks.help')}</p>
+      `),
+
+      // ── Preferências: tema, idioma, incrementos ──
+      acc('beh', '⚙', t('sec.behavior'), escapeHTML`
+        <p class="vcc-sub-title">${t('theme.title')}</p>
+        ${seg('vcc-theme-tabs', SHARED.THEMES_PREFS.map(p => [p, p === 'auto' ? t('theme.auto', { name: t('theme.' + SHARED.resolveTheme('auto')) }) : t('theme.' + p)]), state.themePref)}
+        <p class="vcc-sub-title">🌐 ${t('lang.title')}</p>
+        <div class="vcc-seg" id="vcc-lang-tabs" role="group">
+          ${['auto', ...I18N.SUPPORTED].map(code => escapeHTML`<button class="${langPref === code ? 'active' : ''}" data-lang="${code}" lang="${code === 'auto' ? lang : code}" aria-pressed="${langPref === code ? 'true' : 'false'}">${code === 'auto' ? t('lang.auto', { name: I18N.SHORT_NAMES[I18N.detect()] }) : I18N.LANGUAGE_NAMES[code]}</button>`)}
+        </div>
+        <p class="vcc-sub-title" style="margin-top:12px">${t('bh.steps')}</p>
+        <div class="vcc-slr">
+          <label for="vcc-speed-step">${t('bh.speedStep')}</label>
+          <input type="number" id="vcc-speed-step" class="vcc-num-in" min="0.05" max="1" step="0.05" value="${state.speedStep}">
+          <span class="vcc-slv" style="min-width:0">×</span>
+        </div>
+        <div class="vcc-slr">
+          <label for="vcc-volume-step">${t('bh.volumeStep')}</label>
+          <input type="number" id="vcc-volume-step" class="vcc-num-in" min="1" max="25" step="1" value="${state.volumeStep}">
+          <span class="vcc-slv" style="min-width:0">%</span>
+        </div>
+        <div class="vcc-slr">
+          <label for="vcc-seek-step">${t('bh.seekStep')}</label>
+          <input type="number" id="vcc-seek-step" class="vcc-num-in" min="1" max="300" step="1" value="${state.seekStep}">
+          <span class="vcc-slv" style="min-width:0">s</span>
+        </div>
+      `),
+
+      // ── Sites ativos ──
+      acc('si', '◈', t('sec.sites'), escapeHTML`
+        <div id="vcc-sites-list">${buildSitesList()}</div>
+        <div class="vcc-abts"><button class="vcc-abt" id="vcc-add-site">${t('si.add')}</button></div>
+      `),
 
       // ── Dados salvos ──
       acc('data', '⊟', t('sec.data'), escapeHTML`
         <p class="vcc-sub-title">${t('dt.stored')}</p>
-        <div id="vcc-storage-list" style="margin-bottom:8px;font-family:monospace;font-size:10px;color:rgba(255,255,255,0.42);line-height:1.8"></div>
+        <div id="vcc-storage-list" class="vcc-storage-list"></div>
         <div class="vcc-abts" style="margin-bottom:12px">
           <button class="vcc-abt" id="vcc-refresh-storage">${t('dt.refresh')}</button>
           <button class="vcc-abt" id="vcc-copy-all-storage">${t('dt.copyAll')}</button>
-          <button class="vcc-abt" id="vcc-clear-storage" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">${t('dt.deleteAll')}</button>
+          <button class="vcc-abt danger" id="vcc-clear-storage">${t('dt.deleteAll')}</button>
         </div>
         <div class="vcc-danger-zone">
           <div class="vcc-danger-title">${t('dt.resets')}</div>
           <div class="vcc-abts">
             <button class="vcc-abt" id="vcc-reset-keys">${t('dt.resetKeys')}</button>
-            <button class="vcc-abt" id="vcc-reset-all" style="color:rgba(226,75,74,0.82);border-color:rgba(226,75,74,0.3)">${t('dt.resetAll')}</button>
+            <button class="vcc-abt danger" id="vcc-reset-all">${t('dt.resetAll')}</button>
           </div>
         </div>
       `),
-
-    ]);
-
-    bindCPEvents();
-    buildPresets();
-    buildKeysList();
-    buildVideoList();
-    refreshStorageList();
+    ];
   }
 
   function renderSiteStatus() {
@@ -1571,32 +2050,73 @@
       <div class="vcc-site-warning" role="alert">
         <div class="vcc-site-warning-title">${t('site.inactiveTitle')}</div>
         <div class="vcc-site-warning-text">${t('site.inactiveText')}</div>
-        <button class="vcc-activate-site" id="vcc-activate-site">${t('site.enable', { domain })}</button>
+        <button class="vcc-abt primary" id="vcc-activate-site">${t('site.enable', { domain })}</button>
       </div>`);
     status.querySelector('#vcc-activate-site').addEventListener('click', activateCurrentSite);
   }
 
+  // Reconstrói o painel mantendo seções abertas, rolagem e posição.
+  function rebuildPanel() {
+    if (!cpEl) return;
+    const openIds = [...cpEl.querySelectorAll('.vcc-acc-body.open')].map(b => b.id);
+    const scrollTop = cpEl.querySelector('#vcc-cp-scroll')?.scrollTop || 0;
+    const left = cpEl.style.getPropertyValue('left');
+    const top = cpEl.style.getPropertyValue('top');
+    const transform = cpEl.style.getPropertyValue('transform');
+    cpEl.remove();
+    capturingKey = null;
+    currentScope = 'default';
+    KEYS = loadKeys(domain);
+    buildCP();
+    cpEl.querySelectorAll('.vcc-acc-body').forEach(body => {
+      const open = openIds.includes(body.id);
+      setAccordion(body.id.slice('vcc-body-'.length), open);
+    });
+    if (left) {
+      cpEl.style.setProperty('left', left, 'important');
+      cpEl.style.setProperty('top', top, 'important');
+      cpEl.style.setProperty('transform', transform || 'none', 'important');
+    }
+    const scroller = cpEl.querySelector('#vcc-cp-scroll');
+    if (scroller) scroller.scrollTop = scrollTop;
+    if (state.cpVisible) {
+      updateStats(); refreshStorageList(); updateLoopStatus();
+    }
+    updateScrollCue();
+  }
+
+  function setAccordion(id, open) {
+    const body = cpEl?.querySelector(`#vcc-body-${id}`);
+    if (!body) return;
+    body.classList.toggle('open', open);
+    body.style.display = open ? 'block' : 'none';
+    cpEl.querySelector(`#vcc-arr-${id}`)?.classList.toggle('open', open);
+    cpEl.querySelector(`[data-acc="${id}"]`)?.setAttribute('aria-expanded', String(open));
+  }
+
   // ─────────────────────────────────────────────
-  // BIND EVENTOS DO CP
+  // BIND EVENTOS DO PAINEL
   // ─────────────────────────────────────────────
   function q(sel) { return cpEl.querySelector(sel); }
 
   function bindTog(id, cb) {
     const el = cpEl.querySelector(`#vcc-tog-${id}`); if (!el) return;
-    el.addEventListener('click', () => { el.classList.toggle('on'); cb(el.classList.contains('on')); });
+    el.addEventListener('click', () => {
+      if (el.disabled) return;
+      el.classList.toggle('on');
+      const on = el.classList.contains('on');
+      el.setAttribute('aria-checked', String(on));
+      cb(on);
+    });
   }
 
   function bindCPEvents() {
     // Acordeões
     cpEl.querySelectorAll('.vcc-acc-hdr').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id   = btn.dataset.acc;
-        const body = document.getElementById(`vcc-body-${id}`);
-        const arr  = document.getElementById(`vcc-arr-${id}`);
-        const open = body.classList.contains('open');
-        body.classList.toggle('open', !open);
-        body.style.display = open ? 'none' : 'block';
-        arr.classList.toggle('open', !open);
+        const id = btn.dataset.acc;
+        setAccordion(id, !q(`#vcc-body-${id}`).classList.contains('open'));
+        updateScrollCue();
       });
     });
     cpEl.querySelectorAll('.vcc-acc-body').forEach(b => {
@@ -1609,25 +2129,18 @@
     q('#vcc-spd-reset').addEventListener('click', resetSpeed);
     q('#vcc-spd-toggle2x').addEventListener('click', toggle2x);
     q('#vcc-spd-input').addEventListener('change', e => {
-      const n = parseFloat(e.target.value); if (!isNaN(n)) applySpeed(n);
+      const n = parseFloat(e.target.value); if (!isNaN(n)) setSpeed(n);
     });
     q('#vcc-seek-back').addEventListener('click', () => applySeek(-state.seekStep));
     q('#vcc-seek-fwd' ).addEventListener('click', () => applySeek(+state.seekStep));
-    q('#vcc-toggle-cb-btn').addEventListener('click', cycleCBMode);
 
     // Áudio
     q('#vcc-volume-down').addEventListener('click', () => changeVolume(-state.volumeStep));
     q('#vcc-volume-up').addEventListener('click', () => changeVolume(+state.volumeStep));
     q('#vcc-volume-mute').addEventListener('click', toggleMute);
     q('#vcc-volume').addEventListener('input', e => applyVolume(parseInt(e.target.value) / 100, true));
-    bindTog('boost',     () => {});
-    bindTog('normalize', () => {});
-    bindTog('silence',   () => {});
-    q('#vcc-boost-level').addEventListener('input', e => { q('#vcc-boost-val').textContent = e.target.value + '%'; });
 
     // Navegação
-    bindTog('loopab',  () => {});
-    bindTog('savepos', () => {});
     q('#vcc-loop-a').addEventListener('click',     () => { setLoopPoint('A'); updateLoopStatus(); });
     q('#vcc-loop-b').addEventListener('click',     () => { setLoopPoint('B'); updateLoopStatus(); });
     q('#vcc-loop-clear').addEventListener('click', () => { clearLoop(); updateLoopStatus(); });
@@ -1635,33 +2148,48 @@
     if (pipBtn && !pipBtn.disabled) pipBtn.addEventListener('click', activatePiP);
     q('#vcc-timestamp' ).addEventListener('click', copyTimestamp);
 
-    // Visual
+    // Imagem
     bindTog('invert', () => applyVideoFilter());
     q('#vcc-brightness').addEventListener('input', e => {
       q('#vcc-brightness-val').textContent = e.target.value + '%'; applyVideoFilter();
     });
-    q('#vcc-cb-op').addEventListener('input', e => {
+    q('#vcc-cb-op')?.addEventListener('input', e => {
       state.cbOpacity = parseInt(e.target.value) / 100;
       save(sk('cbOpacity'), state.cbOpacity);
-      if (cbEl) cbEl.style.setProperty('opacity', state.cbOpacity, 'important');
+      bars.forEach(bar => bar.el.style.setProperty('opacity', state.cbOpacity, 'important'));
       q('#vcc-cb-op-val').textContent = e.target.value + '%';
     });
-    q('#vcc-cp-op').addEventListener('input', e => {
+    q('#vcc-cp-op')?.addEventListener('input', e => {
       state.cpOpacity = parseInt(e.target.value) / 100;
       save(sk('cpOpacity'), state.cpOpacity);
-      if (cpEl) cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
+      cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
       q('#vcc-cp-op-val').textContent = e.target.value + '%';
+    });
+
+    // Barra de controle
+    cpEl.querySelectorAll('#vcc-bar-mode button').forEach(b => b.addEventListener('click', () => setBarMode(b.dataset.value)));
+    bindTog('barauto', on => setBarOption('barAuto', on));
+    bindTog('barpervideo', on => setBarOption('barLayout', on ? 'perVideo' : 'single'));
+    cpEl.querySelectorAll('#vcc-bar-anchor button').forEach(b => b.addEventListener('click', () => setBarOption('barAnchor', b.dataset.anchor)));
+    q('#vcc-alert-dur')?.addEventListener('input', e => {
+      state.alertDuration = parseInt(e.target.value);
+      save(gk('alertDuration'), state.alertDuration);
+      q('#vcc-alert-dur-val').textContent = state.alertDuration + 'ms';
     });
 
     // Vídeos
     q('#vcc-vid-all').addEventListener('click', toggleAllVideos);
 
+    if (!IS_EXTENSION) bindFullPanelEvents();
+  }
+
+  function bindFullPanelEvents() {
     // Atalhos
     q('#vcc-add-scope').addEventListener('click', () => {
       const d = prompt(t('ks.domainPrompt')); if (d && d.trim()) addScopeTab(d.trim());
     });
-    cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(t => {
-      t.addEventListener('click', () => setScope(t.dataset.scope));
+    cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(tab => {
+      tab.addEventListener('click', () => setScope(tab.dataset.scope));
     });
     q('#vcc-keys-copy-to-domain').addEventListener('click', () => {
       const target     = currentScope === 'default' ? domain : currentScope;
@@ -1676,7 +2204,9 @@
       KEYS = loadKeys(domain); buildKeysList();
     });
 
-    // Comportamento
+    // Preferências
+    cpEl.querySelectorAll('#vcc-theme-tabs button').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.value)));
+    cpEl.querySelectorAll('#vcc-lang-tabs [data-lang]').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
     q('#vcc-speed-step').addEventListener('change', e => {
       const v = parseFloat(e.target.value);
       if (!isNaN(v) && v >= 0.05 && v <= 1) { state.speedStep = Math.round(v * 100) / 100; save(gk('speedStep'), state.speedStep); }
@@ -1692,13 +2222,6 @@
       if (!isNaN(v) && v >= 1 && v <= 25) { state.volumeStep = v; save(gk('volumeStep'), state.volumeStep); }
       else e.target.value = state.volumeStep;
     });
-    q('#vcc-alert-dur').addEventListener('input', e => {
-      state.alertDuration = parseInt(e.target.value);
-      save(gk('alertDuration'), state.alertDuration);
-      q('#vcc-alert-dur-val').textContent = state.alertDuration + 'ms';
-    });
-    updateCPCBModeBtn();
-    q('#vcc-cb-mode-btn').addEventListener('click', cycleCBMode);
 
     // Sites
     cpEl.querySelectorAll('[data-site-tog]').forEach(bindSiteToggle);
@@ -1713,7 +2236,7 @@
         let v = ''; try { v = JSON.stringify(GM_getValue(k)); } catch {}
         return `${k}: ${v}`;
       }).join('\n');
-      navigator.clipboard.writeText(all).then(() => flashCB(t('flash.copied'), true), () => {});
+      navigator.clipboard.writeText(all).then(() => flashCB(t('flash.copied'), null, true), () => {});
     });
     q('#vcc-clear-storage').addEventListener('click', () => {
       if (!confirm(t('dt.deleteConfirm'))) return;
@@ -1721,17 +2244,12 @@
     });
     q('#vcc-reset-keys').addEventListener('click', () => {
       if (!confirm(t('dt.resetKeysConfirm'))) return;
-      getAllVccKeys().filter(k => k.includes('_keys')).forEach(del);
+      getAllVccKeys().filter(k => k.endsWith('_keys')).forEach(del);
       KEYS = { ...FACTORY_KEYS }; buildKeysList();
     });
     q('#vcc-reset-all').addEventListener('click', () => {
       if (!confirm(t('dt.resetAllConfirm'))) return;
       getAllVccKeys().forEach(del); location.reload();
-    });
-
-    // Idioma
-    cpEl.querySelectorAll('#vcc-lang-tabs [data-lang]').forEach(btn => {
-      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
   }
 
@@ -1741,8 +2259,8 @@
   function buildPresets() {
     const grid = cpEl.querySelector('#vcc-presets'); if (!grid) return;
     setSafeHTML(grid, escapeHTML`${PRESET_SPEEDS.map(s =>
-      escapeHTML`<div class="vcc-pc${Math.abs(state.speed - s) < 0.01 ? ' sel' : ''}" data-speed="${s}">${s}×</div>`
-    )}<div class="vcc-pc" style="border-style:dashed;color:rgba(255,255,255,.2);font-size:15px" id="vcc-preset-add">+</div>`);
+      escapeHTML`<button class="vcc-pc${Math.abs(state.speed - s) < 0.01 ? ' sel' : ''}" data-speed="${s}">${s}×</button>`
+    )}<button class="vcc-pc" id="vcc-preset-add" title="${t('pb.presetPrompt')}" aria-label="${t('pb.presetPrompt')}">+</button>`);
 
     grid.querySelectorAll('.vcc-pc[data-speed]').forEach(c => {
       c.addEventListener('click', () => setSpeed(parseFloat(c.dataset.speed)));
@@ -1765,17 +2283,18 @@
   }
 
   // ─────────────────────────────────────────────
-  // ETA
+  // TEMPO RESTANTE
   // ─────────────────────────────────────────────
   function updateETA() {
     if (!cpEl) return;
     const eta = cpEl.querySelector('#vcc-eta'); if (!eta) return;
     const vid = state.videos[state.primaryVideo];
     if (!vid || !isFinite(vid.duration) || vid.duration === 0) {
-      setSafeHTML(eta, escapeHTML`<span style="color:rgba(255,255,255,.28)">${t('pb.noDuration')}</span>`); return;
+      setSafeHTML(eta, escapeHTML`<span>${t('pb.noDuration')}</span>`); return;
     }
-    const rem = (vid.duration - vid.currentTime) / state.speed;
-    setSafeHTML(eta, tStrong('pb.eta', { time: fmtDuration(rem), speed: fmtSpeed(state.speed) + '×' }));
+    const speed = videoSpeed(vid);
+    const rem = (vid.duration - vid.currentTime) / speed;
+    setSafeHTML(eta, tStrong('pb.eta', { time: fmtDuration(rem), speed: fmtSpeed(speed) + '×' }));
   }
 
   // ─────────────────────────────────────────────
@@ -1792,54 +2311,56 @@
       const dur = isFinite(vid.duration) ? fmtDuration(vid.duration) : '?';
       const res = vid.videoWidth ? `${vid.videoWidth}×${vid.videoHeight}` : '—';
       let srcLabel = t('vi.video', { n: i + 1 });
-      try { srcLabel = new URL(vid.src).hostname || srcLabel; } catch {}
+      try { srcLabel = new URL(vid.currentSrc || vid.src).hostname || srcLabel; } catch {}
 
       const row = document.createElement('div');
       row.className = 'vcc-vrow';
       setSafeHTML(row, escapeHTML`
-        <div class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${t(isPrimary ? 'vi.main' : 'vi.setMain')}">${isPrimary ? '★' : '#' + (i + 1)}</div>
+        <button class="vcc-vthumb${isPrimary ? ' primary' : ''}" title="${t(isPrimary ? 'vi.main' : 'vi.setMain')}" aria-label="${t(isPrimary ? 'vi.main' : 'vi.setMain')}">${isPrimary ? '★' : '#' + (i + 1)}</button>
         <div style="flex:1;min-width:0">
           <div class="vcc-vname">${srcLabel}${isPrimary ? escapeHTML`<span class="vcc-primary-badge">${t('vi.mainBadge')}</span>` : ''}</div>
           <div class="vcc-vmeta">${res} · ${dur}</div>
         </div>
         <div class="vcc-vid-actions">
-          <button class="vcc-vid-btn" data-act="primary" title="${t(isPrimary ? 'vi.isMain' : 'vi.setMain')}" style="${isPrimary ? 'color:#5DCAA5;border-color:#1D9E75' : ''}">★</button>
-          <button class="vcc-vid-btn" data-act="playpause" title="${t('vi.playPause')}">${vid.paused ? '▶' : '⏸'}</button>
-          <button class="vcc-vid-btn" data-act="hide"      title="${t('vi.hide')}">◻</button>
-          <button class="vcc-vid-btn" data-act="mute"      title="${t('vi.mute')}">${vid.muted ? '✕♪' : '♪'}</button>
-          <button class="vcc-vid-btn danger" data-act="remove" title="${t('vi.remove')}">✕</button>
+          <button class="vcc-vid-btn${isPrimary ? ' on' : ''}" data-act="primary" title="${t(isPrimary ? 'vi.isMain' : 'vi.setMain')}" aria-label="${t(isPrimary ? 'vi.isMain' : 'vi.setMain')}">★</button>
+          <button class="vcc-vid-btn" data-act="playpause" title="${t('vi.playPause')}" aria-label="${t('vi.playPause')}">${vid.paused ? '▶' : '⏸'}</button>
+          <button class="vcc-vid-btn${vid.style.visibility === 'hidden' ? ' on' : ''}" data-act="hide" title="${t('vi.hide')}" aria-label="${t('vi.hide')}">◻</button>
+          <button class="vcc-vid-btn" data-act="mute" title="${t('vi.mute')}" aria-label="${t('vi.mute')}">${vid.muted ? '✕♪' : '♪'}</button>
+          <button class="vcc-vid-btn danger" data-act="remove" title="${t('vi.remove')}" aria-label="${t('vi.remove')}">✕</button>
         </div>
-        <div class="vcc-chk${isTarget ? ' on' : ''}" data-vidx="${i}">${isTarget ? '✓' : ''}</div>
+        <button class="vcc-chk${isTarget ? ' on' : ''}" data-vidx="${i}" role="checkbox" aria-checked="${isTarget ? 'true' : 'false'}" aria-label="${t('vi.target')}">${isTarget ? '✓' : ''}</button>
       `);
 
       row.querySelector('.vcc-vthumb').addEventListener('click', () => {
         state.primaryVideo = i;
         buildVideoList();
         updateETA();
+        positionBars();
       });
 
       row.querySelector('.vcc-chk').addEventListener('click', e => {
-        const idx = parseInt(e.currentTarget.dataset.vidx);
+        const el = e.currentTarget;
+        const idx = parseInt(el.dataset.vidx);
         const on  = state.targetVideos.has(idx);
-        if (on) { state.targetVideos.delete(idx); e.currentTarget.classList.remove('on'); e.currentTarget.textContent = ''; }
-        else    { state.targetVideos.add(idx);    e.currentTarget.classList.add('on');    e.currentTarget.textContent = '✓'; }
+        if (on) state.targetVideos.delete(idx); else state.targetVideos.add(idx);
+        el.classList.toggle('on', !on); el.textContent = on ? '' : '✓'; el.setAttribute('aria-checked', String(!on));
       });
 
       row.querySelectorAll('.vcc-vid-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           switch (btn.dataset.act) {
             case 'primary':
-              state.primaryVideo = i; buildVideoList(); updateETA(); break;
+              state.primaryVideo = i; buildVideoList(); updateETA(); positionBars(); break;
             case 'playpause':
               try { vid.paused ? vid.play() : vid.pause(); } catch {}
               setTimeout(() => { btn.textContent = vid.paused ? '▶' : '⏸'; }, 50); break;
             case 'hide':
               vid.style.visibility = vid.style.visibility === 'hidden' ? 'visible' : 'hidden';
-              btn.style.color = vid.style.visibility === 'hidden' ? '#5DCAA5' : ''; break;
+              btn.classList.toggle('on', vid.style.visibility === 'hidden'); break;
             case 'mute':
               try { vid.muted = !vid.muted; } catch {}
               btn.textContent = vid.muted ? '✕♪' : '♪'; break;
-            case 'remove':
+            case 'remove': {
               if (!confirm(t('vi.removeConfirm'))) return;
               try { vid.remove(); } catch {}
               state.videos.splice(i, 1);
@@ -1847,7 +2368,8 @@
               state.targetVideos.forEach(idx => { if (idx < i) newSet.add(idx); else if (idx > i) newSet.add(idx - 1); });
               state.targetVideos.clear(); newSet.forEach(idx => state.targetVideos.add(idx));
               if (state.primaryVideo >= state.videos.length) state.primaryVideo = Math.max(0, state.videos.length - 1);
-              buildVideoList(); break;
+              syncBars(); buildVideoList(); break;
+            }
           }
         });
       });
@@ -1872,38 +2394,37 @@
   }
 
   // ─────────────────────────────────────────────
-  // ATALHOS EDITÁVEIS
+  // ATALHOS EDITÁVEIS (painel do Tampermonkey)
   // ─────────────────────────────────────────────
   function buildKeysList() {
-    const list = cpEl.querySelector('#vcc-keys-list'); if (!list) return;
+    const list = cpEl?.querySelector('#vcc-keys-list'); if (!list) return;
 
     const keyRows = KEY_ACTIONS.map(a => escapeHTML`
       <div class="vcc-kbd-row">
         <span class="vcc-kbd-action">${t('key.' + a.id)}</span>
         <span style="display:flex;align-items:center;gap:3px">
-          <span class="vcc-kbd-key" data-action="${a.id}">${KEYS[a.id] || '—'}</span>
-          <button class="vcc-kbd-clear" data-clear="${a.id}" title="${t('ks.remove')}">✕</button>
+          <span class="vcc-kbd-key" data-action="${a.id}" role="button" tabindex="0">${KEYS[a.id] || '—'}</span>
+          <button class="vcc-kbd-clear" data-clear="${a.id}" title="${t('ks.remove')}" aria-label="${t('ks.remove')}">✕</button>
         </span>
       </div>`);
 
     // Numerais fixos (não editáveis)
     setSafeHTML(list, escapeHTML`${keyRows}
-      <div class="vcc-kbd-row" style="opacity:.5">
+      <div class="vcc-kbd-row fixed">
         <span class="vcc-kbd-action">${t('ks.fixedPlay')}</span>
-        <span class="vcc-kbd-key" style="cursor:default">0</span>
+        <span class="vcc-kbd-key">0</span>
       </div>
-      <div class="vcc-kbd-row" style="opacity:.5">
+      <div class="vcc-kbd-row fixed">
         <span class="vcc-kbd-action">${t('ks.fixedPresets')}</span>
         <span style="display:flex;gap:3px">
-          <span class="vcc-kbd-key" style="cursor:default">1</span>
-          <span class="vcc-kbd-key" style="cursor:default">…</span>
-          <span class="vcc-kbd-key" style="cursor:default">7</span>
+          <span class="vcc-kbd-key">1</span>
+          <span class="vcc-kbd-key">…</span>
+          <span class="vcc-kbd-key">7</span>
         </span>
       </div>`);
 
     list.querySelectorAll('.vcc-kbd-key[data-action]').forEach(el => el.addEventListener('click', () => startCapture(el)));
 
-    // Botões de limpar atalho
     list.querySelectorAll('.vcc-kbd-clear').forEach(btn => {
       btn.addEventListener('click', () => {
         const action = btn.dataset.clear;
@@ -1931,29 +2452,19 @@
         document.removeEventListener('keydown', handler, true); return;
       }
 
-      // Bloquear teclas proibidas
-      if (FORBIDDEN_KEYS.has(e.key)) {
+      const k = SHARED.bindingFromEvent(e);
+      const fail = msgKey => {
         keyEl.classList.remove('capturing'); keyEl.classList.add('error');
-        keyEl.textContent = t('ks.invalid');
-        setTimeout(() => { keyEl.classList.remove('error'); keyEl.textContent = keyEl._orig; capturingKey = null; }, 1200);
-        document.removeEventListener('keydown', handler, true); return;
-      }
+        keyEl.textContent = t(msgKey);
+        setTimeout(() => { keyEl.classList.remove('error'); keyEl.textContent = keyEl._orig; capturingKey = null; }, 1300);
+        document.removeEventListener('keydown', handler, true);
+      };
+      if (!k) return fail('ks.invalid');
 
-      let k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
-      if (e.ctrlKey)  k = 'Ctrl+'  + k;
-      if (e.altKey)   k = 'Alt+'   + k;
-      if (e.shiftKey && e.key.length > 1) k = 'Shift+' + k;
-
-      // Verificar duplicata
       const dup = Object.entries(KEYS).find(([act, bnd]) =>
         bnd && act !== keyEl.dataset.action && bnd.toUpperCase() === k.toUpperCase()
       );
-      if (dup) {
-        keyEl.classList.remove('capturing'); keyEl.classList.add('error');
-        keyEl.textContent = t('ks.inUse');
-        setTimeout(() => { keyEl.classList.remove('error'); keyEl.textContent = keyEl._orig; capturingKey = null; }, 1400);
-        document.removeEventListener('keydown', handler, true); return;
-      }
+      if (dup) return fail('ks.inUse');
 
       keyEl.textContent = k; keyEl.classList.remove('capturing'); capturingKey = null;
       KEYS[keyEl.dataset.action] = k;
@@ -1968,7 +2479,7 @@
 
   function setScope(scope) {
     currentScope = scope;
-    cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(t => t.classList.toggle('active', t.dataset.scope === scope));
+    cpEl.querySelectorAll('.vcc-scope-tab[data-scope]').forEach(tab => tab.classList.toggle('active', tab.dataset.scope === scope));
     KEYS = loadKeys(scope === 'default' ? 'default' : scope);
     const hint = cpEl.querySelector('#vcc-scope-hint');
     if (hint) hint.textContent = scope === 'default' ? t('ks.hintGlobal') : t('ks.hintScope', { scope });
@@ -1976,9 +2487,10 @@
   }
 
   function addScopeTab(d) {
+    d = SHARED.normalizeSite(d);
     const tabs   = cpEl.querySelector('#vcc-scope-tabs');
     const addBtn = cpEl.querySelector('#vcc-add-scope');
-    if (tabs.querySelector(`[data-scope="${d}"]`)) { setScope(d); return; }
+    if (tabs.querySelector(`[data-scope="${CSS.escape(d)}"]`)) { setScope(d); return; }
     const btn = document.createElement('button');
     btn.className = 'vcc-scope-tab'; btn.dataset.scope = d; btn.textContent = d;
     btn.addEventListener('click', () => setScope(d));
@@ -1988,16 +2500,7 @@
   // ─────────────────────────────────────────────
   // SITES
   // ─────────────────────────────────────────────
-  const DEFAULT_SITES = [];
-
-  function normalizeSite(s) {
-    return String(s || '')
-      .trim()
-      .toLowerCase()
-      .replace(/^https?:\/\//, '')
-      .replace(/^www\./, '')
-      .split('/')[0];
-  }
+  const normalizeSite = SHARED.normalizeSite;
 
   function updateCPVolume() {
     if (!cpEl) return;
@@ -2009,16 +2512,9 @@
     if (button) button.textContent = t(state.muted ? 'au.unmute' : 'au.mute');
   }
 
-  function updateCBVolume() {
-    if (!cbEl) return;
-    const el = cbEl.querySelector('#vcc-cb-volume');
-    if (el) el.textContent = state.muted ? t('flash.muted') : `${Math.round(state.volume * 100)}%`;
-  }
-
   function getActiveSites() {
-    return load(gk('activeSites'), DEFAULT_SITES)
-      .map(normalizeSite)
-      .filter(Boolean);
+    const list = load(gk('activeSites'), []);
+    return (Array.isArray(list) ? list : []).map(normalizeSite).filter(Boolean);
   }
 
   function saveActiveSites(sites) {
@@ -2046,8 +2542,8 @@
 
   function siteRowHTML(s, on) {
     return escapeHTML`<div class="vcc-site-row" data-site="${s}">
-      <div class="vcc-site-name">${s}</div>
-      <div class="vcc-tog${on ? ' on' : ''}" data-site-tog="${s}"><div class="vcc-tog-t"></div></div>
+      <div class="vcc-site-name" id="vcc-site-${s}">${s}</div>
+      <button class="vcc-tog${on ? ' on' : ''}" data-site-tog="${s}" role="switch" aria-checked="${on ? 'true' : 'false'}" aria-labelledby="vcc-site-${s}"><span class="vcc-tog-t"></span></button>
     </div>`;
   }
 
@@ -2067,37 +2563,32 @@
       this.classList.toggle('on');
       const site = this.dataset.siteTog;
       const on = this.classList.contains('on');
+      this.setAttribute('aria-checked', String(on));
       setSiteActive(site, on);
-      if (normalizeSite(site) === domain) {
-        if (on) {
-          startVideoEngine();
-          buildCPContent();
-          flashCB(t('flash.siteEnabled'), true);
-        } else {
-          alert(t('site.disabledAlert'));
-        }
+      if (normalizeSite(site) === domain || domain.endsWith('.' + normalizeSite(site))) {
+        if (on) activateCurrentSite(); else deactivateCurrentSite();
       }
     });
   }
 
   // ─────────────────────────────────────────────
-  // STORAGE VIEWER
+  // DADOS SALVOS (painel do Tampermonkey)
   // ─────────────────────────────────────────────
   function refreshStorageList() {
     const list = cpEl?.querySelector('#vcc-storage-list'); if (!list) return;
     const keys = getAllVccKeys();
-    if (!keys.length) { setSafeHTML(list, escapeHTML`<span style="color:rgba(255,255,255,.25)">${t('dt.empty')}</span>`); return; }
+    if (!keys.length) { setSafeHTML(list, escapeHTML`<span>${t('dt.empty')}</span>`); return; }
     setSafeHTML(list, keys.map(k => {
       let val = ''; try { val = JSON.stringify(GM_getValue(k)); } catch {}
       const line = `${k}: ${val}`;
-      return escapeHTML`<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:.5px solid rgba(255,255,255,.04)">
-        <span style="color:rgba(255,255,255,.38);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1" title="${k}">${k}</span>
-        <span style="color:rgba(255,255,255,.22);font-size:10px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${val}">${val}</span>
-        <button data-copy-line="${line}" style="background:none;border:.5px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;padding:1px 5px;flex-shrink:0;font-family:monospace" title="${t('dt.copyLine')}">⎘</button>
+      return escapeHTML`<div class="vcc-storage-row">
+        <span class="k" title="${k}">${k}</span>
+        <span class="v" title="${val}">${val}</span>
+        <button class="vcc-kbd-clear" data-copy-line="${line}" title="${t('dt.copyLine')}" aria-label="${t('dt.copyLine')}">⎘</button>
       </div>`;
     }));
     list.querySelectorAll('[data-copy-line]').forEach(btn => btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB(t('flash.copied'), true), () => {});
+      navigator.clipboard.writeText(btn.dataset.copyLine).then(() => flashCB(t('flash.copied'), null, true), () => {});
     }));
   }
 
@@ -2134,7 +2625,7 @@
     const aStr = loopA !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopA)}</span>` : escapeHTML`<span class="none">${t('nv.notSet')}</span>`;
     const bStr = loopB !== null ? escapeHTML`<span class="pt">${fmtTimecode(loopB)}</span>` : escapeHTML`<span class="none">${t('nv.notSet')}</span>`;
     const active = loopA !== null && loopB !== null;
-    setSafeHTML(el, escapeHTML`A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? escapeHTML` &nbsp;<span style="color:#5DCAA5;font-size:9px">${t('nv.active')}</span>` : ''}`);
+    setSafeHTML(el, escapeHTML`A: ${aStr} &nbsp;→&nbsp; B: ${bStr}${active ? escapeHTML` &nbsp;<span class="on">${t('nv.active')}</span>` : ''}`);
   }
 
   // ─────────────────────────────────────────────
@@ -2148,8 +2639,8 @@
 
   function copyTimestamp() {
     const vid = state.videos[state.primaryVideo]; if (!vid) return;
-    const t = Math.floor(vid.currentTime);
-    navigator.clipboard.writeText(`${location.href.split('?')[0]}?t=${t}`).then(() => flashCB(t('flash.copied'), true), () => {});
+    const secs = Math.floor(vid.currentTime);
+    navigator.clipboard.writeText(`${location.href.split('?')[0]}?t=${secs}`).then(() => flashCB(t('flash.copied'), [vid], true), () => {});
   }
 
   function applyVideoFilter() {
@@ -2161,23 +2652,19 @@
   // ─────────────────────────────────────────────
   // COMPATIBILIDADE
   // ─────────────────────────────────────────────
-  const hasWebAudio = () => { try { new AudioContext(); return 'ok'; } catch { return 'unavailable'; } };
   const COMPAT_CHECKS = [
     { label: 'st.speedControl', check: () => 'ok' },
-    { label: 'st.boost',        check: hasWebAudio },
     { label: 'st.pip',          check: () => document.pictureInPictureEnabled ? 'ok' : 'unavailable' },
-    { label: 'st.silence',      check: hasWebAudio, note: 'st.needsWebAudio' },
-    { label: 'st.normalize',    check: hasWebAudio, note: 'st.needsAudioStream' },
   ];
 
   function renderCompatibility() {
     const el = cpEl?.querySelector('#vcc-compat'); if (!el) return;
     setSafeHTML(el, COMPAT_CHECKS.map(c => {
       const st = c.check ? c.check() : 'ok';
-      const [dot, cls, tag] = st === 'ok' ? ['#5DCAA5','vcc-ok',t('st.available')] : st === 'partial' ? ['#EF9F27','vcc-warn',t('st.partial')] : ['#E24B4A','vcc-err',t('st.unavailable')];
+      const [dot, cls, tag] = st === 'ok' ? ['vcc-dot-ok','vcc-ok',t('st.available')] : st === 'partial' ? ['vcc-dot-warn','vcc-warn',t('st.partial')] : ['vcc-dot-err','vcc-err',t('st.unavailable')];
       return escapeHTML`<div class="vcc-ci">
-        <div class="vcc-cdot" style="background:${dot}"></div>
-        <div class="vcc-ct">${t(c.label)} — <span class="vcc-ctag ${cls}">${tag}</span>${(c.note && st !== 'ok') ? ' — ' + t(c.note) : ''}</div>
+        <div class="vcc-cdot ${dot}"></div>
+        <div class="vcc-ct">${t(c.label)} — <span class="vcc-ctag ${cls}">${tag}</span></div>
       </div>`;
     }));
   }
@@ -2209,7 +2696,7 @@
   }, 1000);
 
   // ─────────────────────────────────────────────
-  // TOGGLE CP / CB helpers
+  // ABRIR / FECHAR O PAINEL
   // ─────────────────────────────────────────────
   function toggleCPVisibility() {
     state.cpVisible = !state.cpVisible;
@@ -2218,13 +2705,9 @@
     if (state.cpVisible) {
       updateCPSpeed(); updateETA(); buildVideoList();
       renderCompatibility(); updateStats(); refreshStorageList();
-      updateCPCBModeBtn(); updateLoopStatus();
+      updateBarSectionUI(); updateLoopStatus();
+      requestAnimationFrame(updateScrollCue);
     }
-  }
-
-  function updateCPCBModeBtn() {
-    const btn = cpEl?.querySelector('#vcc-cb-mode-btn'); if (!btn) return;
-    btn.textContent = t('bh.barModeBtn', { mode: t(`mode.${state.cbMode}`) });
   }
 
   // ─────────────────────────────────────────────
@@ -2249,24 +2732,41 @@
       : `${m}:${String(s).padStart(2,'0')}`;
   }
 
+  // ─────────────────────────────────────────────
+  // ATIVAÇÃO DO SITE
+  // ─────────────────────────────────────────────
   let videoEngineStarted = false;
 
   function startVideoEngine() {
-    if (videoEngineStarted) return;
-    videoEngineStarted = true;
     state.videoControlsActive = true;
-    state.sessionStart = Date.now();
-    state.speedHistory = [];
-    scanVideos();
-    startObserver();
-    buildCB();
+    if (!videoEngineStarted) {
+      videoEngineStarted = true;
+      state.sessionStart = Date.now();
+      state.speedHistory = [];
+      scanVideos();
+      startObserver();
+    }
+    rebuildBars();
+  }
+
+  function activateCurrentSite() {
+    setSiteActive(domain, true);
+    startVideoEngine();
+    rebuildPanel();
+    flashCB(t('flash.siteEnabled'), null, true);
+  }
+
+  // Desliga os controles na página atual (os vídeos mantêm a velocidade atual).
+  function deactivateCurrentSite() {
+    state.videoControlsActive = false;
+    removeAllBars();
+    updatePositionLoop();
+    rebuildPanel();
   }
 
   // ─────────────────────────────────────────────
-  // TROCA DE IDIOMA
+  // IDIOMA E TEMA
   // ─────────────────────────────────────────────
-  // Aplica o idioma sem recarregar a página: reconstrói a barra e o painel,
-  // mantendo seções abertas, rolagem e posição do painel.
   function applyLanguage(pref) {
     const nextPref = I18N.SUPPORTED.includes(pref) ? pref : 'auto';
     const nextLang = I18N.resolve(nextPref);
@@ -2274,35 +2774,8 @@
     langPref = nextPref;
     lang = nextLang;
     t = I18N.translator(lang);
-
-    if (cbEl) { cbEl.remove(); buildCB(); }
-
-    if (cpEl) {
-      const openIds = [...cpEl.querySelectorAll('.vcc-acc-body.open')].map(b => b.id);
-      const scrollTop = cpEl.querySelector('#vcc-cp-scroll')?.scrollTop || 0;
-      const { left, top, transform } = cpEl.style;
-      cpEl.remove();
-      if (capturingKey) capturingKey = null;
-      currentScope = 'default';
-      KEYS = loadKeys(domain);
-      buildCP();
-      cpEl.querySelectorAll('.vcc-acc-body').forEach(body => {
-        const open = openIds.includes(body.id);
-        body.classList.toggle('open', open);
-        body.style.display = open ? 'block' : 'none';
-        cpEl.querySelector('#vcc-arr-' + body.id.slice('vcc-body-'.length))?.classList.toggle('open', open);
-      });
-      if (left) {
-        cpEl.style.setProperty('left', left, 'important');
-        cpEl.style.setProperty('top', top, 'important');
-        cpEl.style.setProperty('transform', transform || 'none', 'important');
-      }
-      const scroller = cpEl.querySelector('#vcc-cp-scroll');
-      if (scroller) scroller.scrollTop = scrollTop;
-      if (state.cpVisible) {
-        updateStats(); refreshStorageList(); updateCPCBModeBtn(); updateLoopStatus();
-      }
-    }
+    rebuildBars();
+    rebuildPanel();
   }
 
   // Escolha feita no painel: salva (vale para todos os sites) e aplica.
@@ -2311,11 +2784,61 @@
     applyLanguage(pref);
   }
 
-  function activateCurrentSite() {
-    setSiteActive(domain, true);
-    startVideoEngine();
-    if (cpEl) buildCPContent();
-    flashCB(t('flash.siteEnabled'), true);
+  function setTheme(pref) {
+    state.themePref = SHARED.THEMES_PREFS.includes(pref) ? pref : 'auto';
+    save(gk('theme'), state.themePref);
+    applyThemeEverywhere();
+    rebuildPanel();
+  }
+
+  // ─────────────────────────────────────────────
+  // SINCRONIZAÇÃO (extensão)
+  //
+  // A página de configurações, o menu do ícone e outras abas gravam no
+  // armazenamento da extensão; aqui as mudanças são aplicadas na hora.
+  // ─────────────────────────────────────────────
+  function settingsSnapshot() {
+    return JSON.stringify([
+      state.cbMode, state.cbOpacity, state.cpOpacity, state.alertDuration, state.seekStep,
+      state.speedStep, state.volumeStep, state.themePref, state.barAuto, state.barAnchor,
+      state.barLayout, state.cbPos, langPref, KEYS,
+    ]);
+  }
+
+  function reloadFromStorage() {
+    const before = settingsSnapshot();
+    const prevSpeed = state.speed, prevVolume = state.volume, prevMuted = state.muted;
+    loadState();
+    KEYS = loadKeys(domain);
+    lang = I18N.resolve(langPref);
+    t = I18N.translator(lang);
+
+    const active = isSiteActive();
+    if (active && !state.videoControlsActive) { startVideoEngine(); rebuildPanel(); return; }
+    if (!active && state.videoControlsActive) { deactivateCurrentSite(); return; }
+
+    if (Math.abs(prevSpeed - state.speed) > 0.001) applySpeed(state.speed, false);
+    if (prevVolume !== state.volume || prevMuted !== state.muted) {
+      targetVideoList().forEach(vid => { try { vid.volume = state.volume; vid.muted = state.muted; } catch {} });
+      updateBarsDisplay(); updateCPVolume();
+    }
+    if (settingsSnapshot() !== before) {
+      rebuildBars();
+      rebuildPanel();
+      if (cpEl) cpEl.style.setProperty('opacity', state.cpOpacity, 'important');
+    }
+  }
+
+  let reloadTimer = null;
+  const extensionStorage = extensionApi?.storage;
+  if (extensionStorage?.onChanged?.addListener) {
+    extensionStorage.onChanged.addListener((changes, area) => {
+      if (area !== 'local') return;
+      const relevant = Object.keys(changes).some(k => k.startsWith('vcc_global_') || k.startsWith(`vcc_${domain}_`));
+      if (!relevant) return;
+      clearTimeout(reloadTimer);
+      reloadTimer = setTimeout(() => storageReady.then(reloadFromStorage), 60);
+    });
   }
 
   // ─────────────────────────────────────────────
@@ -2323,20 +2846,13 @@
   // ─────────────────────────────────────────────
   function init() {
     loadState();
-    langPref = load(gk('language'), 'auto');
     lang = I18N.resolve(langPref);
     t = I18N.translator(lang);
     KEYS = loadKeys(domain);
     injectStyles();
-    state.videoControlsActive = isSiteActive();
-    if (state.videoControlsActive) startVideoEngine();
+    if (isSiteActive()) startVideoEngine();
   }
 
-  function start() {
-    init();
-  }
-
-  const extensionRuntime = globalThis.browser?.runtime || globalThis.chrome?.runtime;
   // Mensagens do menu do ícone (popup) da extensão.
   function handleExtensionMessage(message) {
     switch (message?.type) {
@@ -2354,26 +2870,17 @@
         } else {
           // Remove o domínio e qualquer domínio-pai que o ative.
           saveActiveSites(getActiveSites().filter(s => !(domain === s || domain.endsWith('.' + s))));
-          if (cpEl) buildCPContent();
+          deactivateCurrentSite();
         }
-        return { ok: true, domain, active: isSiteActive(), needsReload: !message.on && videoEngineStarted };
+        return { ok: true, domain, active: isSiteActive(), needsReload: false };
       default:
         return null;
     }
   }
 
-  // Idioma trocado em outra aba ou no menu do ícone: aplica aqui também.
-  const extensionStorage = (globalThis.browser || globalThis.chrome)?.storage;
-  if (extensionStorage?.onChanged?.addListener) {
-    extensionStorage.onChanged.addListener((changes, area) => {
-      if (area !== 'local' || !(I18N.STORAGE_KEY in changes)) return;
-      storageReady.then(() => applyLanguage(changes[I18N.STORAGE_KEY].newValue ?? 'auto'));
-    });
-  }
-
   if (extensionRuntime?.onMessage?.addListener) {
     extensionRuntime.onMessage.addListener((message, _sender, sendResponse) => {
-      if (!String(message?.type || '').startsWith('VCC_')) return false;
+      if (!String(message?.type || '').startsWith('VCC_') || message.type === 'VCC_OPEN_OPTIONS') return false;
       storageReady
         .then(() => handleExtensionMessage(message))
         .then(sendResponse, err => sendResponse({ ok: false, error: String(err) }));
@@ -2382,8 +2889,8 @@
   }
 
   storageReady.then(() => {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
-    else start();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+    else init();
   });
 
 })();

@@ -20,6 +20,7 @@
       "js": [
         "js/gm-compat.js",
         "js/i18n.js",
+        "js/shared.js",
         "js/vcc.js"
       ],
       "run_at": "document_idle"
@@ -40,5 +41,9 @@
     "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
   }
 }

@@ -43,7 +43,9 @@ Great for watching lectures faster, replaying a section over and over, or simply
 • Copy the current video timestamp
 • Brightness and color inversion for night viewing
 • Pages with several videos: pick the main one, control some or all, hide or mute each
-• Available in English and Portuguese — switch languages from the panel or the toolbar menu
+• Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video
+• Light and dark themes, in English and Portuguese
+• Full settings page, with per-site settings
 
 🧭 HOW TO USE
 1. Pin VCC to the toolbar (Extensions button → pin icon next to VCC).
@@ -88,7 +90,9 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 • Copiar o momento atual do vídeo (timestamp)
 • Brilho e inversão de cores para assistir no escuro
 • Páginas com vários vídeos: escolha o principal, controle alguns ou todos, oculte ou silencie cada um
-• Em português e inglês, com troca de idioma pelo painel ou pelo menu do ícone
+• Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo
+• Tema claro e escuro, em português e inglês
+• Página de configurações completa, com ajustes próprios para cada site
 
 🧭 COMO USAR
 1. Fixe o VCC na barra de ferramentas (botão de extensões → alfinete ao lado do VCC).

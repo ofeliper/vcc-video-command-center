@@ -6,7 +6,7 @@ vários vídeos. Funciona no YouTube e na maioria dos sites com vídeo.
 
 Está disponível como **extensão para Firefox**, **extensão para Chrome** (e Edge) e **userscript
 para Tampermonkey**, todos gerados a partir do mesmo código, em **português (pt-BR)** e
-**inglês (en-US)**.
+**inglês (en-US)**, com **tema claro e escuro**.
 
 > O VCC é um controle pessoal de reprodução. Ele **não** baixa vídeos, não extrai streams, não remove
 > anúncios, não contorna paywalls e não interfere em proteções de conteúdo (DRM). Também não coleta
@@ -15,7 +15,9 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 - [Recursos](#recursos)
 - [Instalação](#instalação)
 - [Como usar](#como-usar)
-- [Idioma](#idioma)
+- [Barra de controle](#barra-de-controle)
+- [Página de configurações](#página-de-configurações)
+- [Idioma e tema](#idioma-e-tema)
 - [Permissões e privacidade](#permissões-e-privacidade)
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Desenvolvimento](#desenvolvimento)
@@ -37,17 +39,19 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 - Todos os atalhos podem ser trocados, globalmente ou só para um site.
 - Tecla 0: play/pause do vídeo principal.
 
+**Barra de controle**
+- Modos visível, só alertas (padrão: aparece só quando você usa um atalho) e oculta.
+- Posição livre (arrastável pela alça ⋮⋮) ou automática, dentro do vídeo, no canto escolhido.
+- Uma barra só ou uma barra em cada vídeo, cada uma controlando o próprio vídeo.
+
 **Extras**
 - Loop A→B, Picture-in-Picture e cópia do timestamp atual.
 - Brilho e inversão de cores.
 - Páginas com vários vídeos: escolha o principal, aplique os controles a alguns ou a todos, oculte,
   silencie ou remova cada um.
-- Barra de controle compacta sobre a página (arrastável, com modos visível / só alertas / oculta) e
-  opacidade ajustável da barra e do painel.
 - Estatísticas da sessão (tempo assistido, tempo economizado) e verificação de compatibilidade.
-
-**Em desenvolvimento** — aparecem no painel, mas ainda não têm efeito: volume boost, normalização de
-volume, skip de silêncio e salvar posição por URL.
+- Tema claro e escuro (ou automático, seguindo o sistema), com contraste de leitura ≥ 4,5:1.
+- Página de configurações completa (extensão), com ajustes por site.
 
 ## Instalação
 
@@ -84,15 +88,24 @@ O Tampermonkey verifica atualizações nesse mesmo endereço.
 2. Se o menu pedir, permita o acesso ao site (só nele ou em todos os sites).
 3. Ligue **Controles de vídeo** para aquele site.
 
-A qualquer momento, a tecla **H** abre o painel completo. Sem ativar o site, o painel mostra só as
-configurações gerais e um botão para ativá-lo.
+A qualquer momento, a tecla **H** abre o painel. Sem ativar o site, ele mostra um botão para ativá-lo.
+
+### Painel (tecla H)
+
+Na extensão, o painel reúne só os controles do vídeo aberto: reprodução, áudio, navegação (loop A→B,
+PiP, timestamp), imagem, barra de controle, vídeos na página e sessão. O botão **⚙ Configurações** no
+rodapé abre a página de configurações. No Tampermonkey, que não tem página de configurações, o painel
+também traz atalhos, preferências (tema, idioma, incrementos), sites ativos e dados salvos.
 
 ### Menu do ícone (extensão)
 
 - Mostra se o VCC tem acesso ao site atual e pede a permissão quando falta. Se ela for recusada,
   explica como liberar depois (botão de extensões da barra ou *Gerenciar extensão → Permissões*).
 - **Abrir painel**: o mesmo que a tecla H.
-- **Controles de vídeo**: liga ou desliga o VCC no site atual.
+- **Controles de vídeo**: liga ou desliga o VCC no site atual (vale na hora, sem recarregar).
+- **Tema** e **Idioma**.
+- **⚙ Configurações**: abre a página de configurações.
+- No rodapé, o acesso liberado (todos os sites ou só os escolhidos) e a versão.
 
 ### Atalhos padrão
 
@@ -109,26 +122,63 @@ configurações gerais e um botão para ativá-lo.
 | 0 | Play / pause do vídeo principal *(fixo)* |
 | 1 a 7 | Presets 1×, 1,25×, 1,5×, 1,75×, 2×, 3×, 4× *(fixos)* |
 
-Os atalhos não disparam enquanto você digita em campos de texto. Troque qualquer um em
-**Painel → Atalhos de teclado**.
+Os atalhos não disparam enquanto você digita em campos de texto. Troque qualquer um na
+**página de configurações → Atalhos** (globais) ou **→ Sites** (só para um site). No Tampermonkey,
+em **Painel → Atalhos de teclado**.
 
-## Idioma
+## Barra de controle
 
-O VCC tem interface em **português (pt-BR)** e **inglês (en-US)**.
+A barra mostra a velocidade e o volume e tem botões para voltar, avançar, velocidade, volume e painel.
+As opções ficam no **painel → Barra de controle** e na **página de configurações → Aparência**:
 
-- **Automático (padrão):** segue o idioma do navegador. Navegador em português → pt-BR; qualquer
-  outro idioma → en-US.
-- **Escolha manual**, em dois lugares:
-  - **Painel (tecla H) → Comportamento e idioma → 🌐 Idioma / Language**;
-  - **menu do ícone**, no seletor *🌐 Idioma* do rodapé (só na extensão).
+- **Modo:** *visível* (sempre na tela), *só alertas* (padrão: aparece por um instante quando você usa
+  um atalho ou botão) ou *oculta*. A tecla **V** alterna entre eles.
+- **Posicionar automaticamente:**
+  - *desligado* (padrão): a barra fica onde você quiser na tela; arraste pela alça **⋮⋮** da esquerda.
+    A posição é salva por site.
+  - *ligado*: a barra fica dentro do vídeo e o acompanha ao rolar a página ou redimensionar. Escolha o
+    canto: em cima ou embaixo × esquerda, centro ou direita.
+- **Uma barra em cada vídeo** (requer o posicionamento automático): cada vídeo da página ganha a
+  própria barra, que controla só aquele vídeo. Os atalhos de teclado continuam valendo para os vídeos
+  selecionados no painel.
 
-As opções aparecem no próprio idioma ("Português (Brasil)", "English"), para facilitar a troca de
-volta mesmo sem entender o idioma atual. A escolha vale para todos os sites e é aplicada na hora,
-sem recarregar a página; na extensão, também nas abas já abertas. No Tampermonkey, as outras abas
-passam a usar o novo idioma quando forem recarregadas.
+Em tela cheia, a barra ainda não aparece (previsto para uma próxima versão).
+
+## Página de configurações
+
+Na extensão, abra pelo **menu do ícone → ⚙ Configurações**, pelo **painel → ⚙ Configurações** ou
+pelo gerenciador de extensões (*Opções*). Ela tem:
+
+- **Aparência:** tema, opacidade padrão da barra e do painel, opções da barra de controle e duração do
+  alerta.
+- **Idioma.**
+- **Atalhos:** os atalhos globais (clique na tecla para trocar; ✕ remove).
+- **Comportamento:** incrementos de velocidade, volume e avanço.
+- **Sites:** adicionar um site e, para cada site, ativar/desativar, velocidade e volume salvos,
+  opacidade própria (ou a padrão), posição da barra, atalhos próprios e apagar as configurações do site.
+- **Dados:** ver, copiar e apagar os dados salvos; restaurar atalhos ou todas as configurações.
+- **Sobre:** versão, código-fonte, suporte, privacidade e contato.
+
+As mudanças são salvas na hora e aplicadas imediatamente nas abas abertas.
+
+## Idioma e tema
+
+O VCC tem interface em **português (pt-BR)** e **inglês (en-US)**, e tema **claro** e **escuro**.
+
+- **Automático (padrão):** o idioma segue o do navegador (português → pt-BR; qualquer outro → en-US)
+  e o tema segue o do sistema.
+- **Escolha manual:** no **menu do ícone**, na **página de configurações** e, no Tampermonkey, em
+  **Painel → Preferências**.
+
+As opções de idioma aparecem no próprio idioma ("Português (Brasil)", "English"), para facilitar a
+troca de volta mesmo sem entender o idioma atual. As escolhas valem para todos os sites e são
+aplicadas na hora; na extensão, também nas abas já abertas.
 
 O nome e a descrição da extensão no gerenciador de extensões seguem sempre o idioma do navegador
 (pasta `_locales`), independentemente da escolha acima.
+
+As cores dos dois temas estão em `src/core/shared.js`; o `npm run check` mede o contraste e falha se
+algum texto ficar abaixo de 4,5:1 (ou elementos de interface abaixo de 3:1).
 
 ### Onde ficam as configurações
 
@@ -137,7 +187,12 @@ armazenamento local do navegador (na extensão, `storage.local`; no Tampermonkey
 dele). Sobrevivem a reinícios e atualizações e são apagados ao desinstalar. No Firefox, os dados
 ficam ligados ao ID da extensão (`vcc-video-command-center@ofeliper`), que por isso não deve mudar.
 
-O painel tem a seção **Dados salvos e redefinições** para ver, copiar e apagar esses dados.
+Para ver, copiar e apagar esses dados: **página de configurações → Dados** (no Tampermonkey,
+**Painel → Dados salvos e redefinições**).
+
+Chaves usadas: `vcc_global_<nome>` para as configurações globais (tema, idioma, modo e opções da barra,
+opacidades padrão, incrementos, atalhos, sites ativos) e `vcc_<domínio>_<nome>` para as de cada site
+(velocidade, volume, mudo, opacidades, posição da barra, atalhos).
 
 ## Permissões e privacidade
 
@@ -155,11 +210,14 @@ carrega código remoto. Veja a [política de privacidade](PRIVACY.md).
 ```text
 src/
   core/
-    vcc.js                    Código principal do VCC (usado pela extensão e pelo userscript)
+    vcc.js                    Código principal do VCC: barra, painel, controle dos vídeos
     i18n.js                   Traduções pt-BR e en-US e detecção do idioma
+    shared.js                 Padrões, atalhos de fábrica e cores dos temas (usado em tudo)
   extension/
     gm-compat.js              Adapta o armazenamento da extensão às funções GM_* do Tampermonkey
+    background.js             Abre a página de configurações a pedido do painel
     popup/                    Menu do ícone (popup.html, popup.js, popup.css)
+    options/                  Página de configurações (options.html, options.js, options.css)
     _locales/                 Nome e descrição da extensão por idioma (en, pt_BR)
   userscript/header.txt       Cabeçalho ==UserScript== (a versão é preenchida pelo build)
 manifests/
@@ -180,14 +238,14 @@ tools/
   check.js                    Checagens antes de publicar
 dist/                         Gerado pelo build (fora do git, exceto o userscript)
   chrome/  firefox/
-  userscript/vcc.user.js      i18n.js + vcc.js num arquivo só. Versionado no git: é daqui
+  userscript/vcc.user.js      i18n.js + shared.js + vcc.js num arquivo só. Versionado no git: é daqui
                               que o Tampermonkey instala e atualiza
 releases/                     Zips gerados (fora do git)
 CHANGELOG.md  PRIVACY.md  package.json
 ```
 
-**Por que um código só:** a extensão e o userscript usam o mesmo `src/core/vcc.js` (e as mesmas
-traduções de `src/core/i18n.js`). A extensão
+**Por que um código só:** a extensão e o userscript usam o mesmo `src/core/vcc.js` (e os mesmos
+`i18n.js` e `shared.js`). A extensão
 fornece as funções `GM_getValue`/`GM_setValue`/… por meio do `gm-compat.js`, então o código
 principal não precisa saber onde está rodando. Uma correção vale para todas as versões.
 
@@ -205,7 +263,7 @@ Requisito: [Node.js](https://nodejs.org/) 18 ou mais recente. Não há dependên
 
 ```bash
 npm run build          # gera dist/chrome, dist/firefox e dist/userscript/vcc.user.js
-npm run check          # sintaxe, manifests, traduções e userscript em dia com o código
+npm run check          # sintaxe, manifests, traduções, contraste dos temas e userscript em dia
 npm run package        # build + zips em releases/vcc-<navegador>-<versão>.zip
 npm run lint:firefox   # verificador oficial da Mozilla (web-ext) sobre dist/firefox
 npm run release        # tudo acima em sequência
@@ -225,8 +283,14 @@ Para testar mudanças, rode `npm run build` e recarregue a extensão (no Firefox
   `t('ks.copyTo', { domain })`). Para textos com partes em negrito, use `tStrong()`. No menu do
   ícone, use o atributo `data-i18n="chave"` no HTML. O `npm run check` falha se um idioma tiver
   chaves que o outro não tem ou se o código usar uma chave inexistente.
-- O idioma atual está em `lang` e a preferência em `langPref`; `applyLanguage()` reconstrói a barra e
-  o painel quando ele muda.
+- **Cores só por variáveis de tema.** Use `var(--vcc-text)`, `var(--vcc-surface)` etc. (lista em
+  `THEMES`, `src/core/shared.js`), nunca cores fixas; assim os dois temas continuam legíveis.
+- `IS_EXTENSION` (em `vcc.js`) decide entre o painel enxuto (extensão) e o completo (Tampermonkey).
+- Na extensão, mudanças salvas pela página de configurações, pelo menu ou por outra aba chegam por
+  `storage.onChanged` e são aplicadas por `reloadFromStorage()`, que reconstrói a barra e o painel
+  (`rebuildBars()`, `rebuildPanel()`) só quando algo mudou.
+- Barras: `bars` guarda cada barra (`video` é `null` na barra única). `positionBar()` cuida da posição
+  livre e da automática; `flashCB()` mostra os avisos rápidos.
 - O menu do ícone conversa com a página por mensagens `VCC_GET_STATUS`, `VCC_OPEN_PANEL`,
   `VCC_TOGGLE_PANEL` e `VCC_SET_SITE_ACTIVE`, tratadas no fim de `src/core/vcc.js`.
 

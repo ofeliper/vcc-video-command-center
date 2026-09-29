@@ -1,61 +1,24 @@
 // Menu do ícone da extensão VCC.
 // Mostra se o VCC tem acesso ao site atual, pede a permissão quando falta,
-// abre o painel de controle (o mesmo do atalho H) na página e troca o idioma.
+// abre o painel (o mesmo do atalho H), troca tema e idioma e abre a página
+// de configurações.
 (function () {
   'use strict';
 
   const api = globalThis.browser || globalThis.chrome;
   const I18N = globalThis.VCC_I18N;
+  const SHARED = globalThis.VCC_SHARED;
   const ALL_SITES = { origins: ['<all_urls>'] };
+  const THEME_KEY = 'vcc_global_theme';
   const $ = id => document.getElementById(id);
 
   let tab = null;
   let siteOrigins = null; // { origins: ['*://host/*'] }
   let langPref = 'auto';
+  let themePref = 'auto';
   let t = I18N.translator(I18N.resolve(langPref));
   let lastActive = null;
   let lastAllSites = null;
-
-  // ── Idioma ──
-  function applyTexts() {
-    document.documentElement.lang = I18N.resolve(langPref);
-    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
-    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel)));
-    if (lastActive !== null) renderActive(lastActive);
-    if (lastAllSites !== null) renderAccessSummary(lastAllSites);
-
-    const select = $('language');
-    const options = ['auto', ...I18N.SUPPORTED].map(code => {
-      const opt = document.createElement('option');
-      opt.value = code;
-      opt.textContent = code === 'auto' ? t('lang.auto', { name: I18N.SHORT_NAMES[I18N.detect()] }) : I18N.LANGUAGE_NAMES[code];
-      if (code !== 'auto') opt.lang = code;
-      return opt;
-    });
-    select.replaceChildren(...options);
-    select.value = langPref;
-  }
-
-  function setLanguagePref(pref) {
-    langPref = I18N.SUPPORTED.includes(pref) ? pref : 'auto';
-    t = I18N.translator(I18N.resolve(langPref));
-    applyTexts();
-  }
-
-  async function loadLanguage() {
-    try {
-      const items = await api.storage.local.get(I18N.STORAGE_KEY);
-      setLanguagePref(items?.[I18N.STORAGE_KEY] ?? 'auto');
-    } catch {
-      setLanguagePref('auto');
-    }
-  }
-
-  // Salvar dispara storage.onChanged: as abas abertas trocam o idioma na hora.
-  $('language').addEventListener('change', e => {
-    setLanguagePref(e.target.value);
-    api.storage.local.set({ [I18N.STORAGE_KEY]: langPref });
-  });
 
   function show(id) {
     for (const s of ['unsupported', 'no-access', 'needs-reload', 'ready']) $(s).hidden = s !== id;
@@ -69,6 +32,72 @@
     }
   }
 
+  // ── Tema ──
+  function applyTheme() {
+    SHARED.applyThemeVars(document.documentElement, SHARED.resolveTheme(themePref));
+  }
+
+  // ── Textos e seletores ──
+  function fillSelect(select, options, value) {
+    select.replaceChildren(...options.map(([code, label, langAttr]) => {
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = label;
+      if (langAttr) opt.lang = langAttr;
+      return opt;
+    }));
+    select.value = value;
+  }
+
+  function applyTexts() {
+    document.documentElement.lang = I18N.resolve(langPref);
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel)));
+    if (lastActive !== null) renderActive(lastActive);
+    if (lastAllSites !== null) renderAccessSummary(lastAllSites);
+
+    fillSelect($('language'), ['auto', ...I18N.SUPPORTED].map(code => [
+      code,
+      code === 'auto' ? t('lang.auto', { name: I18N.SHORT_NAMES[I18N.detect()] }) : I18N.LANGUAGE_NAMES[code],
+      code === 'auto' ? null : code,
+    ]), langPref);
+
+    fillSelect($('theme'), SHARED.THEMES_PREFS.map(p => [
+      p,
+      p === 'auto' ? t('theme.auto', { name: t('theme.' + SHARED.resolveTheme('auto')) }) : t('theme.' + p),
+    ]), themePref);
+
+    $('version').textContent = t('pop.version', { v: api.runtime.getManifest().version });
+  }
+
+  async function loadPrefs() {
+    try {
+      const items = await api.storage.local.get([I18N.STORAGE_KEY, THEME_KEY]);
+      langPref = I18N.SUPPORTED.includes(items?.[I18N.STORAGE_KEY]) ? items[I18N.STORAGE_KEY] : 'auto';
+      themePref = SHARED.THEMES_PREFS.includes(items?.[THEME_KEY]) ? items[THEME_KEY] : 'auto';
+    } catch {}
+    t = I18N.translator(I18N.resolve(langPref));
+    applyTheme();
+    applyTexts();
+  }
+
+  // Salvar dispara storage.onChanged: as abas abertas se atualizam na hora.
+  $('language').addEventListener('change', e => {
+    langPref = e.target.value;
+    t = I18N.translator(I18N.resolve(langPref));
+    applyTexts();
+    api.storage.local.set({ [I18N.STORAGE_KEY]: langPref });
+  });
+
+  $('theme').addEventListener('change', e => {
+    themePref = e.target.value;
+    applyTheme();
+    api.storage.local.set({ [THEME_KEY]: themePref });
+  });
+
+  SHARED.onSystemThemeChange(() => { if (themePref === 'auto') { applyTheme(); applyTexts(); } });
+
+  // ── Estado do site ──
   function renderActive(active) {
     lastActive = active;
     const btn = $('toggle-site');
@@ -81,12 +110,6 @@
     lastAllSites = all;
     $('access-summary').textContent = t(all ? 'pop.accessAll' : 'pop.accessSome');
     $('grant-all-footer').hidden = all;
-  }
-
-  async function renderAccessFooter() {
-    const all = await api.permissions.contains(ALL_SITES);
-    $('access-footer').hidden = false;
-    renderAccessSummary(all);
   }
 
   async function refresh() {
@@ -103,6 +126,8 @@
     $('site').textContent = url.hostname.replace(/^www\./, '');
     siteOrigins = { origins: [`*://${url.hostname}/*`] };
 
+    renderAccessSummary(await api.permissions.contains(ALL_SITES));
+
     const hasAccess = await api.permissions.contains(siteOrigins);
     if (!hasAccess) {
       show('no-access');
@@ -116,7 +141,6 @@
       renderActive(!!status.active);
       show('ready');
     }
-    renderAccessFooter();
   }
 
   // permissions.request precisa ser chamado direto no clique (sem await antes),
@@ -135,11 +159,10 @@
   $('grant-site').addEventListener('click', () => requestAccess(siteOrigins));
   $('grant-all').addEventListener('click', () => requestAccess(ALL_SITES));
   $('grant-all-footer').addEventListener('click', () => {
-    api.permissions.request(ALL_SITES).then(granted => { if (granted) renderAccessFooter(); }, () => {});
+    api.permissions.request(ALL_SITES).then(granted => { if (granted) refresh(); }, () => {});
   });
 
   $('reload').addEventListener('click', () => { api.tabs.reload(tab.id); window.close(); });
-  $('reload-after-off').addEventListener('click', () => { api.tabs.reload(tab.id); window.close(); });
 
   $('open-panel').addEventListener('click', async () => {
     await sendToTab({ type: 'VCC_OPEN_PANEL' });
@@ -151,9 +174,14 @@
     const res = await sendToTab({ type: 'VCC_SET_SITE_ACTIVE', on });
     if (!res?.ok) { show('needs-reload'); return; }
     renderActive(!!res.active);
-    $('reload-hint').hidden = !res.needsReload;
   });
 
+  $('open-settings').addEventListener('click', () => {
+    const r = api.runtime.openOptionsPage();
+    if (r?.then) r.then(() => window.close(), () => {}); else window.close();
+  });
+
+  applyTheme();
   applyTexts();
-  loadLanguage().then(refresh);
+  loadPrefs().then(refresh);
 })();

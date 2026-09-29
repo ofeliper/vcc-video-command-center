@@ -47,24 +47,26 @@
       </div>
       <button id="toggle-site" class="switch" role="switch" aria-checked="false" data-i18n-aria-label="pop.videoControlsAria"><span></span></button>
     </div>
-    <p id="reload-hint" class="help" hidden>
-      <span data-i18n="pop.reloadHint"></span>
-      <button id="reload-after-off" class="link" data-i18n="pop.reloadNow"></button>
-    </p>
   </section>
 
-  <footer id="access-footer" hidden>
-    <span id="access-summary" class="muted small"></span>
-    <button id="grant-all-footer" class="link small" hidden data-i18n="pop.allowAll"></button>
-  </footer>
-
-  <!-- Idioma: sempre visível, com os nomes no próprio idioma -->
-  <div class="lang">
+  <!-- Aparência e idioma: sempre visíveis -->
+  <div class="prefs">
+    <label for="theme"><span aria-hidden="true">◐</span> <span data-i18n="pop.theme"></span></label>
+    <select id="theme"></select>
     <label for="language"><span aria-hidden="true">🌐</span> <span data-i18n="pop.language"></span></label>
     <select id="language"></select>
   </div>
 
+  <button id="open-settings" class="settings"><span aria-hidden="true">⚙</span> <span data-i18n="pop.settings"></span></button>
+
+  <footer>
+    <span id="access-summary" class="muted small"></span>
+    <button id="grant-all-footer" class="link small" hidden data-i18n="pop.allowAll"></button>
+    <span id="version" class="muted small version"></span>
+  </footer>
+
   <script src="../js/i18n.js"></script>
+  <script src="../js/shared.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
