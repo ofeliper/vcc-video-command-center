@@ -144,6 +144,29 @@ https://github.com/ofeliper/vcc-video-command-center
 Encontrou um problema? Abra uma issue no GitHub informando o site e a versão do Firefox. Isso ajuda muito a corrigir mais rápido.
 ```
 
+**English**
+
+```
+Tips and known limitations
+
+• VCC only works on the sites you enable. Click the VCC icon and turn on "Video controls", or press H and use the "Enable VCC" button.
+
+• Some sites have their own shortcuts that use the same keys (for example, M for mute). On enabled sites, VCC's shortcuts take priority. You can change any shortcut on the settings page, even for a single site only.
+
+• On live streams, speeds above 1× only work until you catch up with the live point.
+
+• Some players reset the speed when the video or an ad changes. VCC automatically reapplies your chosen speed, but this may fail on heavily customized players.
+
+• Videos inside iframes from other domains require VCC to also have access to that domain.
+
+• In fullscreen, the control bar doesn't appear yet. Keyboard shortcuts still work.
+
+• VCC is also available as a Tampermonkey script for other browsers:
+https://github.com/ofeliper/vcc-video-command-center
+
+Found a problem? Open an issue on GitHub with the site and your Firefox version. It really helps us fix it faster.
+```
+
 ## Legendas das capturas
 
 **Português** (`screenshots/pt-BR/`)
