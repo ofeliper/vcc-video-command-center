@@ -3,6 +3,35 @@
 Todas as mudanças relevantes do VCC. A versão é a mesma para a extensão (Firefox e Chrome) e para o
 userscript do Tampermonkey.
 
+## [0.10.0] — 2026-10-04
+
+### Adicionado
+- **Barra e painel em tela cheia.** Na maioria dos players eles funcionam como fora dela; quando o
+  próprio `<video>` entra em tela cheia, a barra aparece por cima dele e os atalhos continuam valendo.
+- **Zoom** (100% a 500%, com setas para escolher a parte visível) e **espelhamento** do vídeo.
+- **Contraste e saturação**, ao lado do brilho.
+- **Lembrar a rotação por site** (opcional): os vídeos do site já abrem girados.
+- **Quadro a quadro:** `,` e `.` pausam e andam um quadro por vez (a duração do quadro é medida
+  durante a reprodução).
+- **Passo longo de avanço:** `Shift+Z` / `Shift+X` pulam 60 s (ajustável).
+- **Segurar para acelerar:** enquanto a tecla escolhida estiver pressionada, o vídeo vai a 2×
+  (ajustável); ao soltar, volta à velocidade anterior.
+- **Hora de término** junto do tempo restante ("Termina às 21:40").
+- **Marcadores** por vídeo, com nome, e **loop A→B salvo** como marcador.
+- **Retomar de onde parou**, ligado por site.
+- **Captura do quadro atual** como PNG.
+- **Roda do mouse sobre a barra** muda a velocidade ou o volume (pode ser desligada).
+- **Backup:** exportar e importar todas as configurações em arquivo, na página de configurações e no
+  painel do Tampermonkey (o mesmo formato nos dois).
+- Atalhos novos sem tecla de fábrica: acelerar ao segurar, zoom +/−, espelhar, capturar quadro,
+  adicionar marcador, marcador anterior/próximo. Atalhos com Shift + letra passam a ser aceitos.
+
+### Alterado
+- Uma tecla tratada pelo VCC não chega mais ao site, para não fazer duas coisas ao mesmo tempo.
+- A área de avisos da barra tem largura fixa: os botões não mudam de lugar quando o aviso aparece.
+- O que passar da área do player com rotação ou zoom é recortado.
+- Brilho e inversão de cores são mantidos ao reconstruir o painel.
+
 ## [0.9.0] — 2026-10-04
 
 ### Adicionado

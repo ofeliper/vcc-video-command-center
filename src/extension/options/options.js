@@ -163,6 +163,8 @@
       field(t('bar.perVideo'), auto ? t('bar.perVideoSub') : t('bar.perVideoNeedsAuto'),
         switchEl(G('barLayout') === 'perVideo', v => set({ [gkey('barLayout')]: v ? 'perVideo' : 'single' }), { disabled: !auto, labelledby: 'lbl-pervideo' }),
         { off: !auto, id: 'lbl-pervideo' }),
+      field(t('bar.wheel'), t('bar.wheelSub'),
+        switchEl(!!G('barWheel'), v => set({ [gkey('barWheel')]: v }), { labelledby: 'lbl-barwheel' }), { id: 'lbl-barwheel' }),
       field(t('bh.alertDuration'), t('bh.alertHint'),
         range(G('alertDuration'), 200, 3000, 100, v => `${v}ms`, v => set({ [gkey('alertDuration')]: v }), t('bh.alertDuration'))),
     );
@@ -231,6 +233,7 @@
     return h('section', { class: 'card', id: 'keys' },
       h('h2', null, t('opt.nav.keys')),
       h('p', { class: 'hint' }, t('opt.keysHint')),
+      h('p', { class: 'hint' }, t('opt.keysNoKey')),
       keyList(keys, (action, binding) => set({ [gkey('keys')]: { ...(data[gkey('keys')] || {}), [action]: binding } })),
       h('p', { class: 'hint' }, t('ks.help')),
       h('div', { class: 'row-actions' },
@@ -245,7 +248,28 @@
       field(t('bh.speedStep'), null, [numberInput(G('speedStep'), 0.05, 1, 0.05, v => set({ [gkey('speedStep')]: Math.round(v * 100) / 100 }), t('bh.speedStep')), h('span', { class: 'value' }, '×')]),
       field(t('bh.volumeStep'), null, [numberInput(G('volumeStep'), 1, 25, 1, v => set({ [gkey('volumeStep')]: Math.round(v) }), t('bh.volumeStep')), h('span', { class: 'value' }, '%')]),
       field(t('bh.seekStep'), null, [numberInput(G('seekStep'), 1, 300, 1, v => set({ [gkey('seekStep')]: Math.round(v) }), t('bh.seekStep')), h('span', { class: 'value' }, 's')]),
+      field(t('bh.seekStepLong'), `${globalKeys().seekBackLong || '—'} / ${globalKeys().seekFwdLong || '—'}`,
+        [numberInput(G('seekStepLong'), 5, 3600, 5, v => set({ [gkey('seekStepLong')]: Math.round(v) }), t('bh.seekStepLong')), h('span', { class: 'value' }, 's')]),
+      field(t('bh.holdSpeed'), `${t('key.holdSpeed')}: ${globalKeys().holdSpeed || '—'}`,
+        [numberInput(G('holdSpeed'), SPEED_MIN, SPEED_MAX, 0.25, v => set({ [gkey('holdSpeed')]: Math.round(v * 100) / 100 }), t('bh.holdSpeed')), h('span', { class: 'value' }, '×')]),
     );
+  }
+
+  function videoDataCount(domain) {
+    return {
+      pos: Object.keys(data[skey(domain, 'resumePos')] || {}).length,
+      marks: Object.keys(data[skey(domain, 'marks')] || {}).length,
+    };
+  }
+
+  // Posições e marcadores mudam enquanto um vídeo toca: atualiza só os números.
+  function refreshVideoDataCounts() {
+    document.querySelectorAll('[data-vd-count]').forEach(el => {
+      const c = videoDataCount(el.dataset.vdCount);
+      el.textContent = t('opt.siteVideoDataCount', c);
+      const btn = document.querySelector(`[data-vd-clear="${CSS.escape(el.dataset.vdCount)}"]`);
+      if (btn) btn.disabled = !c.pos && !c.marks;
+    });
   }
 
   function siteCard(domain) {
@@ -268,6 +292,8 @@
     };
 
     const pos = S('cbPos');
+    const rotation = [0, 90, 180, 270].includes(S('rotation')) ? S('rotation') : 'off';
+    const { pos: resumeCount, marks: marksCount } = videoDataCount(domain);
     const details = h('details', { class: 'site', open: openSites.has(domain),
       ontoggle: e => { if (e.target.open) openSites.add(domain); else openSites.delete(domain); } },
       h('summary', null, domain, h('span', { class: 'badge ' + (active ? 'on' : 'off') }, t(active ? 'opt.siteOn' : 'opt.siteOff'))),
@@ -289,6 +315,16 @@
         opacityField('cpOpacity', 20, 'vs.panelOpacity'),
         field(t('opt.siteBarPos'), pos ? `x ${Math.round(pos.x)}, y ${Math.round(pos.y)}` : t('opt.posDefault'),
           h('button', { class: 'btn', disabled: !pos, onclick: () => remove(skey(domain, 'cbPos')) }, t('opt.resetPos'))),
+
+        field(t('opt.siteRotation'), null,
+          segmented([['off', t('opt.rotOff')], [0, '0°'], [90, '90°'], [180, '180°'], [270, '270°']], rotation,
+            v => (v === 'off' ? remove(skey(domain, 'rotation')) : set({ [skey(domain, 'rotation')]: v })), t('opt.siteRotation'))),
+        field(t('opt.siteResume'), t('opt.siteResumeSub'), switchEl(!!S('resume'),
+          on => (on ? set({ [skey(domain, 'resume')]: true }) : remove(skey(domain, 'resume'))), { labelledby: `lbl-res-${safeId}` }), { id: `lbl-res-${safeId}` }),
+        field(t('opt.siteVideoData'), h('span', { 'data-vd-count': domain }, t('opt.siteVideoDataCount', { pos: resumeCount, marks: marksCount })),
+          h('button', { class: 'btn', 'data-vd-clear': domain, disabled: !resumeCount && !marksCount, onclick: () => {
+            if (confirm(t('opt.clearVideoDataConfirm', { domain }))) remove(SHARED.VIDEO_DATA_KEYS.map(n => skey(domain, n)));
+          } }, t('opt.clearVideoData'))),
 
         h('h3', null, t('opt.siteKeys')),
         h('div', { class: 'radio-row', role: 'radiogroup', 'aria-label': t('opt.siteKeys') },
@@ -339,12 +375,40 @@
         h('button', { class: 'btn', onclick: () => navigator.clipboard.writeText(text).then(toast, () => {}) }, t('dt.copyAll')),
         h('button', { class: 'btn danger', onclick: () => { if (confirm(t('dt.deleteConfirm'))) remove(allKeys); } }, t('dt.deleteAll'))),
       pre,
+      h('h3', null, t('dt.backup')),
+      h('p', { class: 'hint' }, t('dt.backupHint')),
+      h('div', { class: 'row-actions' },
+        h('button', { class: 'btn', id: 'export-btn', onclick: exportSettings }, t('dt.export')),
+        h('button', { class: 'btn', id: 'import-btn', onclick: () => document.getElementById('import-file').click() }, t('dt.import')),
+        h('input', { type: 'file', id: 'import-file', accept: '.json,application/json', hidden: true, onchange: e => importSettings(e.target) })),
       h('div', { class: 'danger-zone' },
         h('h3', null, t('dt.resets')),
         h('div', { class: 'row-actions' },
           h('button', { class: 'btn', onclick: () => { if (confirm(t('dt.resetKeysConfirm'))) remove(allKeys.filter(k => k.endsWith('_keys'))); } }, t('dt.resetKeys')),
           h('button', { class: 'btn danger', onclick: () => { if (confirm(t('opt.resetAllConfirm'))) remove(allKeys); } }, t('dt.resetAll')))),
     );
+  }
+
+  // Backup em arquivo (mesmo formato do painel do Tampermonkey).
+  function exportSettings() {
+    const json = JSON.stringify(SHARED.buildExport(data, api.runtime.getManifest().version), null, 2);
+    const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    const a = h('a', { href: url, download: SHARED.exportFileName() });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  }
+
+  async function importSettings(input) {
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+    const result = SHARED.parseImport(await file.text());
+    if (result.error) { alert(t('dt.importInvalid')); return; }
+    if (!confirm(t('dt.importConfirm'))) return;
+    const old = Object.keys(data).filter(k => k.startsWith('vcc_') && !(k in result.data));
+    old.forEach(k => { delete data[k]; });
+    if (old.length) await api.storage.local.remove(old);
+    await set(result.data);
   }
 
   function sectionAbout() {
@@ -409,9 +473,9 @@
       if (!key.startsWith('vcc_')) continue;
       if (JSON.stringify(data[key]) === JSON.stringify(newValue)) continue;
       if (newValue === undefined) delete data[key]; else data[key] = newValue;
-      changed = true;
+      if (!SHARED.VIDEO_DATA_KEYS.some(n => key.endsWith('_' + n))) changed = true;
     }
-    if (changed) render();
+    if (changed) render(); else refreshVideoDataCounts();
   });
 
   SHARED.onSystemThemeChange(() => { if (G('theme') === 'auto') render(); });

@@ -6,6 +6,16 @@ The extension stores settings locally in the user's browser storage, such as pla
 keyboard shortcuts, panel visibility, opacity, and enabled site preferences. These settings
 remain on the user's device and are not sent to the developer or to any third party.
 
+If the user turns on "Resume where you left off" for a site, or adds bookmarks to a video, VCC also
+stores the playback position and the bookmarks locally. Each video is identified by a short,
+non-reversible hash of the page address plus the video duration; the page address itself is not
+stored. This data stays in the browser, can be deleted on the settings page, and is removed when
+the extension is uninstalled.
+
+"Capture frame" saves a single image of the current video frame to the user's device, only when
+the user asks for it. "Export settings" saves a file with the stored settings to the user's device.
+Nothing is uploaded.
+
 VCC does not:
 
 - Track browsing history.

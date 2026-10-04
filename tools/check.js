@@ -73,7 +73,11 @@ for (const file of ['src/core/vcc.js', 'src/extension/popup/popup.js', 'src/exte
   for (const m of text.matchAll(keyPattern)) used.add(m[1]);
 }
 // Chaves montadas dinamicamente: 'key.<ação>' e 'mode.<modo>'.
-for (const id of ['slowDown', 'speedUp', 'resetSpeed', 'toggle2x', 'seekBack', 'seekFwd', 'volumeDown', 'volumeUp', 'toggleMute', 'toggleCB', 'toggleCP', 'rotateLeft', 'rotateRight']) used.add('key.' + id);
+require(path.join(root, 'src', 'core', 'shared.js'));
+for (const id of globalThis.VCC_SHARED.KEY_ACTION_IDS) {
+  used.add('key.' + id);
+  if (!baseKeys.includes('key.' + id)) fail(`i18n: falta o nome do atalho key.${id}`);
+}
 for (const mode of ['visible', 'alerts', 'hidden']) used.add('mode.' + mode);
 for (const theme of ['light', 'dark']) used.add('theme.' + theme);
 for (const a of ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']) used.add('anchor.' + a);

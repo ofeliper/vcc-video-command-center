@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/ofeliper/vcc-video-command-center
-// @version      0.9.0
+// @version      0.10.0
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       ofeliper
 // @homepageURL  https://github.com/ofeliper/vcc-video-command-center
@@ -299,6 +299,90 @@
       'vs.rotateRight': "girar 90° no sentido horário",
       'vs.rotateReset': "normal",
       'flash.rotation': "↻ {deg}°",
+
+      // 0.10.0: zoom, espelho, filtros, quadro a quadro, marcadores, retomada, captura, backup
+      'key.holdSpeed': "Acelerar enquanto a tecla estiver pressionada",
+      'key.seekBackLong': "Retroceder (passo longo)",
+      'key.seekFwdLong': "Avançar (passo longo)",
+      'key.frameBack': "Quadro anterior",
+      'key.frameFwd': "Próximo quadro",
+      'key.zoomIn': "Aumentar o zoom",
+      'key.zoomOut': "Diminuir o zoom",
+      'key.mirror': "Espelhar o vídeo",
+      'key.snapshot': "Capturar o quadro atual (imagem)",
+      'key.markAdd': "Adicionar marcador",
+      'key.markPrev': "Marcador anterior",
+      'key.markNext': "Próximo marcador",
+      'cb.wheelSpeed': "Gire a roda do mouse para mudar a velocidade",
+      'pb.seekBackBy': "retroceder {n} segundos",
+      'pb.seekFwdBy': "avançar {n} segundos",
+      'pb.frameBack': "◀ quadro",
+      'pb.frameFwd': "quadro ▶",
+      'pb.frameHint': "pausa e anda um quadro",
+      'pb.endsAt': "Termina às {clock}",
+      'nv.saveLoop': "salvar loop",
+      'nv.saveLoopHint': "Guarda este trecho nos marcadores do vídeo",
+      'nv.marks': "Marcadores",
+      'nv.marksSub': "Guarde momentos deste vídeo e volte a eles depois. Ficam salvos só neste navegador.",
+      'nv.markAdd': "＋ marcar este momento",
+      'nv.markPrev': "◀ anterior",
+      'nv.markNext': "próximo ▶",
+      'nv.noMarks': "Nenhum marcador neste vídeo.",
+      'nv.marksUnavailable': "Disponível quando o vídeo tem duração conhecida.",
+      'nv.markJump': "Ir para {time}",
+      'nv.markLoop': "Repetir o trecho {time}",
+      'nv.markName': "Nome (opcional)",
+      'nv.markDelete': "Apagar marcador",
+      'nv.resume': "Retomar de onde parou",
+      'nv.resumeSub': "Ao reabrir um vídeo de {domain}, volta ao ponto em que você parou.",
+      'nv.snapshot': "📷 capturar quadro",
+      'nv.snapshotHint': "Salva o quadro atual como imagem PNG",
+      'vs.contrast': "Contraste",
+      'vs.saturation': "Saturação",
+      'vs.rotRemember': "Lembrar a rotação neste site",
+      'vs.rotRememberSub': "Os vídeos de {domain} já abrem com esta rotação.",
+      'vs.zoom': "Zoom",
+      'vs.zoomIn': "aumentar o zoom",
+      'vs.zoomOut': "diminuir o zoom",
+      'vs.zoomReset': "100%",
+      'vs.pan': "Mover a imagem",
+      'vs.panSub': "Escolhe a parte visível quando há zoom.",
+      'vs.panLeft': "ver mais à esquerda",
+      'vs.panUp': "ver mais acima",
+      'vs.panDown': "ver mais abaixo",
+      'vs.panRight': "ver mais à direita",
+      'vs.mirror': "Espelhar",
+      'vs.mirrorSub': "Inverte a imagem na horizontal",
+      'vs.resetImage': "restaurar imagem",
+      'bar.wheel': "Roda do mouse sobre a barra",
+      'bar.wheelSub': "Girar sobre o volume muda o volume; no resto da barra, a velocidade.",
+      'bh.seekStepLong': "Avançar/voltar (passo longo)",
+      'bh.holdSpeed': "Velocidade ao segurar a tecla",
+      'dt.backup': "Backup",
+      'dt.backupHint': "Salve todas as configurações em um arquivo, para guardar ou levar a outro navegador.",
+      'dt.export': "Exportar configurações",
+      'dt.import': "Importar…",
+      'dt.importInvalid': "Arquivo inválido: não é um backup do VCC.",
+      'dt.importConfirm': "Importar substitui TODAS as configurações atuais do VCC pelas do arquivo. Continuar?",
+      'flash.frame': "⏸ {time}",
+      'flash.zoom': "zoom {n}%",
+      'flash.mirrorOn': "⇋ espelhado",
+      'flash.mirrorOff': "⇋ normal",
+      'flash.resumed': "↺ {time}",
+      'flash.noMarks': "sem marcador",
+      'flash.markAdded': "🔖 {time}",
+      'flash.mark': "🔖 {name}",
+      'flash.snapshot': "📷 salvo",
+      'flash.snapshotFail': "📷 bloqueado",
+      'opt.siteRotation': "Rotação lembrada",
+      'opt.rotOff': "não lembrar",
+      'opt.siteResume': "Retomar de onde parou",
+      'opt.siteResumeSub': "Ao reabrir um vídeo deste site, volta ao ponto em que você parou.",
+      'opt.siteVideoData': "Posições e marcadores salvos",
+      'opt.siteVideoDataCount': "Posições salvas: {pos} · vídeos com marcadores: {marks}",
+      'opt.clearVideoData': "Apagar",
+      'opt.clearVideoDataConfirm': "Apagar as posições e os marcadores salvos de {domain}?",
+      'opt.keysNoKey': "Ações com “—” não têm tecla: clique para escolher uma.",
     },
 
     'en-US': {
@@ -556,6 +640,90 @@
       'vs.rotateRight': "rotate 90° clockwise",
       'vs.rotateReset': "reset",
       'flash.rotation': "↻ {deg}°",
+
+      // 0.10.0
+      'key.holdSpeed': "Speed up while the key is held",
+      'key.seekBackLong': "Seek back (long step)",
+      'key.seekFwdLong': "Seek forward (long step)",
+      'key.frameBack': "Previous frame",
+      'key.frameFwd': "Next frame",
+      'key.zoomIn': "Zoom in",
+      'key.zoomOut': "Zoom out",
+      'key.mirror': "Mirror the video",
+      'key.snapshot': "Capture the current frame (image)",
+      'key.markAdd': "Add bookmark",
+      'key.markPrev': "Previous bookmark",
+      'key.markNext': "Next bookmark",
+      'cb.wheelSpeed': "Scroll the mouse wheel to change speed",
+      'pb.seekBackBy': "seek back {n} seconds",
+      'pb.seekFwdBy': "seek forward {n} seconds",
+      'pb.frameBack': "◀ frame",
+      'pb.frameFwd': "frame ▶",
+      'pb.frameHint': "pause and step one frame",
+      'pb.endsAt': "Ends at {clock}",
+      'nv.saveLoop': "save loop",
+      'nv.saveLoopHint': "Keeps this section in the video's bookmarks",
+      'nv.marks': "Bookmarks",
+      'nv.marksSub': "Save moments of this video and come back to them later. Stored only in this browser.",
+      'nv.markAdd': "＋ bookmark this moment",
+      'nv.markPrev': "◀ previous",
+      'nv.markNext': "next ▶",
+      'nv.noMarks': "No bookmarks in this video.",
+      'nv.marksUnavailable': "Available when the video has a known duration.",
+      'nv.markJump': "Go to {time}",
+      'nv.markLoop': "Loop the section {time}",
+      'nv.markName': "Name (optional)",
+      'nv.markDelete': "Delete bookmark",
+      'nv.resume': "Resume where you left off",
+      'nv.resumeSub': "When you reopen a video on {domain}, it goes back to where you stopped.",
+      'nv.snapshot': "📷 capture frame",
+      'nv.snapshotHint': "Saves the current frame as a PNG image",
+      'vs.contrast': "Contrast",
+      'vs.saturation': "Saturation",
+      'vs.rotRemember': "Remember rotation on this site",
+      'vs.rotRememberSub': "Videos on {domain} open with this rotation.",
+      'vs.zoom': "Zoom",
+      'vs.zoomIn': "zoom in",
+      'vs.zoomOut': "zoom out",
+      'vs.zoomReset': "100%",
+      'vs.pan': "Move the image",
+      'vs.panSub': "Picks the visible part when zoomed in.",
+      'vs.panLeft': "see more to the left",
+      'vs.panUp': "see more above",
+      'vs.panDown': "see more below",
+      'vs.panRight': "see more to the right",
+      'vs.mirror': "Mirror",
+      'vs.mirrorSub': "Flips the image horizontally",
+      'vs.resetImage': "reset image",
+      'bar.wheel': "Mouse wheel over the bar",
+      'bar.wheelSub': "Scrolling over the volume changes volume; anywhere else on the bar, speed.",
+      'bh.seekStepLong': "Seek back/forward (long step)",
+      'bh.holdSpeed': "Speed while the key is held",
+      'dt.backup': "Backup",
+      'dt.backupHint': "Save all settings to a file, to keep or to take to another browser.",
+      'dt.export': "Export settings",
+      'dt.import': "Import…",
+      'dt.importInvalid': "Invalid file: not a VCC backup.",
+      'dt.importConfirm': "Importing replaces ALL current VCC settings with the ones in the file. Continue?",
+      'flash.frame': "⏸ {time}",
+      'flash.zoom': "zoom {n}%",
+      'flash.mirrorOn': "⇋ mirrored",
+      'flash.mirrorOff': "⇋ normal",
+      'flash.resumed': "↺ {time}",
+      'flash.noMarks': "no bookmark",
+      'flash.markAdded': "🔖 {time}",
+      'flash.mark': "🔖 {name}",
+      'flash.snapshot': "📷 saved",
+      'flash.snapshotFail': "📷 blocked",
+      'opt.siteRotation': "Remembered rotation",
+      'opt.rotOff': "don't remember",
+      'opt.siteResume': "Resume where you left off",
+      'opt.siteResumeSub': "When you reopen a video on this site, it goes back to where you stopped.",
+      'opt.siteVideoData': "Saved positions and bookmarks",
+      'opt.siteVideoDataCount': "Saved positions: {pos} · videos with bookmarks: {marks}",
+      'opt.clearVideoData': "Delete",
+      'opt.clearVideoDataConfirm': "Delete the saved positions and bookmarks of {domain}?",
+      'opt.keysNoKey': "Actions showing “—” have no key: click to pick one.",
     },
   };
 
@@ -621,6 +789,8 @@
     cpOpacity: 1,             // opacidade padrão do painel (0.2–1)
     alertDuration: 700,       // ms que a barra fica visível no modo "alertas"
     seekStep: 10,             // segundos
+    seekStepLong: 60,         // segundos do passo longo (Shift+Z / Shift+X)
+    holdSpeed: 2,             // velocidade enquanto a tecla de acelerar fica pressionada
     speedStep: 0.1,           // ×
     volumeStep: 5,            // %
     theme: 'auto',            // 'auto' | 'light' | 'dark'
@@ -628,6 +798,7 @@
     barAuto: true,            // posicionar a barra automaticamente dentro do vídeo
     barAnchor: 'top-left',    // canto usado no posicionamento automático
     barLayout: 'single',      // 'single' (vídeo principal) | 'perVideo' (uma por vídeo)
+    barWheel: true,           // roda do mouse sobre a barra muda velocidade/volume
   };
 
   const MODES = ['visible', 'alerts', 'hidden'];
@@ -635,22 +806,42 @@
   const BAR_ANCHORS = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
 
   // Configurações guardadas por site (vcc_<domínio>_<nome>).
-  const SITE_KEYS = ['speed', 'volume', 'lastVolume', 'muted', 'cbOpacity', 'cpOpacity', 'cbPos', 'keys'];
+  //   rotation  — rotação lembrada (0/90/180/270); ausente = não lembrar
+  //   resume    — true quando "retomar de onde parou" está ligado no site
+  //   resumePos — posições por vídeo: { <chave do vídeo>: { t, at } }
+  //   marks     — marcadores por vídeo: { <chave do vídeo>: { at, list: [{ t, b?, n }] } }
+  const SITE_KEYS = ['speed', 'volume', 'lastVolume', 'muted', 'cbOpacity', 'cpOpacity', 'cbPos', 'keys',
+    'rotation', 'resume', 'resumePos', 'marks'];
+  // Dados por vídeo: mudam o tempo todo e não exigem redesenhar as telas.
+  const VIDEO_DATA_KEYS = ['resumePos', 'marks'];
 
+  // null = ação sem tecla de fábrica (atribua na página de configurações).
   const FACTORY_KEYS = {
-    slowDown:   'S',
-    speedUp:    'D',
-    resetSpeed: 'R',
-    toggle2x:   'G',
-    seekBack:   'Z',
-    seekFwd:    'X',
-    volumeDown: 'Q',
-    volumeUp:   'E',
-    toggleMute: 'M',
-    toggleCB:   'V',
-    toggleCP:   'H',
-    rotateLeft:  null,   // sem tecla de fábrica: atribua na página de configurações
-    rotateRight: null,
+    slowDown:     'S',
+    speedUp:      'D',
+    resetSpeed:   'R',
+    toggle2x:     'G',
+    holdSpeed:    null,
+    seekBack:     'Z',
+    seekFwd:      'X',
+    seekBackLong: 'Shift+Z',
+    seekFwdLong:  'Shift+X',
+    frameBack:    ',',
+    frameFwd:     '.',
+    volumeDown:   'Q',
+    volumeUp:     'E',
+    toggleMute:   'M',
+    toggleCB:     'V',
+    toggleCP:     'H',
+    rotateLeft:   null,
+    rotateRight:  null,
+    zoomIn:       null,
+    zoomOut:      null,
+    mirror:       null,
+    snapshot:     null,
+    markAdd:      null,
+    markPrev:     null,
+    markNext:     null,
   };
   const KEY_ACTION_IDS = Object.keys(FACTORY_KEYS);
 
@@ -660,15 +851,33 @@
     'Fn', 'CapsLock', 'NumLock', 'ScrollLock', 'Pause', 'PrintScreen',
   ]);
 
-  // Converte um keydown no formato salvo ("S", "Ctrl+K", "Shift+ArrowUp").
-  // Retorna null para teclas que não podem ser usadas.
+  const isLetter = k => k.length === 1 && k.toLowerCase() !== k.toUpperCase();
+
+  // Converte um keydown no formato salvo ("S", "Shift+Z", "Ctrl+K", "Shift+ArrowUp").
+  // Retorna null para teclas que não podem ser usadas. Em símbolos ("?", ">")
+  // o Shift já faz parte do caractere e não é gravado.
   function bindingFromEvent(e) {
     if (FORBIDDEN_KEYS.has(e.key)) return null;
     let k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
     if (e.ctrlKey) k = 'Ctrl+' + k;
     if (e.altKey) k = 'Alt+' + k;
-    if (e.shiftKey && e.key.length > 1) k = 'Shift+' + k;
+    if (e.shiftKey && (e.key.length > 1 || isLetter(e.key))) k = 'Shift+' + k;
     return k;
+  }
+
+  // O evento de teclado corresponde ao atalho salvo?
+  function matchBinding(e, binding) {
+    if (!binding) return false;
+    const parts = binding.split('+');
+    // "Ctrl++" termina em '+': a tecla é o próprio sinal de mais.
+    const key = binding.endsWith('+') ? '+' : parts[parts.length - 1];
+    const mods = binding.endsWith('+') ? parts.slice(0, -2) : parts.slice(0, -1);
+    const shiftMatters = key.length > 1 || isLetter(key);
+    return (
+      (e.key === key || e.key.toUpperCase() === key.toUpperCase()) &&
+      e.ctrlKey === mods.includes('Ctrl') && e.altKey === mods.includes('Alt') &&
+      (!shiftMatters || e.shiftKey === mods.includes('Shift'))
+    );
   }
 
   function normalizeSite(s) {
@@ -678,6 +887,47 @@
       .replace(/^https?:\/\//, '')
       .replace(/^www\./, '')
       .split('/')[0];
+  }
+
+  // ── Chave de um vídeo ──
+  // Resumo curto (não reversível) do endereço da página, para guardar posição e
+  // marcadores por vídeo sem manter uma lista dos endereços visitados.
+  function hashString(str) {
+    let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+  }
+
+  // ── Exportar / importar configurações ──
+  const EXPORT_FORMAT = 'vcc-settings';
+
+  function buildExport(entries, version) {
+    const data = {};
+    for (const [k, v] of Object.entries(entries)) if (k.startsWith('vcc_')) data[k] = v;
+    return { format: EXPORT_FORMAT, version: version || '', exportedAt: new Date().toISOString(), data };
+  }
+
+  // Lê o texto de um arquivo exportado. Retorna { data } ou { error: true }.
+  function parseImport(text) {
+    try {
+      const obj = JSON.parse(text);
+      if (!obj || obj.format !== EXPORT_FORMAT || !obj.data || typeof obj.data !== 'object' || Array.isArray(obj.data)) return { error: true };
+      const data = {};
+      for (const [k, v] of Object.entries(obj.data)) {
+        if (typeof k === 'string' && /^vcc_[\w.-]+$/.test(k) && v !== undefined && typeof v !== 'function') data[k] = v;
+      }
+      return { data };
+    } catch { return { error: true }; }
+  }
+
+  function exportFileName() {
+    return `vcc-settings-${new Date().toISOString().slice(0, 10)}.json`;
   }
 
   // ── Temas ──
@@ -773,10 +1023,16 @@
     THEMES_PREFS,
     BAR_ANCHORS,
     SITE_KEYS,
+    VIDEO_DATA_KEYS,
     FACTORY_KEYS,
     KEY_ACTION_IDS,
     FORBIDDEN_KEYS,
     bindingFromEvent,
+    matchBinding,
+    hashString,
+    buildExport,
+    parseImport,
+    exportFileName,
     normalizeSite,
     THEMES,
     resolveTheme,
@@ -910,6 +1166,8 @@
     speedHistory:  [],
     alertDuration: DEFAULTS.alertDuration,
     seekStep:      DEFAULTS.seekStep,
+    seekStepLong:  DEFAULTS.seekStepLong,
+    holdSpeed:     DEFAULTS.holdSpeed,
     speedStep:     DEFAULTS.speedStep,
     volume:        1.0,
     lastVolume:    1.0,
@@ -919,6 +1177,10 @@
     barAuto:       DEFAULTS.barAuto,
     barAnchor:     DEFAULTS.barAnchor,
     barLayout:     DEFAULTS.barLayout,
+    barWheel:      DEFAULTS.barWheel,
+    resume:        false,            // retomar de onde parou (por site)
+    siteRotation:  null,             // rotação lembrada no site (null = não lembrar)
+    filter:        { invert: false, brightness: 100, contrast: 100, saturate: 100 },
     videoControlsActive: false,
   };
 
@@ -950,6 +1212,8 @@
     state.cbMode        = oneOf(load(gk('cbMode'), DEFAULTS.cbMode), SHARED.MODES, DEFAULTS.cbMode);
     state.alertDuration = clamp(load(gk('alertDuration'), DEFAULTS.alertDuration), 200, 3000, DEFAULTS.alertDuration);
     state.seekStep      = clamp(load(gk('seekStep'),      DEFAULTS.seekStep), 1, 300, DEFAULTS.seekStep);
+    state.seekStepLong  = clamp(load(gk('seekStepLong'),  DEFAULTS.seekStepLong), 5, 3600, DEFAULTS.seekStepLong);
+    state.holdSpeed     = clamp(load(gk('holdSpeed'),     DEFAULTS.holdSpeed), SPEED_MIN, SPEED_MAX, DEFAULTS.holdSpeed);
     state.speedStep     = clamp(load(gk('speedStep'),     DEFAULTS.speedStep), 0.05, 1, DEFAULTS.speedStep);
     state.volume        = clamp(load(sk('volume'), 1.0), 0, 1, 1.0);
     state.lastVolume    = clamp(load(sk('lastVolume'), state.volume || 1.0), 0.01, 1, 1.0);
@@ -959,6 +1223,9 @@
     state.barAuto       = !!load(gk('barAuto'), DEFAULTS.barAuto);
     state.barAnchor     = oneOf(load(gk('barAnchor'), DEFAULTS.barAnchor), SHARED.BAR_ANCHORS, DEFAULTS.barAnchor);
     state.barLayout     = oneOf(load(gk('barLayout'), DEFAULTS.barLayout), ['single', 'perVideo'], DEFAULTS.barLayout);
+    state.barWheel      = !!load(gk('barWheel'), DEFAULTS.barWheel);
+    state.resume        = !!load(sk('resume'), false);
+    state.siteRotation  = oneOf(load(sk('rotation'), null), [0, 90, 180, 270], null);
     langPref            = load(gk('language'), 'auto');
   }
 
@@ -983,18 +1250,7 @@
 
   let KEYS = loadKeys(domain);
 
-  function matchKey(e, binding) {
-    if (!binding) return false;
-    const parts = binding.split('+');
-    const key   = parts[parts.length - 1];
-    const ctrl  = parts.includes('Ctrl');
-    const alt   = parts.includes('Alt');
-    const shift = parts.includes('Shift');
-    return (
-      (e.key === key || e.key.toUpperCase() === key.toUpperCase()) &&
-      e.ctrlKey === ctrl && e.altKey === alt && e.shiftKey === shift
-    );
-  }
+  const matchKey = SHARED.matchBinding;
 
   // ─────────────────────────────────────────────
   // CONTROLE DE VÍDEO
@@ -1007,7 +1263,9 @@
     return Math.max(SPEED_MIN, Math.min(SPEED_MAX, Math.round(v * 100) / 100));
   }
 
-  const videoSpeed = vid => vid._vccSpeed ?? state.speed;
+  // Vídeos acelerados enquanto a tecla de "segurar para acelerar" está pressionada.
+  let holdVideos = null;
+  const videoSpeed = vid => (holdVideos?.has(vid) ? state.holdSpeed : (vid._vccSpeed ?? state.speed));
 
   function targetVideoList() {
     return [...state.targetVideos].map(i => state.videos[i]).filter(v => v && v.isConnected);
@@ -1106,6 +1364,70 @@
     else { state.prevSpeed = state.speed; setSpeed(2.0); }
   }
 
+  // Segurar a tecla acelera; soltar volta à velocidade anterior (nada é salvo).
+  let holdKey = null;
+  function startHold(e) {
+    if (holdVideos) return;
+    const list = targetVideoList();
+    if (!list.length) return;
+    holdVideos = new Set(list);
+    holdKey = e.key.toUpperCase();
+    list.forEach(vid => { try { vid.playbackRate = state.holdSpeed; } catch {} });
+    updateBarsDisplay(); updateETA();
+    flashCB(`▸▸ ${fmtSpeed(state.holdSpeed)}×`, list);
+  }
+
+  function endHold() {
+    if (!holdVideos) return;
+    const list = [...holdVideos];
+    holdVideos = null; holdKey = null;
+    list.forEach(vid => { try { vid.playbackRate = videoSpeed(vid); } catch {} });
+    updateBarsDisplay(); updateETA();
+    flashCB(bar => barSpeedText(bar), list);
+  }
+
+  // Quadro a quadro: pausa e anda um quadro (duração medida durante a reprodução; sem medida, 1/30 s).
+  function stepFrame(dir) {
+    const list = targetVideoList();
+    if (!list.length) return;
+    list.forEach(vid => {
+      try {
+        if (!vid.paused) vid.pause();
+        const frame = vid._vccFrame || 1 / 30;
+        const dur = isFinite(vid.duration) ? vid.duration : Infinity;
+        vid.currentTime = Math.max(0, Math.min(dur, vid.currentTime + dir * frame));
+      } catch {}
+    });
+    flashCB(bar => t('flash.frame', { time: fmtTimecodeMs((bar.video || state.videos[state.primaryVideo] || list[0]).currentTime) }), list);
+    setTimeout(updateVideoList, 80);
+  }
+
+  // Mede a duração de um quadro pelos quadros realmente exibidos.
+  function measureFrame(vid) {
+    if (vid._vccFrame || vid._vccMeasuring || typeof vid.requestVideoFrameCallback !== 'function') return;
+    vid._vccMeasuring = true;
+    let last = null;
+    const deltas = [];
+    const tick = (_now, meta) => {
+      if (last !== null) {
+        const d = meta.mediaTime - last;
+        if (d > 0.004 && d < 0.2) deltas.push(d);
+      }
+      last = meta.mediaTime;
+      if (deltas.length >= 12) {
+        // Média dos intervalos normais; os maiores são quadros pulados.
+        const min = Math.min(...deltas);
+        const normal = deltas.filter(d => d <= min * 1.5);
+        vid._vccFrame = normal.reduce((a, b) => a + b, 0) / normal.length;
+        vid._vccMeasuring = false;
+        return;
+      }
+      if (vid.paused || vid.ended || !vid.isConnected) { vid._vccMeasuring = false; return; }
+      vid.requestVideoFrameCallback(tick);
+    };
+    try { vid.requestVideoFrameCallback(tick); } catch { vid._vccMeasuring = false; }
+  }
+
   // Ações de uma barra presa a um vídeo: valem só para esse vídeo.
   function setVideoSpeed(vid, v) {
     vid._vccSpeed = clampSpeed(v);
@@ -1161,8 +1483,22 @@
     applyWhenReady();
     vid.addEventListener('loadedmetadata', applyWhenReady);
 
+    // Imagem: filtros em uso e rotação lembrada no site.
+    applyFilterTo(vid);
+    if (state.siteRotation && vid._vccRot === undefined) { vid._vccRot = state.siteRotation; watchView(vid); applyView(vid); }
+
+    // Dados por vídeo: retomar de onde parou e marcadores.
+    const onMeta = () => { tryResume(vid); if (vid === state.videos[state.primaryVideo]) renderMarks(); };
+    vid.addEventListener('loadedmetadata', onMeta);
+    if (vid.readyState >= 1) onMeta();
+    vid.addEventListener('timeupdate', () => saveResume(vid));
+    vid.addEventListener('pause', () => saveResume(vid, true));
+    vid.addEventListener('playing', () => measureFrame(vid));
+    if (!vid.paused) measureFrame(vid);
+
     // Reaplica quando o src muda (troca de mídia, playlists ou próximo item)
     vid.addEventListener('emptied', () => {
+      delete vid._vccFrame; delete vid._vccResumed;
       vid.addEventListener('loadedmetadata', function onMeta() {
         try { vid.playbackRate = videoSpeed(vid); } catch {}
         updateBarsDisplay();
@@ -1217,40 +1553,59 @@
   // ─────────────────────────────────────────────
   // KEYBOARD LISTENER
   // ─────────────────────────────────────────────
+  // Atalho tratado pelo VCC: o site não deve agir sobre a mesma tecla
+  // (ex.: "," e "." no YouTube também andam quadro a quadro).
+  function take(e) { e.preventDefault(); e.stopPropagation(); }
+
   function onKeyDown(e) {
     const tag = document.activeElement?.tagName?.toLowerCase();
     if (['input','textarea','select'].includes(tag) || document.activeElement?.isContentEditable) return;
 
     // O painel está sempre disponível, inclusive em sites ainda não ativados.
-    if (matchKey(e, KEYS.toggleCP)) { e.preventDefault(); toggleCPVisibility(); return; }
+    if (matchKey(e, KEYS.toggleCP)) { take(e); toggleCPVisibility(); return; }
     if (!state.videoControlsActive) return;
 
     // Numerais 1-7 → presets
     if (/^[1-7]$/.test(e.key) && !e.ctrlKey && !e.altKey) {
       const s = SPEED_MAP[e.key];
-      if (s !== undefined) { e.preventDefault(); setSpeed(s); return; }
+      if (s !== undefined) { take(e); setSpeed(s); return; }
     }
 
     // Zero → play/pause do vídeo principal
     if (e.key === '0' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.repeat) {
-      e.preventDefault(); togglePrimaryPlayback(); return;
+      take(e); togglePrimaryPlayback(); return;
     }
 
-    if (matchKey(e, KEYS.slowDown))   { e.preventDefault(); changeSpeed(-state.speedStep); return; }
-    if (matchKey(e, KEYS.speedUp))    { e.preventDefault(); changeSpeed(+state.speedStep); return; }
-    if (matchKey(e, KEYS.resetSpeed)) { e.preventDefault(); resetSpeed();                  return; }
-    if (matchKey(e, KEYS.toggle2x))   { e.preventDefault(); toggle2x();                    return; }
-    if (matchKey(e, KEYS.seekBack))   { e.preventDefault(); applySeek(-state.seekStep);    return; }
-    if (matchKey(e, KEYS.seekFwd))    { e.preventDefault(); applySeek(+state.seekStep);    return; }
-    if (matchKey(e, KEYS.volumeDown)) { e.preventDefault(); changeVolume(-state.volumeStep); return; }
-    if (matchKey(e, KEYS.volumeUp))   { e.preventDefault(); changeVolume(+state.volumeStep); return; }
-    if (matchKey(e, KEYS.toggleMute)) { e.preventDefault(); toggleMute();                    return; }
-    if (matchKey(e, KEYS.toggleCB))   { e.preventDefault(); cycleCBMode();                 return; }
-    if (matchKey(e, KEYS.rotateLeft))  { e.preventDefault(); rotateVideos(-90);             return; }
-    if (matchKey(e, KEYS.rotateRight)) { e.preventDefault(); rotateVideos(+90);             return; }
+    if (matchKey(e, KEYS.slowDown))   { take(e); changeSpeed(-state.speedStep); return; }
+    if (matchKey(e, KEYS.speedUp))    { take(e); changeSpeed(+state.speedStep); return; }
+    if (matchKey(e, KEYS.resetSpeed)) { take(e); resetSpeed();                  return; }
+    if (matchKey(e, KEYS.toggle2x))   { take(e); toggle2x();                    return; }
+    if (matchKey(e, KEYS.seekBack))   { take(e); applySeek(-state.seekStep);    return; }
+    if (matchKey(e, KEYS.seekFwd))    { take(e); applySeek(+state.seekStep);    return; }
+    if (matchKey(e, KEYS.volumeDown)) { take(e); changeVolume(-state.volumeStep); return; }
+    if (matchKey(e, KEYS.volumeUp))   { take(e); changeVolume(+state.volumeStep); return; }
+    if (matchKey(e, KEYS.toggleMute)) { take(e); toggleMute();                    return; }
+    if (matchKey(e, KEYS.toggleCB))   { take(e); cycleCBMode();                 return; }
+    if (matchKey(e, KEYS.rotateLeft))  { take(e); rotateVideos(-90);             return; }
+    if (matchKey(e, KEYS.rotateRight)) { take(e); rotateVideos(+90);             return; }
+    if (matchKey(e, KEYS.seekBackLong)) { take(e); applySeek(-state.seekStepLong); return; }
+    if (matchKey(e, KEYS.seekFwdLong))  { take(e); applySeek(+state.seekStepLong); return; }
+    if (matchKey(e, KEYS.frameBack))   { take(e); stepFrame(-1);                 return; }
+    if (matchKey(e, KEYS.frameFwd))    { take(e); stepFrame(+1);                 return; }
+    if (matchKey(e, KEYS.holdSpeed))   { take(e); if (!e.repeat) startHold(e);   return; }
+    if (matchKey(e, KEYS.zoomIn))      { take(e); changeZoom(+ZOOM_STEP);        return; }
+    if (matchKey(e, KEYS.zoomOut))     { take(e); changeZoom(-ZOOM_STEP);        return; }
+    if (matchKey(e, KEYS.mirror))      { take(e); toggleMirror();                return; }
+    if (matchKey(e, KEYS.snapshot))    { take(e); if (!e.repeat) captureFrame(); return; }
+    if (matchKey(e, KEYS.markAdd))     { take(e); if (!e.repeat) addMark();      return; }
+    if (matchKey(e, KEYS.markPrev))    { take(e); jumpMark(-1);                  return; }
+    if (matchKey(e, KEYS.markNext))    { take(e); jumpMark(+1);                  return; }
   }
 
   document.addEventListener('keydown', onKeyDown, true);
+  // Fim do "segurar para acelerar": ao soltar a tecla ou ao sair da janela.
+  document.addEventListener('keyup', e => { if (holdVideos && e.key.toUpperCase() === holdKey) endHold(); }, true);
+  window.addEventListener('blur', endHold);
 
   // ─────────────────────────────────────────────
   // TEMA (claro / escuro / automático)
@@ -1284,7 +1639,8 @@
       .vcc-bar button:hover, .vcc-bar .vcc-bar-label:hover { background: var(--vcc-surface-hover); color: var(--vcc-text); }
       .vcc-bar button:focus-visible { outline: 2px solid var(--vcc-accent); outline-offset: 1px; }
       .vcc-bar button:active { transform: scale(0.92); }
-      .vcc-bar .vcc-bar-speed { min-width: 44px; color: var(--vcc-text); cursor: default; }
+      /* Largura fixa para os avisos ("+10s · 1.75×", "volume 100%") não empurrarem os botões. */
+      .vcc-bar .vcc-bar-speed { min-width: 96px; color: var(--vcc-text); cursor: default; white-space: nowrap; }
       .vcc-bar .vcc-bar-speed:hover { background: none; }
       .vcc-bar .vcc-bar-vol { min-width: 40px; font-size: 11px; }
       .vcc-bar .vcc-bar-grip {
@@ -1309,6 +1665,7 @@
         font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
         font-size: 13px; line-height: 1.4; text-align: left;
         box-sizing: border-box; overflow: hidden;
+        margin: 0; padding: 0; right: auto; bottom: auto; height: auto;
       }
       #vcc-cp * { box-sizing: border-box; }
       #vcc-cp button:focus-visible, #vcc-cp input:focus-visible { outline: 2px solid var(--vcc-accent); outline-offset: 1px; }
@@ -1493,6 +1850,18 @@
       .vcc-site-warning-title { color: var(--vcc-warn); font-size: 13px; font-weight: 700; margin-bottom: 4px; }
       .vcc-site-warning-text { color: var(--vcc-text); font-size: 12px; line-height: 1.5; margin-bottom: 10px; }
 
+      .vcc-mark-row { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid var(--vcc-border); }
+      .vcc-mark-row:last-child { border-bottom: none; }
+      .vcc-mark-time { all: unset; box-sizing: border-box; font: 600 12px 'JetBrains Mono',monospace; color: var(--vcc-accent); background: var(--vcc-accent-soft); border: 1px solid var(--vcc-accent); border-radius: 4px; padding: 3px 7px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+      .vcc-mark-time:hover { filter: brightness(1.1); }
+      .vcc-mark-name { flex: 1; min-width: 0; background: var(--vcc-surface); border: 1px solid var(--vcc-border-strong); border-radius: 6px; color: var(--vcc-text); font: 12px/1.3 inherit; font-family: inherit; padding: 4px 8px; outline: none; }
+      .vcc-mark-name:focus { border-color: var(--vcc-accent); }
+      .vcc-mark-name::placeholder { color: var(--vcc-text-3); }
+      .vcc-pan { display: grid; grid-template-columns: repeat(4, 30px); gap: 4px; }
+      .vcc-pan button { all: unset; box-sizing: border-box; height: 28px; background: var(--vcc-surface); border: 1px solid var(--vcc-border); border-radius: 6px; color: var(--vcc-text); font-size: 13px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      .vcc-pan button:hover { background: var(--vcc-surface-hover); }
+      .vcc-pan button:disabled { cursor: not-allowed; }
+
       .vcc-video-feature.vcc-disabled > .vcc-acc-hdr { color: var(--vcc-text-3); }
       .vcc-video-feature.vcc-disabled > .vcc-acc-hdr::after { content: attr(data-inactive); margin-left: auto; margin-right: 10px; color: var(--vcc-warn); font: 11px monospace; }
       .vcc-video-feature.vcc-disabled > .vcc-acc-body { opacity: .45; pointer-events: none; }
@@ -1531,7 +1900,7 @@
       ${state.barAuto ? '' : escapeHTML`<span class="vcc-bar-grip" title="${t('cb.drag')}" aria-hidden="true">⋮⋮</span>`}
       <button data-act="back" title="${keyTitle('seekBack', 'cb.back')}" aria-label="${t('cb.back')}">«</button>
       <button data-act="slow" title="${keyTitle('slowDown', 'cb.slower')}" aria-label="${t('cb.slower')}">−</button>
-      <span class="vcc-bar-label vcc-bar-speed" aria-live="polite">1.0×</span>
+      <span class="vcc-bar-label vcc-bar-speed" aria-live="polite"${state.barWheel ? escapeHTML` title="${t('cb.wheelSpeed')}"` : ''}>1.0×</span>
       <button data-act="fast" title="${keyTitle('speedUp', 'cb.faster')}" aria-label="${t('cb.faster')}">+</button>
       <button data-act="fwd"  title="${keyTitle('seekFwd', 'cb.fwd')}" aria-label="${t('cb.fwd')}">»</button>
       <span class="vcc-bar-div"></span>
@@ -1578,6 +1947,17 @@
     });
     const grip = bar.el.querySelector('.vcc-bar-grip');
     if (grip) makeDraggable(bar.el, grip, (x, y) => savePos(x, y));
+    // Roda do mouse: sobre o volume muda o volume; no resto da barra, a velocidade.
+    bar.el.addEventListener('wheel', e => {
+      if (!state.barWheel || !e.deltaY) return;
+      e.preventDefault(); e.stopPropagation();
+      const up = e.deltaY < 0 ? 1 : -1;
+      const overVolume = !!e.target.closest?.('[data-act="vdown"], [data-act="mute"], [data-act="vup"]');
+      if (overVolume) onBarAction(bar, up > 0 ? 'vup' : 'vdown');
+      else onBarAction(bar, up > 0 ? 'fast' : 'slow');
+    }, { passive: false });
+    shieldFromPage(bar.el);
+    placeInPage(bar.el);
 
     bars.push(bar);
     updateBarDisplay(bar);
@@ -1697,9 +2077,69 @@
     bars.filter(b => !targets.includes(b)).forEach(updateBarDisplay);
   }
 
+  // ── Tela cheia ──
+  // Em tela cheia o navegador só desenha (e só deixa clicar) o que está dentro
+  // do elemento em tela cheia. Por isso a barra e o painel são movidos para
+  // dentro dele e voltam para o <html> quando a tela cheia termina.
+  // Quando o elemento em tela cheia é o próprio <video> (ou não aceita filhos
+  // visíveis), eles vão para a "camada superior" como popovers: aparecem por
+  // cima do vídeo, mas em alguns navegadores não recebem cliques — os atalhos
+  // de teclado continuam valendo.
+  const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+
+  function fullscreenHost() {
+    const fs = fullscreenElement();
+    if (!fs || fs.shadowRoot || ['VIDEO', 'IFRAME', 'CANVAS', 'IMG'].includes(fs.tagName)) return null;
+    return fs;
+  }
+
+  function setPopover(el, open, restack = false) {
+    if (typeof el.showPopover !== 'function') return;
+    const isOpen = el.matches(':popover-open');
+    if (open) {
+      if (el.getAttribute('popover') !== 'manual') el.setAttribute('popover', 'manual');
+      // Reabrir coloca o elemento acima do que acabou de entrar em tela cheia.
+      if (isOpen && restack) el.hidePopover();
+      if (!el.matches(':popover-open')) el.showPopover();
+    } else if (el.hasAttribute('popover')) {
+      if (isOpen) el.hidePopover();
+      el.removeAttribute('popover');
+    }
+  }
+
+  // Coloca a barra ou o painel no lugar certo da página (ver acima). Também
+  // recoloca o elemento se o site o tiver removido.
+  function placeInPage(el, restack = false) {
+    if (!el) return;
+    try {
+      const fs = fullscreenElement();
+      const host = fullscreenHost();
+      const parent = host || document.documentElement;
+      if (el.parentNode !== parent) { setPopover(el, false); parent.appendChild(el); }
+      setPopover(el, !!fs && !host, restack);
+    } catch {}
+  }
+
+  // Cliques na barra e no painel não devem chegar ao player (onde um clique
+  // pausa o vídeo e um duplo clique sai da tela cheia).
+  function shieldFromPage(el) {
+    ['click', 'dblclick', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend', 'contextmenu']
+      .forEach(type => el.addEventListener(type, e => e.stopPropagation()));
+  }
+
+  function onFullscreenChange() {
+    bars.forEach(bar => placeInPage(bar.el, true));
+    placeInPage(cpEl, true);
+    positionBars();
+    schedulePosition();
+  }
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
   // ── Posicionamento ──
   function positionBar(bar) {
     const el = bar.el;
+    placeInPage(el);
     if (!state.barAuto) {
       // Posição livre, salva por site e mantida dentro da janela.
       const x = clampToViewport(state.cbPos?.x ?? 12, 60, 'x');
@@ -1784,11 +2224,12 @@
       el.style.setProperty('left', nx + 'px', 'important');
       el.style.setProperty('top', ny + 'px', 'important');
       el.style.setProperty('transform', 'none', 'important');
-    });
+    }, true);
+    // Na captura: a barra e o painel não deixam o mouseup chegar ao documento.
     document.addEventListener('mouseup', () => {
       if (!dragging) return; dragging = false;
       const r = el.getBoundingClientRect(); if (onDrop) onDrop(r.left, r.top);
-    });
+    }, true);
   }
 
   // ─────────────────────────────────────────────
@@ -1823,6 +2264,8 @@
 
     // Mesmo root que a barra: escapa overflow/clip do <body>
     document.documentElement.appendChild(cpEl);
+    shieldFromPage(cpEl);
+    placeInPage(cpEl);
     cpEl.querySelector('#vcc-cp-close').addEventListener('click', toggleCPVisibility);
     cpEl.querySelector('#vcc-open-settings')?.addEventListener('click', openSettingsPage);
     makeDraggable(cpEl, cpEl.querySelector('#vcc-cp-bar'), null);
@@ -1835,6 +2278,7 @@
 
     buildCPContent();
     updateCPSpeed(); updateETA(); buildVideoList(); renderCompatibility();
+    updateImageUI(); renderMarks(); updateLoopStatus();
   }
 
   // Degradês no topo e no pé do painel enquanto houver conteúdo acima ou abaixo.
@@ -1895,6 +2339,7 @@
       </div>
       ${tog('barpervideo', state.barLayout === 'perVideo', t('bar.perVideo'), auto ? t('bar.perVideoSub') : t('bar.perVideoNeedsAuto'), { disabled: !auto })}
       ${auto ? '' : escapeHTML`<p class="vcc-hint">${t('bar.freeHint')}</p>`}
+      ${tog('barwheel', state.barWheel, t('bar.wheel'), t('bar.wheelSub'))}
       ${IS_EXTENSION ? '' : escapeHTML`
         <div class="vcc-slr" style="margin-top:8px">
           <label for="vcc-alert-dur">${t('bh.alertDuration')}</label>
@@ -1931,8 +2376,14 @@
         <p class="vcc-sub-title">${t('pb.presets')}</p>
         <div class="vcc-preset-grid" id="vcc-presets"></div>
         <div class="vcc-abts">
-          <button class="vcc-abt" id="vcc-seek-back">${t('pb.seekBack')}</button>
-          <button class="vcc-abt" id="vcc-seek-fwd">${t('pb.seekFwd')}</button>
+          <button class="vcc-abt" id="vcc-seek-back-long" title="${keyTitle('seekBackLong', 'cb.back')}" aria-label="${t('pb.seekBackBy', { n: state.seekStepLong })}">«« ${state.seekStepLong}s</button>
+          <button class="vcc-abt" id="vcc-seek-back" title="${keyTitle('seekBack', 'cb.back')}">${t('pb.seekBack')}</button>
+          <button class="vcc-abt" id="vcc-seek-fwd" title="${keyTitle('seekFwd', 'cb.fwd')}">${t('pb.seekFwd')}</button>
+          <button class="vcc-abt" id="vcc-seek-fwd-long" title="${keyTitle('seekFwdLong', 'cb.fwd')}" aria-label="${t('pb.seekFwdBy', { n: state.seekStepLong })}">${state.seekStepLong}s »»</button>
+        </div>
+        <div class="vcc-abts">
+          <button class="vcc-abt" id="vcc-frame-back" title="${keyTitle('frameBack', 'pb.frameHint')}">${t('pb.frameBack')}</button>
+          <button class="vcc-abt" id="vcc-frame-fwd" title="${keyTitle('frameFwd', 'pb.frameHint')}">${t('pb.frameFwd')}</button>
         </div>
       `, true, true),
 
@@ -1950,31 +2401,65 @@
           <button class="vcc-abt" id="vcc-loop-a">${t('nv.setA')}</button>
           <button class="vcc-abt" id="vcc-loop-b">${t('nv.setB')}</button>
           <button class="vcc-abt" id="vcc-loop-clear">${t('nv.clear')}</button>
+          <button class="vcc-abt" id="vcc-loop-save" title="${t('nv.saveLoopHint')}" disabled>${t('nv.saveLoop')}</button>
         </div>
         <div class="vcc-loop-status" id="vcc-loop-status">
           <span class="none">${t('nv.noLoop')}</span>
         </div>
-        <div class="vcc-row" style="margin-top:6px">
+        <p class="vcc-sub-title" style="margin-top:12px">${t('nv.marks')}</p>
+        <p class="vcc-hint" style="margin-top:0">${t('nv.marksSub')}</p>
+        <div class="vcc-abts" style="margin-bottom:4px">
+          <button class="vcc-abt" id="vcc-mark-add" title="${keyTitle('markAdd', 'key.markAdd')}">${t('nv.markAdd')}</button>
+          <button class="vcc-abt" id="vcc-mark-prev" title="${keyTitle('markPrev', 'key.markPrev')}">${t('nv.markPrev')}</button>
+          <button class="vcc-abt" id="vcc-mark-next" title="${keyTitle('markNext', 'key.markNext')}">${t('nv.markNext')}</button>
+        </div>
+        <div id="vcc-marks-list"></div>
+        <div style="margin-top:8px">
+          ${tog('resume', state.resume, t('nv.resume'), t('nv.resumeSub', { domain }))}
+        </div>
+        <div class="vcc-row">
           <div class="vcc-row-label">${t('nv.pip')}</div>
           <button class="vcc-abt" id="vcc-pip"${!document.pictureInPictureEnabled ? ' disabled' : ''}>${t(document.pictureInPictureEnabled ? 'nv.pipOn' : 'nv.pipUnavailable')}</button>
         </div>
         <div class="vcc-abts" style="margin-top:2px">
           <button class="vcc-abt" id="vcc-timestamp">${t('nv.timestamp')}</button>
+          <button class="vcc-abt" id="vcc-snapshot" title="${keyTitle('snapshot', 'nv.snapshotHint')}">${t('nv.snapshot')}</button>
         </div>
       `, false, true),
 
       // ── Imagem ──
       acc('vs', '◑', t('sec.visual'), escapeHTML`
-        ${tog('invert', false, t('vs.invert'), t('vs.invertSub'), { videoControl: true })}
-        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label for="vcc-brightness">${t('vs.brightness')}</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
+        ${tog('invert', state.filter.invert, t('vs.invert'), t('vs.invertSub'), { videoControl: true })}
+        ${[['brightness', 'vs.brightness', 10, 200], ['contrast', 'vs.contrast', 50, 200], ['saturate', 'vs.saturation', 0, 200]].map(([name, label, min, max]) => escapeHTML`
+        <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label for="vcc-${name}">${t(label)}</label><input type="range" id="vcc-${name}" data-filter="${name}" min="${min}" max="${max}" value="${state.filter[name]}" step="5"><span class="vcc-slv" id="vcc-${name}-val">${state.filter[name]}%</span></div>`)}
         <div class="vcc-row vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}" style="margin-top:6px">
-          <div><div class="vcc-row-label">${t('vs.rotation')}</div><div class="vcc-row-sub" id="vcc-rot-val">${rotationLabel()}</div></div>
+          <div><div class="vcc-row-label">${t('vs.rotation')}</div><div class="vcc-row-sub" id="vcc-rot-val">0°</div></div>
           <div class="vcc-abts" style="margin-top:0;flex-wrap:nowrap">
             <button class="vcc-abt" id="vcc-rot-left" title="${keyTitle('rotateLeft', 'vs.rotateLeft')}" aria-label="${t('vs.rotateLeft')}">⟲ 90°</button>
             <button class="vcc-abt" id="vcc-rot-right" title="${keyTitle('rotateRight', 'vs.rotateRight')}" aria-label="${t('vs.rotateRight')}">⟳ 90°</button>
             <button class="vcc-abt" id="vcc-rot-reset">${t('vs.rotateReset')}</button>
           </div>
         </div>
+        ${tog('rotremember', state.siteRotation !== null, t('vs.rotRemember'), t('vs.rotRememberSub', { domain }), { videoControl: true })}
+        <div class="vcc-row vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}">
+          <div><div class="vcc-row-label">${t('vs.zoom')}</div><div class="vcc-row-sub" id="vcc-zoom-val">100%</div></div>
+          <div class="vcc-abts" style="margin-top:0;flex-wrap:nowrap">
+            <button class="vcc-abt" id="vcc-zoom-out" title="${keyTitle('zoomOut', 'vs.zoomOut')}" aria-label="${t('vs.zoomOut')}">−</button>
+            <button class="vcc-abt" id="vcc-zoom-in" title="${keyTitle('zoomIn', 'vs.zoomIn')}" aria-label="${t('vs.zoomIn')}">+</button>
+            <button class="vcc-abt" id="vcc-zoom-reset">${t('vs.zoomReset')}</button>
+          </div>
+        </div>
+        <div class="vcc-row vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}" id="vcc-pan-row">
+          <div><div class="vcc-row-label">${t('vs.pan')}</div><div class="vcc-row-sub">${t('vs.panSub')}</div></div>
+          <div class="vcc-pan" role="group" aria-label="${t('vs.pan')}">
+            <button data-pan="-1,0" title="${t('vs.panLeft')}" aria-label="${t('vs.panLeft')}">←</button>
+            <button data-pan="0,-1" title="${t('vs.panUp')}" aria-label="${t('vs.panUp')}">↑</button>
+            <button data-pan="0,1" title="${t('vs.panDown')}" aria-label="${t('vs.panDown')}">↓</button>
+            <button data-pan="1,0" title="${t('vs.panRight')}" aria-label="${t('vs.panRight')}">→</button>
+          </div>
+        </div>
+        ${tog('mirror', false, t('vs.mirror'), t('vs.mirrorSub'), { videoControl: true })}
+        <div class="vcc-abts vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><button class="vcc-abt" id="vcc-image-reset">${t('vs.resetImage')}</button></div>
         <p class="vcc-sub-title" style="margin-top:10px">${t('vs.opacity')}</p>
         <div class="vcc-slr"><label for="vcc-cb-op">${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
         <div class="vcc-slr"><label for="vcc-cp-op">${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
@@ -2063,6 +2548,16 @@
           <input type="number" id="vcc-seek-step" class="vcc-num-in" min="1" max="300" step="1" value="${state.seekStep}">
           <span class="vcc-slv" style="min-width:0">s</span>
         </div>
+        <div class="vcc-slr">
+          <label for="vcc-seek-step-long">${t('bh.seekStepLong')}</label>
+          <input type="number" id="vcc-seek-step-long" class="vcc-num-in" min="5" max="3600" step="5" value="${state.seekStepLong}">
+          <span class="vcc-slv" style="min-width:0">s</span>
+        </div>
+        <div class="vcc-slr">
+          <label for="vcc-hold-speed">${t('bh.holdSpeed')}</label>
+          <input type="number" id="vcc-hold-speed" class="vcc-num-in" min="${SPEED_MIN}" max="${SPEED_MAX}" step="0.25" value="${state.holdSpeed}">
+          <span class="vcc-slv" style="min-width:0">×</span>
+        </div>
       `),
 
       // ── Sites ativos ──
@@ -2079,6 +2574,12 @@
           <button class="vcc-abt" id="vcc-refresh-storage">${t('dt.refresh')}</button>
           <button class="vcc-abt" id="vcc-copy-all-storage">${t('dt.copyAll')}</button>
           <button class="vcc-abt danger" id="vcc-clear-storage">${t('dt.deleteAll')}</button>
+        </div>
+        <p class="vcc-sub-title">${t('dt.backup')}</p>
+        <p class="vcc-hint" style="margin-top:0">${t('dt.backupHint')}</p>
+        <div class="vcc-abts" style="margin-bottom:12px">
+          <button class="vcc-abt" id="vcc-export">${t('dt.export')}</button>
+          <button class="vcc-abt" id="vcc-import">${t('dt.import')}</button>
         </div>
         <div class="vcc-danger-zone">
           <div class="vcc-danger-title">${t('dt.resets')}</div>
@@ -2185,6 +2686,10 @@
     });
     q('#vcc-seek-back').addEventListener('click', () => applySeek(-state.seekStep));
     q('#vcc-seek-fwd' ).addEventListener('click', () => applySeek(+state.seekStep));
+    q('#vcc-seek-back-long').addEventListener('click', () => applySeek(-state.seekStepLong));
+    q('#vcc-seek-fwd-long' ).addEventListener('click', () => applySeek(+state.seekStepLong));
+    q('#vcc-frame-back').addEventListener('click', () => stepFrame(-1));
+    q('#vcc-frame-fwd' ).addEventListener('click', () => stepFrame(+1));
 
     // Áudio
     q('#vcc-volume-down').addEventListener('click', () => changeVolume(-state.volumeStep));
@@ -2199,15 +2704,34 @@
     const pipBtn = q('#vcc-pip');
     if (pipBtn && !pipBtn.disabled) pipBtn.addEventListener('click', activatePiP);
     q('#vcc-timestamp' ).addEventListener('click', copyTimestamp);
+    q('#vcc-snapshot').addEventListener('click', captureFrame);
+    q('#vcc-loop-save').addEventListener('click', () => {
+      if (loopA === null || loopB === null) return;
+      addMark({ a: Math.min(loopA, loopB), b: Math.max(loopA, loopB) });
+    });
+    q('#vcc-mark-add').addEventListener('click', () => addMark());
+    q('#vcc-mark-prev').addEventListener('click', () => jumpMark(-1));
+    q('#vcc-mark-next').addEventListener('click', () => jumpMark(+1));
+    bindTog('resume', setResume);
 
     // Imagem
-    bindTog('invert', () => applyVideoFilter());
+    bindTog('invert', on => setFilter('invert', on));
+    cpEl.querySelectorAll('input[data-filter]').forEach(input => input.addEventListener('input', () => {
+      q(`#vcc-${input.dataset.filter}-val`).textContent = input.value + '%';
+      setFilter(input.dataset.filter, parseInt(input.value));
+    }));
     q('#vcc-rot-left').addEventListener('click', () => rotateVideos(-90));
     q('#vcc-rot-right').addEventListener('click', () => rotateVideos(+90));
     q('#vcc-rot-reset').addEventListener('click', () => rotateVideos(0));
-    q('#vcc-brightness').addEventListener('input', e => {
-      q('#vcc-brightness-val').textContent = e.target.value + '%'; applyVideoFilter();
-    });
+    bindTog('rotremember', setRotationRemember);
+    q('#vcc-zoom-out').addEventListener('click', () => changeZoom(-ZOOM_STEP));
+    q('#vcc-zoom-in').addEventListener('click', () => changeZoom(+ZOOM_STEP));
+    q('#vcc-zoom-reset').addEventListener('click', () => changeZoom(0));
+    cpEl.querySelectorAll('#vcc-pan-row button').forEach(b => b.addEventListener('click', () => {
+      const [dx, dy] = b.dataset.pan.split(',').map(Number); panView(dx, dy);
+    }));
+    bindTog('mirror', on => toggleMirror(on));
+    q('#vcc-image-reset').addEventListener('click', resetImage);
     q('#vcc-cb-op')?.addEventListener('input', e => {
       setOpacity('cbOpacity', parseInt(e.target.value) / 100);
       bars.forEach(bar => bar.el.style.setProperty('opacity', state.cbOpacity, 'important'));
@@ -2223,6 +2747,7 @@
     cpEl.querySelectorAll('#vcc-bar-mode button').forEach(b => b.addEventListener('click', () => setBarMode(b.dataset.value)));
     bindTog('barauto', on => setBarOption('barAuto', on));
     bindTog('barpervideo', on => setBarOption('barLayout', on ? 'perVideo' : 'single'));
+    bindTog('barwheel', on => setBarOption('barWheel', on));
     cpEl.querySelectorAll('#vcc-bar-anchor button').forEach(b => b.addEventListener('click', () => setBarOption('barAnchor', b.dataset.anchor)));
     q('#vcc-alert-dur')?.addEventListener('input', e => {
       state.alertDuration = parseInt(e.target.value);
@@ -2281,6 +2806,16 @@
       if (!isNaN(v) && v >= 1 && v <= 300) { state.seekStep = v; save(gk('seekStep'), state.seekStep); }
       else e.target.value = state.seekStep;
     });
+    q('#vcc-seek-step-long').addEventListener('change', e => {
+      const v = parseInt(e.target.value);
+      if (!isNaN(v) && v >= 5 && v <= 3600) { state.seekStepLong = v; save(gk('seekStepLong'), v); rebuildPanel(); }
+      else e.target.value = state.seekStepLong;
+    });
+    q('#vcc-hold-speed').addEventListener('change', e => {
+      const v = parseFloat(e.target.value);
+      if (!isNaN(v) && v >= SPEED_MIN && v <= SPEED_MAX) { state.holdSpeed = clampSpeed(v); save(gk('holdSpeed'), state.holdSpeed); }
+      else e.target.value = state.holdSpeed;
+    });
     q('#vcc-volume-step').addEventListener('change', e => {
       const v = parseInt(e.target.value);
       if (!isNaN(v) && v >= 1 && v <= 25) { state.volumeStep = v; save(gk('volumeStep'), state.volumeStep); }
@@ -2302,6 +2837,8 @@
       }).join('\n');
       navigator.clipboard.writeText(all).then(() => flashCB(t('flash.copied'), null, true), () => {});
     });
+    q('#vcc-export').addEventListener('click', exportSettings);
+    q('#vcc-import').addEventListener('click', importSettings);
     q('#vcc-clear-storage').addEventListener('click', () => {
       if (!confirm(t('dt.deleteConfirm'))) return;
       getAllVccKeys().forEach(del); refreshStorageList(); alert(t('dt.deleted'));
@@ -2358,7 +2895,12 @@
     }
     const speed = videoSpeed(vid);
     const rem = (vid.duration - vid.currentTime) / speed;
-    setSafeHTML(eta, tStrong('pb.eta', { time: fmtDuration(rem), speed: fmtSpeed(speed) + '×' }));
+    let clock = '';
+    try { clock = new Date(Date.now() + rem * 1000).toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' }); } catch {}
+    setSafeHTML(eta, [
+      ...tStrong('pb.eta', { time: fmtDuration(rem), speed: fmtSpeed(speed) + '×' }),
+      ...(clock ? [escapeHTML`<br>`, ...tStrong('pb.endsAt', { clock })] : []),
+    ]);
   }
 
   // ─────────────────────────────────────────────
@@ -2400,6 +2942,7 @@
         buildVideoList();
         updateETA();
         positionBars();
+        updateImageUI(); renderMarks();
       });
 
       row.querySelector('.vcc-chk').addEventListener('click', e => {
@@ -2414,7 +2957,7 @@
         btn.addEventListener('click', () => {
           switch (btn.dataset.act) {
             case 'primary':
-              state.primaryVideo = i; buildVideoList(); updateETA(); positionBars(); break;
+              state.primaryVideo = i; buildVideoList(); updateETA(); positionBars(); updateImageUI(); renderMarks(); break;
             case 'playpause':
               try { vid.paused ? vid.play() : vid.pause(); } catch {}
               setTimeout(() => { btn.textContent = vid.paused ? '▶' : '⏸'; }, 50); break;
@@ -2656,6 +3199,31 @@
     }));
   }
 
+  // Backup em arquivo (o mesmo formato da página de configurações da extensão).
+  function exportSettings() {
+    const entries = {};
+    getAllVccKeys().forEach(k => { entries[k] = load(k, null); });
+    let version = '';
+    try { version = GM_info?.script?.version || ''; } catch {}
+    const json = JSON.stringify(SHARED.buildExport(entries, version), null, 2);
+    downloadBlob(new Blob([json], { type: 'application/json' }), SHARED.exportFileName());
+  }
+
+  function importSettings() {
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = '.json,application/json';
+    input.addEventListener('change', async () => {
+      const file = input.files?.[0]; if (!file) return;
+      const result = SHARED.parseImport(await file.text());
+      if (result.error) { alert(t('dt.importInvalid')); return; }
+      if (!confirm(t('dt.importConfirm'))) return;
+      getAllVccKeys().forEach(del);
+      Object.entries(result.data).forEach(([k, v]) => save(k, v));
+      location.reload();
+    });
+    input.click();
+  }
+
   // ─────────────────────────────────────────────
   // LOOP A→B
   // ─────────────────────────────────────────────
@@ -2683,6 +3251,8 @@
 
   function updateLoopStatus() {
     const el = cpEl?.querySelector('#vcc-loop-status'); if (!el) return;
+    const saveBtn = cpEl.querySelector('#vcc-loop-save');
+    if (saveBtn) saveBtn.disabled = loopA === null || loopB === null;
     if (loopA === null && loopB === null) {
       setSafeHTML(el, escapeHTML`<span class="none">${t('nv.noLoop')}</span>`); return;
     }
@@ -2707,28 +3277,55 @@
     navigator.clipboard.writeText(`${location.href.split('?')[0]}?t=${secs}`).then(() => flashCB(t('flash.copied'), [vid], true), () => {});
   }
 
-  function applyVideoFilter() {
-    const invert = cpEl?.querySelector('#vcc-tog-invert')?.classList.contains('on') ? 1 : 0;
-    const bright = cpEl?.querySelector('#vcc-brightness')?.value ?? 100;
-    state.videos.forEach(v => { try { v.style.filter = `invert(${invert}) brightness(${bright}%)`; } catch {} });
+  // ─────────────────────────────────────────────
+  // IMAGEM: FILTROS
+  // Brilho, contraste, saturação e inversão valem para todos os vídeos da
+  // página, até recarregar.
+  // ─────────────────────────────────────────────
+  function filterCSS() {
+    const f = state.filter;
+    if (!f.invert && f.brightness === 100 && f.contrast === 100 && f.saturate === 100) return '';
+    return `invert(${f.invert ? 1 : 0}) brightness(${f.brightness}%) contrast(${f.contrast}%) saturate(${f.saturate}%)`;
+  }
+
+  function applyFilterTo(vid) {
+    const css = filterCSS();
+    try {
+      if (css) { vid.style.filter = css; vid._vccFiltered = true; }
+      else if (vid._vccFiltered) { vid.style.filter = ''; vid._vccFiltered = false; }
+    } catch {}
+  }
+
+  function applyVideoFilter() { state.videos.forEach(applyFilterTo); }
+
+  function setFilter(name, value) {
+    state.filter[name] = value;
+    applyVideoFilter();
   }
 
   // ─────────────────────────────────────────────
-  // ROTAÇÃO DO VÍDEO
+  // IMAGEM: ROTAÇÃO, ZOOM E ESPELHAMENTO
   //
-  // Gira os vídeos selecionados em passos de 90° com CSS (transform), sem
-  // mexer no arquivo. A 90°/270° a imagem é reduzida ou ampliada para caber
-  // no mesmo espaço do player. Vale até recarregar a página.
+  // Tudo com CSS (transform) no próprio <video>, sem mexer no arquivo:
+  //   rotação  — passos de 90°; a 90°/270° a imagem é ajustada para caber
+  //   zoom     — de 1× a 5×, com a parte visível movida pelos botões de direção
+  //   espelho  — inverte a imagem na horizontal
+  // O que passar da área original do player é recortado (clip-path), para não
+  // cobrir o resto da página. Vale até recarregar; a rotação pode ser lembrada
+  // por site.
   // ─────────────────────────────────────────────
-  const videoRotation = vid => vid?._vccRot || 0;
+  const ZOOM_MIN = 1, ZOOM_MAX = 5, ZOOM_STEP = 0.25;
+  const VIEW_PROPS = ['transform', 'clip-path'];
 
-  // Medidas para a imagem girada caber na caixa do elemento <video>:
-  // `scale` e, quando a imagem é menor que a caixa (faixas pretas), o recorte
-  // `clip` que esconde as faixas — senão, ampliadas, elas cobririam a página.
+  const videoRotation = vid => vid?._vccRot || 0;
+  const videoZoom = vid => vid?._vccZoom || 1;
+  const hasView = vid => !!(videoRotation(vid) || videoZoom(vid) !== 1 || vid._vccFlip);
+
+  // Escala para a imagem girada a 90°/270° caber na caixa do elemento.
   function rotationFit(vid, deg) {
-    if (deg % 180 === 0) return { scale: 1, clip: '' };
+    if (deg % 180 === 0) return 1;
     const w = vid.clientWidth, h = vid.clientHeight;
-    if (!w || !h) return { scale: 1, clip: '' };
+    if (!w || !h) return 1;
     // Área ocupada pela imagem dentro da caixa (object-fit: contain, o padrão).
     let cw = w, ch = h;
     let fit = 'contain';
@@ -2737,13 +3334,34 @@
       const k = Math.min(w / vid.videoWidth, h / vid.videoHeight);
       cw = vid.videoWidth * k; ch = vid.videoHeight * k;
     }
-    const scale = Math.round(Math.min(w / ch, h / cw) * 10000) / 10000;
-    const insetY = Math.max(0, (h - ch) / 2), insetX = Math.max(0, (w - cw) / 2);
-    const clip = scale > 1 && (insetX > 0.5 || insetY > 0.5) ? `inset(${insetY.toFixed(1)}px ${insetX.toFixed(1)}px)` : '';
-    return { scale, clip };
+    return Math.min(w / ch, h / cw);
   }
 
-  const ROTATION_PROPS = ['transform', 'clip-path'];
+  // Medidas da imagem transformada. O deslocamento (pan) é limitado para a
+  // imagem nunca descolar das bordas do player.
+  function viewGeometry(vid) {
+    const deg = videoRotation(vid), odd = deg % 180 !== 0;
+    const w = vid.clientWidth, h = vid.clientHeight;
+    const S = Math.round(rotationFit(vid, deg) * videoZoom(vid) * 10000) / 10000;
+    const dispW = (odd ? h : w) * S, dispH = (odd ? w : h) * S;
+    const maxX = Math.max(0, (dispW - w) / 2), maxY = Math.max(0, (dispH - h) / 2);
+    const pan = vid._vccPan || { x: 0, y: 0 };
+    const px = Math.round(Math.max(-maxX, Math.min(maxX, pan.x)) * 10) / 10;
+    const py = Math.round(Math.max(-maxY, Math.min(maxY, pan.y)) * 10) / 10;
+    vid._vccPan = { x: px, y: py };
+    return { deg, odd, w, h, S, dispW, dispH, px, py, maxX, maxY };
+  }
+
+  // Recorte que mantém visível só a área original do player, escrito nas
+  // coordenadas do próprio elemento (antes da transformação).
+  function viewClip(g, flip) {
+    const cx = -g.px, cy = -g.py;
+    const [rx, ry] = { 0: [cx, cy], 90: [cy, -cx], 180: [-cx, -cy], 270: [-cy, cx] }[g.deg];
+    const lx = (flip ? -rx : rx) / g.S, ly = ry / g.S;
+    const hw = (g.odd ? g.h : g.w) / (2 * g.S), hh = (g.odd ? g.w : g.h) / (2 * g.S);
+    const insets = [g.h / 2 + ly - hh, g.w / 2 - lx - hw, g.h / 2 - ly - hh, g.w / 2 + lx - hw].map(n => Math.max(0, n));
+    return insets.some(n => n > 0.5) ? `inset(${insets.map(n => n.toFixed(1) + 'px').join(' ')})` : '';
+  }
 
   // Deslocamento entre o ponto de origem das transformações do elemento e o
   // centro dele, para girar sempre em torno do centro (alguns players usam
@@ -2757,80 +3375,333 @@
     return null;
   }
 
-  function applyRotation(vid) {
-    const deg = videoRotation(vid);
+  function applyView(vid) {
     try {
       const st = vid.style;
+      const active = hasView(vid);
       if (!vid._vccBase) {
-        if (!deg) return;
-        // Estilos originais, para devolver ao desfazer a rotação.
+        if (!active) return;
+        // Estilos originais, para devolver ao desfazer.
         const saved = {};
-        ROTATION_PROPS.forEach(p => { saved[p] = [st.getPropertyValue(p), st.getPropertyPriority(p)]; });
+        VIEW_PROPS.forEach(p => { saved[p] = [st.getPropertyValue(p), st.getPropertyPriority(p)]; });
         // Transformação que o site já aplicava (inline ou por CSS) é mantida.
         let own = saved.transform[0];
         if (!own) { const c = getComputedStyle(vid).transform; if (c && c !== 'none') own = c; }
         vid._vccBase = { saved, own: own || '' };
       }
-      if (!deg) {
-        ROTATION_PROPS.forEach(p => {
-          const [value, priority] = vid._vccBase.saved[p];
-          if (value) st.setProperty(p, value, priority); else st.removeProperty(p);
-        });
-        delete vid._vccBase;
+      const restore = p => {
+        const [value, priority] = vid._vccBase.saved[p];
+        if (value) st.setProperty(p, value, priority); else st.removeProperty(p);
+      };
+      if (!active) {
+        VIEW_PROPS.forEach(restore);
+        delete vid._vccBase; delete vid._vccPan;
         return;
       }
-      const { scale, clip } = rotationFit(vid, deg);
+      const g = viewGeometry(vid);
       const off = centerOffset(vid);
-      const spin = `rotate(${deg}deg) scale(${scale})`;
-      const around = off ? `translate(${off[0]}px, ${off[1]}px) ${spin} translate(${-off[0]}px, ${-off[1]}px)` : spin;
+      const parts = [
+        g.px || g.py ? `translate(${g.px}px, ${g.py}px)` : '',
+        g.deg ? `rotate(${g.deg}deg)` : '',
+        `scale(${g.S})`,
+        vid._vccFlip ? 'scaleX(-1)' : '',
+      ].filter(Boolean).join(' ');
+      const around = off ? `translate(${off[0]}px, ${off[1]}px) ${parts} translate(${-off[0]}px, ${-off[1]}px)` : parts;
       st.setProperty('transform', `${vid._vccBase.own} ${around}`.trim(), 'important');
-      if (clip) st.setProperty('clip-path', clip, 'important');
-      else {
-        const [value, priority] = vid._vccBase.saved['clip-path'];
-        if (value) st.setProperty('clip-path', value, priority); else st.removeProperty('clip-path');
-      }
+      const clip = viewClip(g, vid._vccFlip);
+      if (clip) st.setProperty('clip-path', clip, 'important'); else restore('clip-path');
     } catch {}
   }
 
-  // Retângulo do player na janela. Girado a 90°/270°, o elemento ocupa uma
-  // área diferente da original; devolve a área original (onde a imagem cabe),
+  // Recalcula quando o player muda de tamanho ou de vídeo.
+  function watchView(vid) {
+    if (vid._vccViewWatch) return;
+    vid._vccViewWatch = true;
+    vid.addEventListener('loadedmetadata', () => applyView(vid));
+    if (typeof ResizeObserver === 'function') new ResizeObserver(() => { if (hasView(vid)) applyView(vid); }).observe(vid);
+  }
+
+  // Retângulo do player na janela. Com rotação ou zoom, o elemento ocupa uma
+  // área diferente da original; devolve a área original (a parte visível),
   // para a barra continuar dentro do player.
   function videoBox(vid) {
     const r = vid.getBoundingClientRect();
-    if (videoRotation(vid) % 180 === 0 || !vid._vccBase || !r.width || !r.height) return r;
-    const { scale } = rotationFit(vid, videoRotation(vid));
-    const w = r.height / scale, h = r.width / scale;
-    const left = r.left + (r.width - w) / 2, top = r.top + (r.height - h) / 2;
+    if (!vid._vccBase || !hasView(vid) || !r.width || !r.height) return r;
+    const g = viewGeometry(vid);
+    if (!g.dispW) return r;
+    const f = r.width / g.dispW;
+    const w = g.w * f, h = g.h * f;
+    const left = r.left + r.width / 2 - g.px * f - w / 2, top = r.top + r.height / 2 - g.py * f - h / 2;
     return { left, top, width: w, height: h, right: left + w, bottom: top + h };
+  }
+
+  function updateViewAfterChange(list) {
+    list.forEach(vid => { watchView(vid); applyView(vid); });
+    updateImageUI();
+    schedulePosition();
   }
 
   // delta = +90 (horário), -90 (anti-horário) ou 0 (volta ao normal).
   function rotateVideos(delta) {
     const list = targetVideoList();
     if (!list.length) return;
+    list.forEach(vid => { vid._vccRot = delta === 0 ? 0 : (((videoRotation(vid) + delta) % 360) + 360) % 360; });
+    updateViewAfterChange(list);
+    const shown = vid => videoRotation(vid || state.videos[state.primaryVideo] || list[0]);
+    if (state.siteRotation !== null) { state.siteRotation = shown(); save(sk('rotation'), state.siteRotation); }
+    flashCB(bar => t('flash.rotation', { deg: shown(bar.video) }), list);
+  }
+
+  // Lembrar a rotação neste site: os próximos vídeos já abrem girados.
+  function setRotationRemember(on) {
+    if (on) { state.siteRotation = videoRotation(state.videos[state.primaryVideo]); save(sk('rotation'), state.siteRotation); }
+    else { state.siteRotation = null; del(sk('rotation')); }
+  }
+
+  function changeZoom(delta) {
+    const list = targetVideoList();
+    if (!list.length) return;
     list.forEach(vid => {
-      vid._vccRot = delta === 0 ? 0 : (((videoRotation(vid) + delta) % 360) + 360) % 360;
-      applyRotation(vid);
-      // Recalcula a escala quando o player muda de tamanho ou de vídeo.
-      if (!vid._vccRotWatch) {
-        vid._vccRotWatch = true;
-        vid.addEventListener('loadedmetadata', () => applyRotation(vid));
-        if (typeof ResizeObserver === 'function') new ResizeObserver(() => { if (videoRotation(vid)) applyRotation(vid); }).observe(vid);
-      }
+      const z = delta === 0 ? 1 : Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, Math.round((videoZoom(vid) + delta) / ZOOM_STEP) * ZOOM_STEP));
+      vid._vccZoom = z;
+      if (z === 1) vid._vccPan = { x: 0, y: 0 };
     });
-    updateRotationLabel();
+    updateViewAfterChange(list);
+    flashCB(bar => t('flash.zoom', { n: Math.round(videoZoom(bar.video || state.videos[state.primaryVideo] || list[0]) * 100) }), list);
+  }
+
+  // Move a parte visível da imagem ampliada: dx/dy = -1, 0 ou +1.
+  function panView(dx, dy) {
+    const list = targetVideoList().filter(hasView);
+    list.forEach(vid => {
+      const pan = vid._vccPan || { x: 0, y: 0 };
+      // Ver mais à direita = deslocar a imagem para a esquerda.
+      vid._vccPan = { x: pan.x - dx * vid.clientWidth * 0.1, y: pan.y - dy * vid.clientHeight * 0.1 };
+    });
+    updateViewAfterChange(list);
+  }
+
+  function toggleMirror(force) {
+    const list = targetVideoList();
+    if (!list.length) return;
+    const on = typeof force === 'boolean' ? force : !(state.videos[state.primaryVideo] || list[0])._vccFlip;
+    list.forEach(vid => { vid._vccFlip = on; });
+    updateViewAfterChange(list);
+    flashCB(t(on ? 'flash.mirrorOn' : 'flash.mirrorOff'), list);
+  }
+
+  // Volta a imagem ao normal: filtros, rotação, zoom e espelho.
+  function resetImage() {
+    state.filter = { invert: false, brightness: 100, contrast: 100, saturate: 100 };
+    applyVideoFilter();
+    const list = state.videos.filter(v => v.isConnected);
+    list.forEach(vid => { vid._vccRot = 0; vid._vccZoom = 1; vid._vccFlip = false; vid._vccPan = { x: 0, y: 0 }; });
+    if (state.siteRotation !== null) { state.siteRotation = 0; save(sk('rotation'), 0); }
+    list.forEach(applyView);
     schedulePosition();
-    flashCB(bar => t('flash.rotation', { deg: videoRotation(bar.video || state.videos[state.primaryVideo] || list[0]) }), list);
+    rebuildPanel();
   }
 
-  function rotationLabel() {
+  // Atualiza os valores da seção Imagem sem reconstruir o painel.
+  function updateImageUI() {
+    if (!cpEl) return;
     const vid = state.videos[state.primaryVideo];
-    return `${videoRotation(vid)}°`;
+    const set = (id, text) => { const el = cpEl.querySelector(id); if (el) el.textContent = text; };
+    set('#vcc-rot-val', `${videoRotation(vid)}°`);
+    set('#vcc-zoom-val', `${Math.round(videoZoom(vid) * 100)}%`);
+    const mirror = cpEl.querySelector('#vcc-tog-mirror');
+    if (mirror) { mirror.classList.toggle('on', !!vid?._vccFlip); mirror.setAttribute('aria-checked', String(!!vid?._vccFlip)); }
+    const canPan = !!vid && hasView(vid) && (() => { const g = viewGeometry(vid); return g.maxX > 1 || g.maxY > 1; })();
+    cpEl.querySelector('#vcc-pan-row')?.classList.toggle('vcc-off', !canPan);
+    cpEl.querySelectorAll('#vcc-pan-row button').forEach(b => { b.disabled = !canPan; });
   }
 
-  function updateRotationLabel() {
-    const el = cpEl?.querySelector('#vcc-rot-val');
-    if (el) el.textContent = rotationLabel();
+  // ─────────────────────────────────────────────
+  // DADOS POR VÍDEO: RETOMAR DE ONDE PAROU E MARCADORES
+  //
+  // Ficam salvos só neste navegador, por site. Cada vídeo é identificado por
+  // um resumo do endereço da página + a duração, e não pelo endereço em si.
+  // ─────────────────────────────────────────────
+  const RESUME_MIN_DURATION = 60;   // vídeos curtos (anúncios, vinhetas) não entram
+  const RESUME_EDGE = 10;           // segundos ignorados no começo e no fim
+  const MAX_RESUME_ENTRIES = 100, MAX_MARK_VIDEOS = 200, MAX_MARKS = 50;
+
+  function videoKey(vid) {
+    const d = vid?.duration;
+    if (!isFinite(d) || d <= 0) return null;
+    let page = location.href;
+    try {
+      const u = new URL(location.href);
+      u.hash = '';
+      ['t', 'start', 'time_continue'].forEach(p => u.searchParams.delete(p));
+      page = u.origin + u.pathname + u.search;
+    } catch {}
+    return `${SHARED.hashString(page)}.${Math.round(d)}`;
+  }
+
+  // Mantém só as entradas mais recentes.
+  function trimEntries(all, max) {
+    const keys = Object.keys(all);
+    if (keys.length <= max) return all;
+    keys.sort((a, b) => (all[b].at || 0) - (all[a].at || 0)).slice(max).forEach(k => { delete all[k]; });
+    return all;
+  }
+
+  // ── Retomar de onde parou ──
+  function saveResume(vid, force = false) {
+    if (!state.resume || !state.videoControlsActive) return;
+    const dur = vid.duration, pos = vid.currentTime;
+    if (!isFinite(dur) || dur < RESUME_MIN_DURATION) return;
+    if (!force && Math.abs(pos - (vid._vccResumeSaved ?? -99)) < 5) return;
+    const key = videoKey(vid); if (!key) return;
+    vid._vccResumeSaved = pos;
+    const all = load(sk('resumePos'), {});
+    if (pos < RESUME_EDGE || pos > dur - RESUME_EDGE) {
+      if (!(key in all)) return;        // começo ou fim: nada a retomar
+      delete all[key];
+    } else {
+      all[key] = { t: Math.round(pos * 10) / 10, at: Date.now() };
+    }
+    save(sk('resumePos'), trimEntries(all, MAX_RESUME_ENTRIES));
+  }
+
+  function tryResume(vid) {
+    if (!state.resume || !state.videoControlsActive) return;
+    const key = videoKey(vid);
+    if (!key || vid._vccResumed === key) return;
+    vid._vccResumed = key;
+    const entry = load(sk('resumePos'), {})[key];
+    if (!entry || !(entry.t >= RESUME_EDGE)) return;
+    // Só retoma se o vídeo ainda está no começo (o site pode ter retomado por conta própria).
+    if (vid.currentTime > 3 || vid.duration < RESUME_MIN_DURATION) return;
+    try { vid.currentTime = Math.max(0, entry.t - 2); } catch { return; }
+    vid._vccResumeSaved = entry.t;
+    flashCB(t('flash.resumed', { time: fmtTimecode(entry.t) }), [vid]);
+  }
+
+  function setResume(on) {
+    state.resume = on;
+    if (on) { save(sk('resume'), true); state.videos.forEach(v => saveResume(v, true)); }
+    else del(sk('resume'));
+  }
+
+  window.addEventListener('pagehide', () => state.videos.forEach(v => saveResume(v, true)));
+
+  // ── Marcadores ──
+  function loadMarks(key) {
+    const entry = key ? load(sk('marks'), {})[key] : null;
+    return Array.isArray(entry?.list) ? entry.list : [];
+  }
+
+  function saveMarks(key, list) {
+    const all = load(sk('marks'), {});
+    if (list.length) all[key] = { at: Date.now(), list: list.slice().sort((a, b) => a.t - b.t).slice(0, MAX_MARKS) };
+    else delete all[key];
+    if (Object.keys(all).length) save(sk('marks'), trimEntries(all, MAX_MARK_VIDEOS));
+    else del(sk('marks'));
+  }
+
+  // Marca o momento atual; com `range` = { a, b }, salva um trecho (loop).
+  function addMark(range = null) {
+    const vid = state.videos[state.primaryVideo];
+    const key = videoKey(vid);
+    if (!key) { flashCB(t('flash.noMarks'), null, true); return; }
+    const list = loadMarks(key).slice();
+    const round = v => Math.round(v * 10) / 10;
+    const mark = range ? { t: round(range.a), b: round(range.b), n: '' } : { t: round(vid.currentTime), n: '' };
+    if (!list.some(m => Math.abs(m.t - mark.t) < 0.5 && (m.b ?? null) === (mark.b ?? null))) list.push(mark);
+    saveMarks(key, list);
+    renderMarks();
+    flashCB(t('flash.markAdded', { time: fmtTimecode(mark.t) }), [vid], !!range);
+  }
+
+  function goToMark(mark) {
+    const vid = state.videos[state.primaryVideo]; if (!vid) return;
+    if (mark.b != null) { loopA = mark.t; loopB = mark.b; enableLoop(); updateLoopStatus(); }
+    try { vid.currentTime = mark.t; } catch {}
+    const name = mark.n ? (mark.n.length > 20 ? mark.n.slice(0, 19) + '…' : mark.n) : fmtTimecode(mark.t);
+    flashCB(t('flash.mark', { name }), [vid]);
+  }
+
+  // dir = -1 (marcador anterior) ou +1 (próximo).
+  function jumpMark(dir) {
+    const vid = state.videos[state.primaryVideo];
+    const list = loadMarks(videoKey(vid));
+    if (!list.length) { flashCB(t('flash.noMarks')); return; }
+    const now = vid.currentTime;
+    const next = dir > 0 ? list.find(m => m.t > now + 0.5) : [...list].reverse().find(m => m.t < now - 2);
+    if (next) goToMark(next); else flashCB(t('flash.noMarks'));
+  }
+
+  function renderMarks() {
+    const box = cpEl?.querySelector('#vcc-marks-list'); if (!box) return;
+    if (box.contains(document.activeElement) && document.activeElement.matches?.('input')) return;   // não interrompe a digitação
+    const vid = state.videos[state.primaryVideo];
+    const key = videoKey(vid);
+    cpEl.querySelectorAll('#vcc-mark-add, #vcc-mark-prev, #vcc-mark-next').forEach(b => { b.disabled = !key; });
+    if (!key) { setSafeHTML(box, escapeHTML`<p class="vcc-hint">${t('nv.marksUnavailable')}</p>`); return; }
+    const list = loadMarks(key);
+    if (!list.length) { setSafeHTML(box, escapeHTML`<p class="vcc-hint">${t('nv.noMarks')}</p>`); return; }
+    setSafeHTML(box, list.map((m, i) => {
+      const label = m.b != null ? `${fmtTimecode(m.t)} → ${fmtTimecode(m.b)}` : fmtTimecode(m.t);
+      return escapeHTML`<div class="vcc-mark-row">
+        <button class="vcc-mark-time" data-mark="${i}" title="${t(m.b != null ? 'nv.markLoop' : 'nv.markJump', { time: label })}">${m.b != null ? '⟳ ' : ''}${label}</button>
+        <input class="vcc-mark-name" data-mark-name="${i}" type="text" maxlength="60" value="${m.n || ''}" placeholder="${t('nv.markName')}" aria-label="${t('nv.markName')}">
+        <button class="vcc-kbd-clear" data-mark-del="${i}" title="${t('nv.markDelete')}" aria-label="${t('nv.markDelete')}">✕</button>
+      </div>`;
+    }));
+    box.querySelectorAll('[data-mark]').forEach(b => b.addEventListener('click', () => goToMark(list[+b.dataset.mark])));
+    box.querySelectorAll('[data-mark-del]').forEach(b => b.addEventListener('click', () => {
+      saveMarks(key, list.filter((_, i) => i !== +b.dataset.markDel)); renderMarks();
+    }));
+    box.querySelectorAll('[data-mark-name]').forEach(input => {
+      // As teclas digitadas não devem acionar atalhos do site.
+      input.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') input.blur(); });
+      input.addEventListener('change', () => {
+        const next = list.map((m, i) => (i === +input.dataset.markName ? { ...m, n: input.value.trim().slice(0, 60) } : m));
+        saveMarks(key, next);
+      });
+      input.addEventListener('blur', () => setTimeout(renderMarks, 0));
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // CAPTURA DO QUADRO ATUAL
+  // Salva a imagem que está na tela (com rotação e espelho) como PNG. Vídeos
+  // protegidos (DRM) ou servidos de outro domínio sem permissão não podem ser
+  // lidos pelo navegador; nesse caso, só avisa.
+  // ─────────────────────────────────────────────
+  function captureFrame() {
+    const vid = state.videos[state.primaryVideo];
+    const fail = () => flashCB(t('flash.snapshotFail'), vid ? [vid] : null, true);
+    if (!vid || !vid.videoWidth || vid.mediaKeys) return fail();
+    try {
+      const deg = videoRotation(vid), odd = deg % 180 !== 0;
+      const w = vid.videoWidth, h = vid.videoHeight;
+      const canvas = document.createElement('canvas');
+      canvas.width = odd ? h : w; canvas.height = odd ? w : h;
+      const ctx = canvas.getContext('2d');
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(deg * Math.PI / 180);
+      if (vid._vccFlip) ctx.scale(-1, 1);
+      ctx.drawImage(vid, -w / 2, -h / 2, w, h);
+      canvas.toBlob(blob => {
+        if (!blob) return fail();
+        const title = (document.title || domain).replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'video';
+        downloadBlob(blob, `${title}-${fmtTimecode(vid.currentTime).replace(/:/g, '.')}.png`);
+        flashCB(t('flash.snapshot'), [vid], true);
+      }, 'image/png');
+    } catch { fail(); }
+  }
+
+  function downloadBlob(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name; a.style.display = 'none';
+    document.documentElement.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
   }
 
   // ─────────────────────────────────────────────
@@ -2885,11 +3756,12 @@
   function toggleCPVisibility() {
     state.cpVisible = !state.cpVisible;
     if (!cpEl) buildCP();
+    placeInPage(cpEl);
     cpEl.style.setProperty('display', state.cpVisible ? 'flex' : 'none', 'important');
     if (state.cpVisible) {
       updateCPSpeed(); updateETA(); buildVideoList();
       renderCompatibility(); updateStats(); refreshStorageList();
-      updateBarSectionUI(); updateLoopStatus();
+      updateBarSectionUI(); updateLoopStatus(); updateImageUI(); renderMarks();
       requestAnimationFrame(updateScrollCue);
     }
   }
@@ -2914,6 +3786,12 @@
     return h > 0
       ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
       : `${m}:${String(s).padStart(2,'0')}`;
+  }
+
+  // Com milésimos, para o quadro a quadro: "1:23.456".
+  function fmtTimecodeMs(secs) {
+    const whole = Math.floor(secs);
+    return `${fmtTimecode(whole)}.${String(Math.round((secs - whole) * 1000)).padStart(3, '0').slice(0, 3)}`;
   }
 
   // ─────────────────────────────────────────────
@@ -2986,12 +3864,14 @@
       state.cbMode, state.cbOpacity, state.cpOpacity, state.alertDuration, state.seekStep,
       state.speedStep, state.volumeStep, state.themePref, state.barAuto, state.barAnchor,
       state.barLayout, state.cbPos, langPref, KEYS,
+      state.seekStepLong, state.holdSpeed, state.barWheel, state.resume, state.siteRotation,
     ]);
   }
 
   function reloadFromStorage() {
     const before = settingsSnapshot();
     const prevSpeed = state.speed, prevVolume = state.volume, prevMuted = state.muted;
+    const prevRotation = state.siteRotation;
     loadState();
     KEYS = loadKeys(domain);
     lang = I18N.resolve(langPref);
@@ -3006,6 +3886,12 @@
       targetVideoList().forEach(vid => { try { vid.volume = state.volume; vid.muted = state.muted; } catch {} });
       updateBarsDisplay(); updateCPVolume();
     }
+    // Rotação lembrada mudou na página de configurações: aplica aos vídeos abertos.
+    if (state.siteRotation !== prevRotation && state.siteRotation !== null) {
+      const list = state.videos.filter(v => v.isConnected);
+      list.forEach(vid => { vid._vccRot = state.siteRotation; });
+      updateViewAfterChange(list);
+    }
     if (settingsSnapshot() !== before) {
       rebuildBars();
       rebuildPanel();
@@ -3018,7 +3904,11 @@
   if (extensionStorage?.onChanged?.addListener) {
     extensionStorage.onChanged.addListener((changes, area) => {
       if (area !== 'local') return;
-      const relevant = Object.keys(changes).some(k => k.startsWith('vcc_global_') || k.startsWith(`vcc_${domain}_`));
+      // Dados por vídeo (posições, marcadores) mudam o tempo todo e não são configurações.
+      const videoData = SHARED.VIDEO_DATA_KEYS.map(n => sk(n));
+      const keys = Object.keys(changes);
+      if (keys.includes(sk('marks'))) setTimeout(renderMarks, 80);
+      const relevant = keys.some(k => (k.startsWith('vcc_global_') || k.startsWith(`vcc_${domain}_`)) && !videoData.includes(k));
       if (!relevant) return;
       clearTimeout(reloadTimer);
       reloadTimer = setTimeout(() => storageReady.then(reloadFromStorage), 60);

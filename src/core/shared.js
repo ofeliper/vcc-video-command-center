@@ -15,6 +15,8 @@
     cpOpacity: 1,             // opacidade padrão do painel (0.2–1)
     alertDuration: 700,       // ms que a barra fica visível no modo "alertas"
     seekStep: 10,             // segundos
+    seekStepLong: 60,         // segundos do passo longo (Shift+Z / Shift+X)
+    holdSpeed: 2,             // velocidade enquanto a tecla de acelerar fica pressionada
     speedStep: 0.1,           // ×
     volumeStep: 5,            // %
     theme: 'auto',            // 'auto' | 'light' | 'dark'
@@ -22,6 +24,7 @@
     barAuto: true,            // posicionar a barra automaticamente dentro do vídeo
     barAnchor: 'top-left',    // canto usado no posicionamento automático
     barLayout: 'single',      // 'single' (vídeo principal) | 'perVideo' (uma por vídeo)
+    barWheel: true,           // roda do mouse sobre a barra muda velocidade/volume
   };
 
   const MODES = ['visible', 'alerts', 'hidden'];
@@ -29,22 +32,42 @@
   const BAR_ANCHORS = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
 
   // Configurações guardadas por site (vcc_<domínio>_<nome>).
-  const SITE_KEYS = ['speed', 'volume', 'lastVolume', 'muted', 'cbOpacity', 'cpOpacity', 'cbPos', 'keys'];
+  //   rotation  — rotação lembrada (0/90/180/270); ausente = não lembrar
+  //   resume    — true quando "retomar de onde parou" está ligado no site
+  //   resumePos — posições por vídeo: { <chave do vídeo>: { t, at } }
+  //   marks     — marcadores por vídeo: { <chave do vídeo>: { at, list: [{ t, b?, n }] } }
+  const SITE_KEYS = ['speed', 'volume', 'lastVolume', 'muted', 'cbOpacity', 'cpOpacity', 'cbPos', 'keys',
+    'rotation', 'resume', 'resumePos', 'marks'];
+  // Dados por vídeo: mudam o tempo todo e não exigem redesenhar as telas.
+  const VIDEO_DATA_KEYS = ['resumePos', 'marks'];
 
+  // null = ação sem tecla de fábrica (atribua na página de configurações).
   const FACTORY_KEYS = {
-    slowDown:   'S',
-    speedUp:    'D',
-    resetSpeed: 'R',
-    toggle2x:   'G',
-    seekBack:   'Z',
-    seekFwd:    'X',
-    volumeDown: 'Q',
-    volumeUp:   'E',
-    toggleMute: 'M',
-    toggleCB:   'V',
-    toggleCP:   'H',
-    rotateLeft:  null,   // sem tecla de fábrica: atribua na página de configurações
-    rotateRight: null,
+    slowDown:     'S',
+    speedUp:      'D',
+    resetSpeed:   'R',
+    toggle2x:     'G',
+    holdSpeed:    null,
+    seekBack:     'Z',
+    seekFwd:      'X',
+    seekBackLong: 'Shift+Z',
+    seekFwdLong:  'Shift+X',
+    frameBack:    ',',
+    frameFwd:     '.',
+    volumeDown:   'Q',
+    volumeUp:     'E',
+    toggleMute:   'M',
+    toggleCB:     'V',
+    toggleCP:     'H',
+    rotateLeft:   null,
+    rotateRight:  null,
+    zoomIn:       null,
+    zoomOut:      null,
+    mirror:       null,
+    snapshot:     null,
+    markAdd:      null,
+    markPrev:     null,
+    markNext:     null,
   };
   const KEY_ACTION_IDS = Object.keys(FACTORY_KEYS);
 
@@ -54,15 +77,33 @@
     'Fn', 'CapsLock', 'NumLock', 'ScrollLock', 'Pause', 'PrintScreen',
   ]);
 
-  // Converte um keydown no formato salvo ("S", "Ctrl+K", "Shift+ArrowUp").
-  // Retorna null para teclas que não podem ser usadas.
+  const isLetter = k => k.length === 1 && k.toLowerCase() !== k.toUpperCase();
+
+  // Converte um keydown no formato salvo ("S", "Shift+Z", "Ctrl+K", "Shift+ArrowUp").
+  // Retorna null para teclas que não podem ser usadas. Em símbolos ("?", ">")
+  // o Shift já faz parte do caractere e não é gravado.
   function bindingFromEvent(e) {
     if (FORBIDDEN_KEYS.has(e.key)) return null;
     let k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
     if (e.ctrlKey) k = 'Ctrl+' + k;
     if (e.altKey) k = 'Alt+' + k;
-    if (e.shiftKey && e.key.length > 1) k = 'Shift+' + k;
+    if (e.shiftKey && (e.key.length > 1 || isLetter(e.key))) k = 'Shift+' + k;
     return k;
+  }
+
+  // O evento de teclado corresponde ao atalho salvo?
+  function matchBinding(e, binding) {
+    if (!binding) return false;
+    const parts = binding.split('+');
+    // "Ctrl++" termina em '+': a tecla é o próprio sinal de mais.
+    const key = binding.endsWith('+') ? '+' : parts[parts.length - 1];
+    const mods = binding.endsWith('+') ? parts.slice(0, -2) : parts.slice(0, -1);
+    const shiftMatters = key.length > 1 || isLetter(key);
+    return (
+      (e.key === key || e.key.toUpperCase() === key.toUpperCase()) &&
+      e.ctrlKey === mods.includes('Ctrl') && e.altKey === mods.includes('Alt') &&
+      (!shiftMatters || e.shiftKey === mods.includes('Shift'))
+    );
   }
 
   function normalizeSite(s) {
@@ -72,6 +113,47 @@
       .replace(/^https?:\/\//, '')
       .replace(/^www\./, '')
       .split('/')[0];
+  }
+
+  // ── Chave de um vídeo ──
+  // Resumo curto (não reversível) do endereço da página, para guardar posição e
+  // marcadores por vídeo sem manter uma lista dos endereços visitados.
+  function hashString(str) {
+    let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+  }
+
+  // ── Exportar / importar configurações ──
+  const EXPORT_FORMAT = 'vcc-settings';
+
+  function buildExport(entries, version) {
+    const data = {};
+    for (const [k, v] of Object.entries(entries)) if (k.startsWith('vcc_')) data[k] = v;
+    return { format: EXPORT_FORMAT, version: version || '', exportedAt: new Date().toISOString(), data };
+  }
+
+  // Lê o texto de um arquivo exportado. Retorna { data } ou { error: true }.
+  function parseImport(text) {
+    try {
+      const obj = JSON.parse(text);
+      if (!obj || obj.format !== EXPORT_FORMAT || !obj.data || typeof obj.data !== 'object' || Array.isArray(obj.data)) return { error: true };
+      const data = {};
+      for (const [k, v] of Object.entries(obj.data)) {
+        if (typeof k === 'string' && /^vcc_[\w.-]+$/.test(k) && v !== undefined && typeof v !== 'function') data[k] = v;
+      }
+      return { data };
+    } catch { return { error: true }; }
+  }
+
+  function exportFileName() {
+    return `vcc-settings-${new Date().toISOString().slice(0, 10)}.json`;
   }
 
   // ── Temas ──
@@ -167,10 +249,16 @@
     THEMES_PREFS,
     BAR_ANCHORS,
     SITE_KEYS,
+    VIDEO_DATA_KEYS,
     FACTORY_KEYS,
     KEY_ACTION_IDS,
     FORBIDDEN_KEYS,
     bindingFromEvent,
+    matchBinding,
+    hashString,
+    buildExport,
+    parseImport,
+    exportFileName,
     normalizeSite,
     THEMES,
     resolveTheme,

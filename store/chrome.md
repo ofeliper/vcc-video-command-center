@@ -29,24 +29,27 @@ Great for watching lectures faster, replaying a section over and over, or simply
 ⚡ SPEED
 • 0.1× to 16×, with fine steps or 1×–4× presets (keys 1–7)
 • One-key 2× toggle and reset to normal speed
-• Shows how much time is left at the current speed
+• Shows how much time is left at the current speed and when the video will end
 • Session stats: time watched and time saved
 
 ⌨️ KEYBOARD SHORTCUTS
-• Seek, speed, volume and mute without leaving the keyboard
+• Seek, frame-by-frame, speed, volume and mute without leaving the keyboard
+• Hold a key to speed up, release to go back to normal
 • Every shortcut can be remapped — globally or per site
 • Key 0 plays/pauses the main video
 
 🎬 EXTRAS
 • A→B loop to repeat a section
+• Bookmarks: save named moments of a video and come back to them later
+• Resume where you left off, on the sites you choose
 • Picture-in-Picture
-• Copy the current video timestamp
-• Brightness and color inversion for night viewing
-• Rotate the video by 90° (clockwise or counter-clockwise) for sideways recordings
+• Copy the current video timestamp and capture the current frame as an image
+• Brightness, contrast, saturation and color inversion
+• Rotate by 90°, zoom and mirror the video
 • Pages with several videos: pick the main one, control some or all, hide or mute each
-• Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video
+• Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video. Works in fullscreen too
 • Light and dark themes, in English and Portuguese
-• Full settings page, with per-site settings
+• Full settings page, with per-site settings and file backup
 
 🧭 HOW TO USE
 1. Pin VCC to the toolbar (Extensions button → pin icon next to VCC).
@@ -54,10 +57,10 @@ Great for watching lectures faster, replaying a section over and over, or simply
 3. Turn on video controls for that site — done.
 Open the full panel anytime with the H key.
 
-Default shortcuts: S/D speed − / +, R normal speed, G toggle 2×, Z/X back / forward, Q/E volume − / +, M mute, V bar mode, H panel.
+Default shortcuts: S/D speed − / +, R normal speed, G toggle 2×, Z/X back / forward, Shift+Z/X long step, , and . frame by frame, Q/E volume − / +, M mute, V bar mode, H panel.
 
 🔒 PRIVACY
-VCC does not collect, send or share any data. All settings stay in your browser. No ads, no tracking, no remote code.
+VCC does not collect, send or share any data. Settings, bookmarks and video positions stay in your browser. No ads, no tracking, no remote code.
 
 VCC is a personal playback controller. It does not download media, extract streams, remove ads, bypass paywalls or interfere with content protection (DRM).
 
@@ -77,24 +80,27 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 ⚡ VELOCIDADE
 • De 0,1× a 16×, com ajuste fino ou presets de 1× a 4× (teclas 1 a 7)
 • Alternância rápida para 2× e volta à velocidade normal com uma tecla
-• Mostra quanto tempo falta para o vídeo acabar na velocidade atual
+• Mostra quanto tempo falta para o vídeo acabar na velocidade atual e a hora em que ele termina
 • Estatísticas da sessão: tempo assistido e tempo economizado
 
 ⌨️ ATALHOS DE TECLADO
-• Avançar e voltar, velocidade, volume e mudo sem tirar a mão do teclado
+• Avançar e voltar, quadro a quadro, velocidade, volume e mudo sem tirar a mão do teclado
+• Segure uma tecla para acelerar e solte para voltar ao normal
 • Todos os atalhos podem ser trocados — globalmente ou só para um site
 • Tecla 0 para play/pause do vídeo principal
 
 🎬 RECURSOS EXTRAS
 • Loop A→B para repetir um trecho
+• Marcadores: guarde momentos do vídeo, com nome, e volte a eles depois
+• Retomar de onde parou, nos sites que você escolher
 • Picture-in-Picture
-• Copiar o momento atual do vídeo (timestamp)
-• Brilho e inversão de cores para assistir no escuro
-• Girar o vídeo em 90° (horário ou anti-horário), para vídeos gravados de lado
+• Copiar o momento atual do vídeo (timestamp) e capturar o quadro atual como imagem
+• Brilho, contraste, saturação e inversão de cores
+• Girar em 90°, dar zoom e espelhar o vídeo
 • Páginas com vários vídeos: escolha o principal, controle alguns ou todos, oculte ou silencie cada um
-• Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo
+• Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo. Funciona também em tela cheia
 • Tema claro e escuro, em português e inglês
-• Página de configurações completa, com ajustes próprios para cada site
+• Página de configurações completa, com ajustes próprios para cada site e backup em arquivo
 
 🧭 COMO USAR
 1. Fixe o VCC na barra de ferramentas (botão de extensões → alfinete ao lado do VCC).
@@ -102,10 +108,10 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 3. Ative os controles de vídeo naquele site e pronto.
 Você pode abrir o painel completo a qualquer momento com a tecla H.
 
-Atalhos padrão: S/D velocidade − / +, R velocidade normal, G alterna 2×, Z/X voltar / avançar, Q/E volume − / +, M mudo, V modo da barra, H painel.
+Atalhos padrão: S/D velocidade − / +, R velocidade normal, G alterna 2×, Z/X voltar / avançar, Shift+Z/X passo longo, , e . quadro a quadro, Q/E volume − / +, M mudo, V modo da barra, H painel.
 
 🔒 PRIVACIDADE
-O VCC não coleta, não envia e não compartilha nenhum dado. Todas as configurações ficam salvas apenas no seu navegador. Não há anúncios, rastreamento ou código remoto.
+O VCC não coleta, não envia e não compartilha nenhum dado. Configurações, marcadores e posições dos vídeos ficam salvos apenas no seu navegador. Não há anúncios, rastreamento ou código remoto.
 
 O VCC é um controle pessoal de reprodução. Ele não baixa vídeos, não extrai streams, não remove anúncios, não contorna paywalls e não interfere em proteções de conteúdo (DRM).
 
@@ -151,7 +157,7 @@ Ordem das capturas: 1 painel, 2 menu do ícone, 3 atalhos, 4 vários vídeos.
 ### Finalidade única (Single purpose)
 
 ```
-VCC provides personal playback controls (speed, seeking, volume, keyboard shortcuts, A→B loop, Picture-in-Picture) for HTML5 videos on the pages the user chooses.
+VCC provides personal playback controls (speed, seeking, volume, keyboard shortcuts, A→B loop, bookmarks, picture adjustments, Picture-in-Picture) for HTML5 videos on the pages the user chooses.
 ```
 
 ### Justificativa das permissões
@@ -163,7 +169,7 @@ VCC's content script loads a local control panel on web pages so the user can op
 
 **`storage`**
 ```
-Saves the user's preferences locally: playback speed, keyboard shortcuts, volume, panel opacity, interface language and the list of sites where VCC is enabled.
+Saves the user's preferences locally: playback speed, keyboard shortcuts, volume, panel opacity, interface language and the list of sites where VCC is enabled. If the user uses bookmarks or "resume where you left off", it also saves those positions locally, keyed by a hash of the page address (the address itself is not stored).
 ```
 
 **`activeTab`**

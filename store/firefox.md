@@ -37,24 +37,27 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 ⚡ VELOCIDADE
 • De 0,1× a 16×, com ajuste fino ou presets de 1× a 4× (teclas 1 a 7)
 • Alternância rápida para 2× e volta à velocidade normal com uma tecla
-• Mostra quanto tempo falta para o vídeo acabar na velocidade atual
+• Mostra quanto tempo falta para o vídeo acabar na velocidade atual e a hora em que ele termina
 • Estatísticas da sessão: tempo assistido e tempo economizado
 
 ⌨️ ATALHOS DE TECLADO
-• Avançar e voltar, velocidade, volume e mudo sem tirar a mão do teclado
+• Avançar e voltar, quadro a quadro, velocidade, volume e mudo sem tirar a mão do teclado
+• Segure uma tecla para acelerar e solte para voltar ao normal
 • Todos os atalhos podem ser trocados — globalmente ou só para um site
 • Tecla 0 para play/pause do vídeo principal
 
 🎬 RECURSOS EXTRAS
 • Loop A→B para repetir um trecho
+• Marcadores: guarde momentos do vídeo, com nome, e volte a eles depois
+• Retomar de onde parou, nos sites que você escolher
 • Picture-in-Picture
-• Copiar o momento atual do vídeo (timestamp)
-• Brilho e inversão de cores para assistir no escuro
-• Girar o vídeo em 90° (horário ou anti-horário), para vídeos gravados de lado
+• Copiar o momento atual do vídeo (timestamp) e capturar o quadro atual como imagem
+• Brilho, contraste, saturação e inversão de cores
+• Girar em 90°, dar zoom e espelhar o vídeo
 • Páginas com vários vídeos: escolha o principal, controle alguns ou todos, oculte ou silencie cada um
-• Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo
+• Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo. Funciona também em tela cheia
 • Tema claro e escuro, em português e inglês
-• Página de configurações completa, com ajustes próprios para cada site
+• Página de configurações completa, com ajustes próprios para cada site e backup em arquivo
 
 🧭 COMO USAR
 1. Abra uma página com vídeo e clique no ícone do VCC na barra de ferramentas.
@@ -62,10 +65,10 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 3. Ative os controles de vídeo naquele site e pronto.
 Você pode abrir o painel completo a qualquer momento com a tecla H.
 
-Atalhos padrão: S/D velocidade − / +, R velocidade normal, G alterna 2×, Z/X voltar / avançar, Q/E volume − / +, M mudo, V modo da barra, H painel.
+Atalhos padrão: S/D velocidade − / +, R velocidade normal, G alterna 2×, Z/X voltar / avançar, Shift+Z/X passo longo, , e . quadro a quadro, Q/E volume − / +, M mudo, V modo da barra, H painel.
 
 🔒 PRIVACIDADE
-O VCC não coleta, não envia e não compartilha nenhum dado. Todas as configurações ficam salvas apenas no seu navegador. Não há anúncios, rastreamento ou código remoto.
+O VCC não coleta, não envia e não compartilha nenhum dado. Configurações, marcadores e posições dos vídeos ficam salvos apenas no seu navegador. Não há anúncios, rastreamento ou código remoto.
 
 O VCC é um controle pessoal de reprodução. Ele não baixa vídeos, não extrai streams, não remove anúncios, não contorna paywalls e não interfere em proteções de conteúdo (DRM).
 
@@ -85,24 +88,27 @@ Great for watching lectures faster, replaying a section over and over, or simply
 ⚡ SPEED
 • 0.1× to 16×, with fine steps or 1×–4× presets (keys 1–7)
 • One-key 2× toggle and reset to normal speed
-• Shows how much time is left at the current speed
+• Shows how much time is left at the current speed and when the video will end
 • Session stats: time watched and time saved
 
 ⌨️ KEYBOARD SHORTCUTS
-• Seek, speed, volume and mute without leaving the keyboard
+• Seek, frame-by-frame, speed, volume and mute without leaving the keyboard
+• Hold a key to speed up, release to go back to normal
 • Every shortcut can be remapped — globally or per site
 • Key 0 plays/pauses the main video
 
 🎬 EXTRAS
 • A→B loop to repeat a section
+• Bookmarks: save named moments of a video and come back to them later
+• Resume where you left off, on the sites you choose
 • Picture-in-Picture
-• Copy the current video timestamp
-• Brightness and color inversion for night viewing
-• Rotate the video by 90° (clockwise or counter-clockwise) for sideways recordings
+• Copy the current video timestamp and capture the current frame as an image
+• Brightness, contrast, saturation and color inversion
+• Rotate by 90°, zoom and mirror the video
 • Pages with several videos: pick the main one, control some or all, hide or mute each
-• Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video
+• Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video. Works in fullscreen too
 • Light and dark themes, in English and Portuguese
-• Full settings page, with per-site settings
+• Full settings page, with per-site settings and file backup
 
 🧭 HOW TO USE
 1. Open a page with a video and click the VCC icon in the toolbar.
@@ -110,10 +116,10 @@ Great for watching lectures faster, replaying a section over and over, or simply
 3. Turn on video controls for that site — done.
 Open the full panel anytime with the H key.
 
-Default shortcuts: S/D speed − / +, R normal speed, G toggle 2×, Z/X back / forward, Q/E volume − / +, M mute, V bar mode, H panel.
+Default shortcuts: S/D speed − / +, R normal speed, G toggle 2×, Z/X back / forward, Shift+Z/X long step, , and . frame by frame, Q/E volume − / +, M mute, V bar mode, H panel.
 
 🔒 PRIVACY
-VCC does not collect, send or share any data. All settings stay in your browser. No ads, no tracking, no remote code.
+VCC does not collect, send or share any data. Settings, bookmarks and video positions stay in your browser. No ads, no tracking, no remote code.
 
 VCC is a personal playback controller. It does not download media, extract streams, remove ads, bypass paywalls or interfere with content protection (DRM).
 
@@ -138,9 +144,13 @@ Dicas e limitações conhecidas
 
 • Vídeos dentro de iframes de outros domínios dependem de o VCC ter acesso também a esse domínio.
 
-• Em tela cheia, a barra de controle ainda não aparece. Os atalhos continuam funcionando.
+• Em tela cheia, a barra e o painel funcionam na maioria dos players. Quando o próprio vídeo entra em tela cheia (controles nativos do navegador), a barra aparece por cima dele, mas pode não receber cliques; os atalhos continuam funcionando.
 
-• A rotação do vídeo é só visual e vale até recarregar a página. Os atalhos de rotação vêm sem tecla: escolha as suas na página de configurações. No Picture-in-Picture, o vídeo aparece sem a rotação.
+• Rotação, zoom e espelho são só visuais. No Picture-in-Picture, o vídeo aparece sem eles. Várias ações (girar, zoom, espelhar, capturar quadro, marcadores, acelerar ao segurar) vêm sem tecla: escolha as suas na página de configurações.
+
+• A captura de quadro não funciona em vídeos protegidos (DRM) nem em alguns vídeos servidos de outro domínio.
+
+• "Retomar de onde parou" vale para vídeos de 1 minuto ou mais e é ligado por site. Se o próprio site já retoma o vídeo, o VCC não interfere.
 
 • O VCC também existe como script para Tampermonkey, para quem usa outros navegadores:
 https://github.com/ofeliper/vcc-video-command-center
@@ -163,9 +173,13 @@ Tips and known limitations
 
 • Videos inside iframes from other domains require VCC to also have access to that domain.
 
-• In fullscreen, the control bar doesn't appear yet. Keyboard shortcuts still work.
+• In fullscreen, the bar and the panel work on most players. When the video element itself goes fullscreen (the browser's native controls), the bar is shown over it but may not receive clicks; keyboard shortcuts still work.
 
-• Video rotation is visual only and lasts until the page is reloaded. Rotation shortcuts have no default key: pick yours on the settings page. In Picture-in-Picture, the video is shown without the rotation.
+• Rotation, zoom and mirror are visual only. In Picture-in-Picture, the video is shown without them. Several actions (rotate, zoom, mirror, capture frame, bookmarks, hold to speed up) have no default key: pick yours on the settings page.
+
+• Frame capture doesn't work on protected (DRM) videos or on some videos served from another domain.
+
+• "Resume where you left off" applies to videos of 1 minute or longer and is turned on per site. If the site already resumes the video, VCC doesn't interfere.
 
 • VCC is also available as a Tampermonkey script for other browsers:
 https://github.com/ofeliper/vcc-video-command-center
@@ -199,7 +213,8 @@ Found a problem? Open an issue on GitHub with the site and your Firefox version.
 
 - `<all_urls>`: carrega a interface local do VCC nas páginas para que o atalho H e o painel estejam
   disponíveis. A detecção e o controle de vídeos só acontecem nos domínios ativados pelo usuário.
-- `storage`: guarda as preferências localmente.
+- `storage`: guarda localmente as preferências e, se o usuário usar esses recursos, marcadores e
+  posições dos vídeos (identificados por um hash do endereço da página, não pelo endereço).
 - `activeTab`: o menu do ícone lê o endereço da aba atual quando o usuário clica no botão, para
   mostrar o site e se o VCC tem acesso a ele.
 - Coleta de dados: nenhuma (`data_collection_permissions: { required: ["none"] }`).

@@ -1,8 +1,8 @@
 # VCC — Video Command Center
 
 O VCC é um painel de controle para vídeos HTML5 no navegador: velocidade de 0,1× a 16×, atalhos de
-teclado personalizáveis, loop A→B, Picture-in-Picture, volume, brilho e controle de páginas com
-vários vídeos. Funciona no YouTube e na maioria dos sites com vídeo.
+teclado personalizáveis, loop A→B, marcadores, Picture-in-Picture, volume, ajustes de imagem (brilho,
+rotação, zoom) e controle de páginas com vários vídeos. Funciona no YouTube e na maioria dos sites com vídeo.
 
 Está disponível como **extensão para Firefox**, **extensão para Chrome** (e Edge) e **userscript
 para Tampermonkey**, todos gerados a partir do mesmo código, em **português (pt-BR)** e
@@ -31,11 +31,13 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 **Velocidade**
 - De 0,1× a 16×, com passo configurável ou presets de 1× a 4× (teclas 1 a 7).
 - Alternância rápida para 2× e volta à velocidade normal.
-- Tempo restante do vídeo na velocidade atual.
+- Tempo restante do vídeo na velocidade atual e a hora em que ele termina.
+- Segurar uma tecla para acelerar (2× por padrão) e voltar ao normal ao soltar.
 - A velocidade é reaplicada quando o player a reinicia (troca de vídeo, anúncio, play).
 
 **Atalhos de teclado**
-- Avançar/voltar, velocidade, volume, mudo e painel sem tirar a mão do teclado.
+- Avançar/voltar (passo curto e passo longo), quadro a quadro, velocidade, volume, mudo e painel sem
+  tirar a mão do teclado.
 - Todos os atalhos podem ser trocados, globalmente ou só para um site.
 - Tecla 0: play/pause do vídeo principal.
 
@@ -43,16 +45,22 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 - Modos visível, só alertas (padrão: aparece só quando você usa um atalho) e oculta.
 - Posição automática, dentro do vídeo, no canto escolhido (padrão), ou livre, arrastável pela alça ⋮⋮.
 - Uma barra só ou uma barra em cada vídeo, cada uma controlando o próprio vídeo.
+- Roda do mouse sobre a barra muda a velocidade ou o volume.
+- Aparece também em tela cheia.
 
 **Extras**
 - Loop A→B, Picture-in-Picture e cópia do timestamp atual.
-- Brilho e inversão de cores.
-- Rotação do vídeo em passos de 90°, no sentido horário ou anti-horário, para vídeos gravados de lado.
+- Marcadores: guarde momentos (ou trechos em loop) de um vídeo, com nome, e pule entre eles.
+- Retomar de onde parou, por site.
+- Captura do quadro atual como imagem PNG.
+- Brilho, contraste, saturação e inversão de cores.
+- Rotação em passos de 90°, zoom de até 5× (com escolha da parte visível) e espelhamento.
 - Páginas com vários vídeos: escolha o principal, aplique os controles a alguns ou a todos, oculte,
   silencie ou remova cada um.
 - Estatísticas da sessão (tempo assistido, tempo economizado) e verificação de compatibilidade.
 - Tema claro e escuro (ou automático, seguindo o sistema), com contraste de leitura ≥ 4,5:1.
 - Página de configurações completa (extensão), com ajustes por site.
+- Backup das configurações em arquivo (exportar e importar), inclusive entre navegadores.
 
 ## Instalação
 
@@ -93,22 +101,46 @@ A qualquer momento, a tecla **H** abre o painel. Sem ativar o site, ele mostra u
 
 ### Painel (tecla H)
 
-Na extensão, o painel reúne só os controles do vídeo aberto: reprodução, áudio, navegação (loop A→B,
-PiP, timestamp), imagem e opacidade, barra de controle, vídeos na página e sessão. O botão **⚙ Configurações** no
+Na extensão, o painel reúne só os controles do vídeo aberto: reprodução (velocidade, avanço, quadro a
+quadro), áudio, navegação (loop A→B, marcadores, retomada, PiP, timestamp, captura), imagem (filtros,
+rotação, zoom, espelho) e opacidade, barra de controle, vídeos na página e sessão. O botão **⚙ Configurações** no
 rodapé abre a página de configurações. No Tampermonkey, que não tem página de configurações, o painel
 também traz atalhos, preferências (tema, idioma, incrementos), sites ativos e dados salvos.
 
-### Rotação do vídeo
+### Imagem: filtros, rotação, zoom e espelho
 
-Em **Painel → Imagem → Rotação**, os botões **⟲ 90°** e **⟳ 90°** giram o vídeo no sentido anti-horário
-e horário, e **normal** desfaz. Também dá para usar atalhos: eles vêm sem tecla, e você escolhe as suas
-em **configurações → Atalhos**.
+Em **Painel → Imagem**:
 
-- A imagem girada é ajustada para caber no mesmo espaço do player, sem cobrir o resto da página.
-- Vale para os vídeos selecionados (o principal, ou os que você escolher em *Vídeos na página*).
-- A rotação é só visual e dura até recarregar a página; o arquivo do vídeo não muda.
-- Os controles do próprio site continuam no lugar (não giram). No Picture-in-Picture, o navegador
-  mostra o vídeo sem a rotação.
+- **Brilho, contraste, saturação e inversão de cores** valem para todos os vídeos da página.
+- **Rotação:** **⟲ 90°** e **⟳ 90°** giram no sentido anti-horário e horário; **normal** desfaz. A
+  imagem girada é ajustada para caber no mesmo espaço do player. Com **Lembrar a rotação neste
+  site**, os próximos vídeos do site já abrem girados.
+- **Zoom:** de 100% a 500%, em passos de 25%. Com zoom, as setas de **Mover a imagem** escolhem a
+  parte visível. Serve para cortar faixas pretas ou aproximar um detalhe.
+- **Espelhar:** inverte a imagem na horizontal.
+- **restaurar imagem** desfaz tudo de uma vez.
+
+Rotação, zoom e espelho valem para os vídeos selecionados, são só visuais (o arquivo não muda) e, fora
+a rotação lembrada, duram até recarregar a página. O que passar da área do player é recortado, para
+não cobrir o resto da página. Os controles do próprio site não giram, e no Picture-in-Picture o
+navegador mostra o vídeo sem essas mudanças.
+
+### Marcadores, loop salvo e retomada
+
+Em **Painel → Navegação avançada**:
+
+- **Marcadores:** *marcar este momento* guarda o ponto atual do vídeo; dê um nome se quiser. Clique no
+  tempo para voltar a ele, ou use *anterior* / *próximo*. Com um loop A→B ativo, **salvar loop** guarda
+  o trecho; ao clicar nele depois, o loop volta a valer.
+- **Retomar de onde parou:** ligado por site. Ao reabrir um vídeo, ele volta ao ponto em que você
+  parou (vale para vídeos de 1 minuto ou mais; se o próprio site já retomar, o VCC não interfere).
+- **capturar quadro:** salva o quadro atual como PNG, já com a rotação e o espelho. Vídeos protegidos
+  (DRM) e alguns servidos de outro domínio não podem ser lidos pelo navegador; nesses casos aparece o
+  aviso "bloqueado".
+
+Marcadores e posições ficam salvos só no seu navegador, por site. Cada vídeo é identificado por um
+resumo (hash) do endereço da página mais a duração, e não pelo endereço em si. Para apagar:
+**configurações → Sites → Posições e marcadores salvos**.
 
 ### Menu do ícone (extensão)
 
@@ -128,13 +160,21 @@ em **configurações → Atalhos**.
 | R | Voltar para 1× |
 | G | Alternar 2× |
 | Z / X | Voltar / avançar (10 s por padrão) |
+| Shift+Z / Shift+X | Voltar / avançar o passo longo (60 s por padrão) |
+| , / . | Quadro anterior / próximo quadro (pausa o vídeo) |
 | Q / E | Diminuir / aumentar volume |
 | M | Mudo |
 | V | Modo da barra de controle (visível → só alertas → oculta) |
 | H | Abrir / fechar o painel |
 | 0 | Play / pause do vídeo principal *(fixo)* |
 | 1 a 7 | Presets 1×, 1,25×, 1,5×, 1,75×, 2×, 3×, 4× *(fixos)* |
-| *(sem tecla)* | Girar o vídeo 90° no sentido anti-horário / horário — escolha as teclas nas configurações |
+
+Ações que vêm **sem tecla** (escolha as suas em **configurações → Atalhos**): acelerar enquanto a
+tecla estiver pressionada, girar 90° (anti-horário / horário), aumentar / diminuir o zoom, espelhar,
+capturar o quadro, adicionar marcador e marcador anterior / próximo.
+
+Nos sites ativados, uma tecla usada pelo VCC não chega ao site, para a mesma tecla não fazer duas
+coisas (por exemplo, `,` e `.` no YouTube).
 
 Os atalhos não disparam enquanto você digita em campos de texto. Troque qualquer um na
 **página de configurações → Atalhos** (globais) ou **→ Sites** (só para um site). No Tampermonkey,
@@ -158,8 +198,13 @@ As opções ficam no **painel → Barra de controle** e na **página de configur
 - **Uma barra em cada vídeo** (requer o posicionamento automático): cada vídeo da página ganha a
   própria barra, que controla só aquele vídeo. Os atalhos de teclado continuam valendo para os vídeos
   selecionados no painel.
+- **Roda do mouse sobre a barra** (ligada por padrão): girar sobre o volume muda o volume; no resto da
+  barra, a velocidade.
 
-Em tela cheia, a barra ainda não aparece (previsto para uma próxima versão).
+**Tela cheia:** a barra e o painel aparecem também em tela cheia. Na maioria dos players (YouTube e
+outros com controles próprios) eles funcionam como fora dela. Quando o que entra em tela cheia é o
+próprio vídeo (controles nativos do navegador), a barra aparece por cima dele, mas em alguns
+navegadores não recebe cliques; os atalhos de teclado continuam funcionando.
 
 ## Página de configurações
 
@@ -170,10 +215,13 @@ pelo gerenciador de extensões (*Opções*). Ela tem:
   alerta.
 - **Idioma.**
 - **Atalhos:** os atalhos globais (clique na tecla para trocar; ✕ remove).
-- **Comportamento:** incrementos de velocidade, volume e avanço.
+- **Comportamento:** incrementos de velocidade, volume e avanço, passo longo e velocidade ao segurar a
+  tecla.
 - **Sites:** adicionar um site e, para cada site, ativar/desativar, velocidade e volume salvos,
-  opacidade própria (ou a padrão), posição da barra, atalhos próprios e apagar as configurações do site.
-- **Dados:** ver, copiar e apagar os dados salvos; restaurar atalhos ou todas as configurações.
+  opacidade própria (ou a padrão), posição da barra, rotação lembrada, retomar de onde parou, apagar
+  posições e marcadores, atalhos próprios e apagar as configurações do site.
+- **Dados:** ver, copiar e apagar os dados salvos; **backup** (exportar todas as configurações para um
+  arquivo e importar de volta, o que substitui as atuais); restaurar atalhos ou todas as configurações.
 - **Sobre:** versão, código-fonte, suporte, privacidade e contato.
 
 As mudanças são salvas na hora e aplicadas imediatamente nas abas abertas.
@@ -204,12 +252,14 @@ armazenamento local do navegador (na extensão, `storage.local`; no Tampermonkey
 dele). Sobrevivem a reinícios e atualizações e são apagados ao desinstalar. No Firefox, os dados
 ficam ligados ao ID da extensão (`vcc-video-command-center@ofeliper`), que por isso não deve mudar.
 
-Para ver, copiar e apagar esses dados: **página de configurações → Dados** (no Tampermonkey,
-**Painel → Dados salvos e redefinições**).
+Para ver, copiar, apagar, exportar e importar esses dados: **página de configurações → Dados** (no
+Tampermonkey, **Painel → Dados salvos e redefinições**). O arquivo exportado é o mesmo nas duas
+versões, então dá para levar as configurações do Tampermonkey para a extensão e vice-versa.
 
 Chaves usadas: `vcc_global_<nome>` para as configurações globais (tema, idioma, modo e opções da barra,
 opacidades padrão, incrementos, atalhos, sites ativos) e `vcc_<domínio>_<nome>` para as de cada site
-(velocidade, volume, mudo, opacidades, posição da barra, atalhos).
+(velocidade, volume, mudo, opacidades, posição da barra, atalhos, rotação lembrada, retomada, posições
+e marcadores por vídeo).
 
 ## Permissões e privacidade
 
