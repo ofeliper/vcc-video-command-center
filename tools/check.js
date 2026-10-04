@@ -73,7 +73,7 @@ for (const file of ['src/core/vcc.js', 'src/extension/popup/popup.js', 'src/exte
   for (const m of text.matchAll(keyPattern)) used.add(m[1]);
 }
 // Chaves montadas dinamicamente: 'key.<ação>' e 'mode.<modo>'.
-for (const id of ['slowDown', 'speedUp', 'resetSpeed', 'toggle2x', 'seekBack', 'seekFwd', 'volumeDown', 'volumeUp', 'toggleMute', 'toggleCB', 'toggleCP']) used.add('key.' + id);
+for (const id of ['slowDown', 'speedUp', 'resetSpeed', 'toggle2x', 'seekBack', 'seekFwd', 'volumeDown', 'volumeUp', 'toggleMute', 'toggleCB', 'toggleCP', 'rotateLeft', 'rotateRight']) used.add('key.' + id);
 for (const mode of ['visible', 'alerts', 'hidden']) used.add('mode.' + mode);
 for (const theme of ['light', 'dark']) used.add('theme.' + theme);
 for (const a of ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right']) used.add('anchor.' + a);

@@ -50,6 +50,7 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 • Picture-in-Picture
 • Copiar o momento atual do vídeo (timestamp)
 • Brilho e inversão de cores para assistir no escuro
+• Girar o vídeo em 90° (horário ou anti-horário), para vídeos gravados de lado
 • Páginas com vários vídeos: escolha o principal, controle alguns ou todos, oculte ou silencie cada um
 • Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo
 • Tema claro e escuro, em português e inglês
@@ -97,6 +98,7 @@ Great for watching lectures faster, replaying a section over and over, or simply
 • Picture-in-Picture
 • Copy the current video timestamp
 • Brightness and color inversion for night viewing
+• Rotate the video by 90° (clockwise or counter-clockwise) for sideways recordings
 • Pages with several videos: pick the main one, control some or all, hide or mute each
 • Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video
 • Light and dark themes, in English and Portuguese
@@ -138,6 +140,8 @@ Dicas e limitações conhecidas
 
 • Em tela cheia, a barra de controle ainda não aparece. Os atalhos continuam funcionando.
 
+• A rotação do vídeo é só visual e vale até recarregar a página. Os atalhos de rotação vêm sem tecla: escolha as suas na página de configurações. No Picture-in-Picture, o vídeo aparece sem a rotação.
+
 • O VCC também existe como script para Tampermonkey, para quem usa outros navegadores:
 https://github.com/ofeliper/vcc-video-command-center
 
@@ -160,6 +164,8 @@ Tips and known limitations
 • Videos inside iframes from other domains require VCC to also have access to that domain.
 
 • In fullscreen, the control bar doesn't appear yet. Keyboard shortcuts still work.
+
+• Video rotation is visual only and lasts until the page is reloaded. Rotation shortcuts have no default key: pick yours on the settings page. In Picture-in-Picture, the video is shown without the rotation.
 
 • VCC is also available as a Tampermonkey script for other browsers:
 https://github.com/ofeliper/vcc-video-command-center

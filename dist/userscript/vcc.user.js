@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/ofeliper/vcc-video-command-center
-// @version      0.8.0
+// @version      0.9.0
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       ofeliper
 // @homepageURL  https://github.com/ofeliper/vcc-video-command-center
@@ -290,6 +290,15 @@
       'opt.contact': "Contato",
       'vs.opacityGlobal': "Vale para todos os sites que não têm opacidade própria.",
       'vs.opacitySite': "Valor próprio de {domain} (definido na página de configurações).",
+
+      // 0.9.0: rotação do vídeo
+      'key.rotateLeft': "Girar o vídeo 90° (anti-horário)",
+      'key.rotateRight': "Girar o vídeo 90° (horário)",
+      'vs.rotation': "Rotação",
+      'vs.rotateLeft': "girar 90° no sentido anti-horário",
+      'vs.rotateRight': "girar 90° no sentido horário",
+      'vs.rotateReset': "normal",
+      'flash.rotation': "↻ {deg}°",
     },
 
     'en-US': {
@@ -538,6 +547,15 @@
       'opt.contact': "Contact",
       'vs.opacityGlobal': "Applies to every site without its own opacity.",
       'vs.opacitySite': "Own value for {domain} (set on the settings page).",
+
+      // 0.9.0: rotação do vídeo
+      'key.rotateLeft': "Rotate video 90° (counterclockwise)",
+      'key.rotateRight': "Rotate video 90° (clockwise)",
+      'vs.rotation': "Rotation",
+      'vs.rotateLeft': "rotate 90° counterclockwise",
+      'vs.rotateRight': "rotate 90° clockwise",
+      'vs.rotateReset': "reset",
+      'flash.rotation': "↻ {deg}°",
     },
   };
 
@@ -631,6 +649,8 @@
     toggleMute: 'M',
     toggleCB:   'V',
     toggleCP:   'H',
+    rotateLeft:  null,   // sem tecla de fábrica: atribua na página de configurações
+    rotateRight: null,
   };
   const KEY_ACTION_IDS = Object.keys(FACTORY_KEYS);
 
@@ -1226,6 +1246,8 @@
     if (matchKey(e, KEYS.volumeUp))   { e.preventDefault(); changeVolume(+state.volumeStep); return; }
     if (matchKey(e, KEYS.toggleMute)) { e.preventDefault(); toggleMute();                    return; }
     if (matchKey(e, KEYS.toggleCB))   { e.preventDefault(); cycleCBMode();                 return; }
+    if (matchKey(e, KEYS.rotateLeft))  { e.preventDefault(); rotateVideos(-90);             return; }
+    if (matchKey(e, KEYS.rotateRight)) { e.preventDefault(); rotateVideos(+90);             return; }
   }
 
   document.addEventListener('keydown', onKeyDown, true);
@@ -1690,7 +1712,7 @@
     }
     const vid = bar.video || state.videos[state.primaryVideo] || state.videos.find(v => v.isConnected);
     let r = null;
-    try { r = vid && vid.isConnected ? vid.getBoundingClientRect() : null; } catch {}
+    try { r = vid && vid.isConnected ? videoBox(vid) : null; } catch {}
     const visible = r && r.width >= MIN_VIDEO_W && r.height >= MIN_VIDEO_H &&
       r.bottom > 0 && r.right > 0 && r.top < window.innerHeight && r.left < window.innerWidth;
     bar.placed = !!visible;
@@ -1945,6 +1967,14 @@
       acc('vs', '◑', t('sec.visual'), escapeHTML`
         ${tog('invert', false, t('vs.invert'), t('vs.invertSub'), { videoControl: true })}
         <div class="vcc-slr vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}"><label for="vcc-brightness">${t('vs.brightness')}</label><input type="range" id="vcc-brightness" min="10" max="200" value="100" step="5"><span class="vcc-slv" id="vcc-brightness-val">100%</span></div>
+        <div class="vcc-row vcc-video-control${state.videoControlsActive ? '' : ' vcc-disabled'}" style="margin-top:6px">
+          <div><div class="vcc-row-label">${t('vs.rotation')}</div><div class="vcc-row-sub" id="vcc-rot-val">${rotationLabel()}</div></div>
+          <div class="vcc-abts" style="margin-top:0;flex-wrap:nowrap">
+            <button class="vcc-abt" id="vcc-rot-left" title="${keyTitle('rotateLeft', 'vs.rotateLeft')}" aria-label="${t('vs.rotateLeft')}">⟲ 90°</button>
+            <button class="vcc-abt" id="vcc-rot-right" title="${keyTitle('rotateRight', 'vs.rotateRight')}" aria-label="${t('vs.rotateRight')}">⟳ 90°</button>
+            <button class="vcc-abt" id="vcc-rot-reset">${t('vs.rotateReset')}</button>
+          </div>
+        </div>
         <p class="vcc-sub-title" style="margin-top:10px">${t('vs.opacity')}</p>
         <div class="vcc-slr"><label for="vcc-cb-op">${t('vs.barOpacity')}</label><input type="range" id="vcc-cb-op" min="10" max="100" value="${Math.round(state.cbOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cb-op-val">${Math.round(state.cbOpacity * 100)}%</span></div>
         <div class="vcc-slr"><label for="vcc-cp-op">${t('vs.panelOpacity')}</label><input type="range" id="vcc-cp-op" min="20" max="100" value="${Math.round(state.cpOpacity * 100)}" step="5"><span class="vcc-slv" id="vcc-cp-op-val">${Math.round(state.cpOpacity * 100)}%</span></div>
@@ -2172,6 +2202,9 @@
 
     // Imagem
     bindTog('invert', () => applyVideoFilter());
+    q('#vcc-rot-left').addEventListener('click', () => rotateVideos(-90));
+    q('#vcc-rot-right').addEventListener('click', () => rotateVideos(+90));
+    q('#vcc-rot-reset').addEventListener('click', () => rotateVideos(0));
     q('#vcc-brightness').addEventListener('input', e => {
       q('#vcc-brightness-val').textContent = e.target.value + '%'; applyVideoFilter();
     });
@@ -2678,6 +2711,126 @@
     const invert = cpEl?.querySelector('#vcc-tog-invert')?.classList.contains('on') ? 1 : 0;
     const bright = cpEl?.querySelector('#vcc-brightness')?.value ?? 100;
     state.videos.forEach(v => { try { v.style.filter = `invert(${invert}) brightness(${bright}%)`; } catch {} });
+  }
+
+  // ─────────────────────────────────────────────
+  // ROTAÇÃO DO VÍDEO
+  //
+  // Gira os vídeos selecionados em passos de 90° com CSS (transform), sem
+  // mexer no arquivo. A 90°/270° a imagem é reduzida ou ampliada para caber
+  // no mesmo espaço do player. Vale até recarregar a página.
+  // ─────────────────────────────────────────────
+  const videoRotation = vid => vid?._vccRot || 0;
+
+  // Medidas para a imagem girada caber na caixa do elemento <video>:
+  // `scale` e, quando a imagem é menor que a caixa (faixas pretas), o recorte
+  // `clip` que esconde as faixas — senão, ampliadas, elas cobririam a página.
+  function rotationFit(vid, deg) {
+    if (deg % 180 === 0) return { scale: 1, clip: '' };
+    const w = vid.clientWidth, h = vid.clientHeight;
+    if (!w || !h) return { scale: 1, clip: '' };
+    // Área ocupada pela imagem dentro da caixa (object-fit: contain, o padrão).
+    let cw = w, ch = h;
+    let fit = 'contain';
+    try { fit = getComputedStyle(vid).objectFit || 'contain'; } catch {}
+    if ((fit === 'contain' || fit === 'scale-down') && vid.videoWidth && vid.videoHeight) {
+      const k = Math.min(w / vid.videoWidth, h / vid.videoHeight);
+      cw = vid.videoWidth * k; ch = vid.videoHeight * k;
+    }
+    const scale = Math.round(Math.min(w / ch, h / cw) * 10000) / 10000;
+    const insetY = Math.max(0, (h - ch) / 2), insetX = Math.max(0, (w - cw) / 2);
+    const clip = scale > 1 && (insetX > 0.5 || insetY > 0.5) ? `inset(${insetY.toFixed(1)}px ${insetX.toFixed(1)}px)` : '';
+    return { scale, clip };
+  }
+
+  const ROTATION_PROPS = ['transform', 'clip-path'];
+
+  // Deslocamento entre o ponto de origem das transformações do elemento e o
+  // centro dele, para girar sempre em torno do centro (alguns players usam
+  // outra origem).
+  function centerOffset(vid) {
+    try {
+      const [ox, oy] = getComputedStyle(vid).transformOrigin.split(' ').map(parseFloat);
+      const dx = vid.offsetWidth / 2 - ox, dy = vid.offsetHeight / 2 - oy;
+      if (isFinite(dx) && isFinite(dy) && (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5)) return [Math.round(dx * 10) / 10, Math.round(dy * 10) / 10];
+    } catch {}
+    return null;
+  }
+
+  function applyRotation(vid) {
+    const deg = videoRotation(vid);
+    try {
+      const st = vid.style;
+      if (!vid._vccBase) {
+        if (!deg) return;
+        // Estilos originais, para devolver ao desfazer a rotação.
+        const saved = {};
+        ROTATION_PROPS.forEach(p => { saved[p] = [st.getPropertyValue(p), st.getPropertyPriority(p)]; });
+        // Transformação que o site já aplicava (inline ou por CSS) é mantida.
+        let own = saved.transform[0];
+        if (!own) { const c = getComputedStyle(vid).transform; if (c && c !== 'none') own = c; }
+        vid._vccBase = { saved, own: own || '' };
+      }
+      if (!deg) {
+        ROTATION_PROPS.forEach(p => {
+          const [value, priority] = vid._vccBase.saved[p];
+          if (value) st.setProperty(p, value, priority); else st.removeProperty(p);
+        });
+        delete vid._vccBase;
+        return;
+      }
+      const { scale, clip } = rotationFit(vid, deg);
+      const off = centerOffset(vid);
+      const spin = `rotate(${deg}deg) scale(${scale})`;
+      const around = off ? `translate(${off[0]}px, ${off[1]}px) ${spin} translate(${-off[0]}px, ${-off[1]}px)` : spin;
+      st.setProperty('transform', `${vid._vccBase.own} ${around}`.trim(), 'important');
+      if (clip) st.setProperty('clip-path', clip, 'important');
+      else {
+        const [value, priority] = vid._vccBase.saved['clip-path'];
+        if (value) st.setProperty('clip-path', value, priority); else st.removeProperty('clip-path');
+      }
+    } catch {}
+  }
+
+  // Retângulo do player na janela. Girado a 90°/270°, o elemento ocupa uma
+  // área diferente da original; devolve a área original (onde a imagem cabe),
+  // para a barra continuar dentro do player.
+  function videoBox(vid) {
+    const r = vid.getBoundingClientRect();
+    if (videoRotation(vid) % 180 === 0 || !vid._vccBase || !r.width || !r.height) return r;
+    const { scale } = rotationFit(vid, videoRotation(vid));
+    const w = r.height / scale, h = r.width / scale;
+    const left = r.left + (r.width - w) / 2, top = r.top + (r.height - h) / 2;
+    return { left, top, width: w, height: h, right: left + w, bottom: top + h };
+  }
+
+  // delta = +90 (horário), -90 (anti-horário) ou 0 (volta ao normal).
+  function rotateVideos(delta) {
+    const list = targetVideoList();
+    if (!list.length) return;
+    list.forEach(vid => {
+      vid._vccRot = delta === 0 ? 0 : (((videoRotation(vid) + delta) % 360) + 360) % 360;
+      applyRotation(vid);
+      // Recalcula a escala quando o player muda de tamanho ou de vídeo.
+      if (!vid._vccRotWatch) {
+        vid._vccRotWatch = true;
+        vid.addEventListener('loadedmetadata', () => applyRotation(vid));
+        if (typeof ResizeObserver === 'function') new ResizeObserver(() => { if (videoRotation(vid)) applyRotation(vid); }).observe(vid);
+      }
+    });
+    updateRotationLabel();
+    schedulePosition();
+    flashCB(bar => t('flash.rotation', { deg: videoRotation(bar.video || state.videos[state.primaryVideo] || list[0]) }), list);
+  }
+
+  function rotationLabel() {
+    const vid = state.videos[state.primaryVideo];
+    return `${videoRotation(vid)}°`;
+  }
+
+  function updateRotationLabel() {
+    const el = cpEl?.querySelector('#vcc-rot-val');
+    if (el) el.textContent = rotationLabel();
   }
 
   // ─────────────────────────────────────────────

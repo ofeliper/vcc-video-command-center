@@ -272,6 +272,15 @@
       'opt.contact': "Contato",
       'vs.opacityGlobal': "Vale para todos os sites que não têm opacidade própria.",
       'vs.opacitySite': "Valor próprio de {domain} (definido na página de configurações).",
+
+      // 0.9.0: rotação do vídeo
+      'key.rotateLeft': "Girar o vídeo 90° (anti-horário)",
+      'key.rotateRight': "Girar o vídeo 90° (horário)",
+      'vs.rotation': "Rotação",
+      'vs.rotateLeft': "girar 90° no sentido anti-horário",
+      'vs.rotateRight': "girar 90° no sentido horário",
+      'vs.rotateReset': "normal",
+      'flash.rotation': "↻ {deg}°",
     },
 
     'en-US': {
@@ -520,6 +529,15 @@
       'opt.contact': "Contact",
       'vs.opacityGlobal': "Applies to every site without its own opacity.",
       'vs.opacitySite': "Own value for {domain} (set on the settings page).",
+
+      // 0.9.0: rotação do vídeo
+      'key.rotateLeft': "Rotate video 90° (counterclockwise)",
+      'key.rotateRight': "Rotate video 90° (clockwise)",
+      'vs.rotation': "Rotation",
+      'vs.rotateLeft': "rotate 90° counterclockwise",
+      'vs.rotateRight': "rotate 90° clockwise",
+      'vs.rotateReset': "reset",
+      'flash.rotation': "↻ {deg}°",
     },
   };
 

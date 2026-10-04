@@ -47,6 +47,7 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 **Extras**
 - Loop A→B, Picture-in-Picture e cópia do timestamp atual.
 - Brilho e inversão de cores.
+- Rotação do vídeo em passos de 90°, no sentido horário ou anti-horário, para vídeos gravados de lado.
 - Páginas com vários vídeos: escolha o principal, aplique os controles a alguns ou a todos, oculte,
   silencie ou remova cada um.
 - Estatísticas da sessão (tempo assistido, tempo economizado) e verificação de compatibilidade.
@@ -97,6 +98,18 @@ PiP, timestamp), imagem e opacidade, barra de controle, vídeos na página e ses
 rodapé abre a página de configurações. No Tampermonkey, que não tem página de configurações, o painel
 também traz atalhos, preferências (tema, idioma, incrementos), sites ativos e dados salvos.
 
+### Rotação do vídeo
+
+Em **Painel → Imagem → Rotação**, os botões **⟲ 90°** e **⟳ 90°** giram o vídeo no sentido anti-horário
+e horário, e **normal** desfaz. Também dá para usar atalhos: eles vêm sem tecla, e você escolhe as suas
+em **configurações → Atalhos**.
+
+- A imagem girada é ajustada para caber no mesmo espaço do player, sem cobrir o resto da página.
+- Vale para os vídeos selecionados (o principal, ou os que você escolher em *Vídeos na página*).
+- A rotação é só visual e dura até recarregar a página; o arquivo do vídeo não muda.
+- Os controles do próprio site continuam no lugar (não giram). No Picture-in-Picture, o navegador
+  mostra o vídeo sem a rotação.
+
 ### Menu do ícone (extensão)
 
 - Mostra se o VCC tem acesso ao site atual e pede a permissão quando falta. Se ela for recusada,
@@ -121,6 +134,7 @@ também traz atalhos, preferências (tema, idioma, incrementos), sites ativos e 
 | H | Abrir / fechar o painel |
 | 0 | Play / pause do vídeo principal *(fixo)* |
 | 1 a 7 | Presets 1×, 1,25×, 1,5×, 1,75×, 2×, 3×, 4× *(fixos)* |
+| *(sem tecla)* | Girar o vídeo 90° no sentido anti-horário / horário — escolha as teclas nas configurações |
 
 Os atalhos não disparam enquanto você digita em campos de texto. Troque qualquer um na
 **página de configurações → Atalhos** (globais) ou **→ Sites** (só para um site). No Tampermonkey,

@@ -42,6 +42,7 @@ Great for watching lectures faster, replaying a section over and over, or simply
 • Picture-in-Picture
 • Copy the current video timestamp
 • Brightness and color inversion for night viewing
+• Rotate the video by 90° (clockwise or counter-clockwise) for sideways recordings
 • Pages with several videos: pick the main one, control some or all, hide or mute each
 • Control bar anywhere you like (drag it by its handle) or pinned inside the video, in the corner you choose — even one bar per video
 • Light and dark themes, in English and Portuguese
@@ -89,6 +90,7 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 • Picture-in-Picture
 • Copiar o momento atual do vídeo (timestamp)
 • Brilho e inversão de cores para assistir no escuro
+• Girar o vídeo em 90° (horário ou anti-horário), para vídeos gravados de lado
 • Páginas com vários vídeos: escolha o principal, controle alguns ou todos, oculte ou silencie cada um
 • Barra de controle livre (arraste pela alça) ou presa dentro do vídeo, no canto que você escolher — e, se quiser, uma barra em cada vídeo
 • Tema claro e escuro, em português e inglês

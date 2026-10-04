@@ -43,6 +43,8 @@
     toggleMute: 'M',
     toggleCB:   'V',
     toggleCP:   'H',
+    rotateLeft:  null,   // sem tecla de fábrica: atribua na página de configurações
+    rotateRight: null,
   };
   const KEY_ACTION_IDS = Object.keys(FACTORY_KEYS);
 

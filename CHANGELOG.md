@@ -3,6 +3,15 @@
 Todas as mudanças relevantes do VCC. A versão é a mesma para a extensão (Firefox e Chrome) e para o
 userscript do Tampermonkey.
 
+## [0.9.0] — 2026-10-04
+
+### Adicionado
+- **Rotação do vídeo** em passos de 90°, no sentido horário ou anti-horário: botões em
+  **Painel → Imagem → Rotação** (⟲ 90°, ⟳ 90° e *normal*) e dois atalhos novos, que vêm sem tecla e
+  podem ser escolhidos nas configurações. A imagem girada é ajustada para caber no espaço do player,
+  a barra de controle continua dentro dele e mostra o ângulo ("↻ 90°"). Vale para os vídeos
+  selecionados e dura até recarregar a página.
+
 ## [0.8.0] — 2026-09-29
 
 ### Adicionado
