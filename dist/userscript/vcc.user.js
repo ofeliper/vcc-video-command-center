@@ -3873,6 +3873,9 @@
     const prevSpeed = state.speed, prevVolume = state.volume, prevMuted = state.muted;
     const prevRotation = state.siteRotation;
     loadState();
+    // A velocidade é de cada aba: o valor salvo do site só vale ao carregar a
+    // página, então uma mudança feita em outra aba não altera esta.
+    state.speed = prevSpeed;
     KEYS = loadKeys(domain);
     lang = I18N.resolve(langPref);
     t = I18N.translator(lang);
@@ -3881,7 +3884,6 @@
     if (active && !state.videoControlsActive) { startVideoEngine(); rebuildPanel(); return; }
     if (!active && state.videoControlsActive) { deactivateCurrentSite(); return; }
 
-    if (Math.abs(prevSpeed - state.speed) > 0.001) applySpeed(state.speed, false);
     if (prevVolume !== state.volume || prevMuted !== state.muted) {
       targetVideoList().forEach(vid => { try { vid.volume = state.volume; vid.muted = state.muted; } catch {} });
       updateBarsDisplay(); updateCPVolume();
