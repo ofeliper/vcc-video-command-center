@@ -30,6 +30,7 @@ Great for watching lectures faster, replaying a section over and over, or simply
 • 0.1× to 16×, with fine steps or 1×–4× presets (keys 1–7)
 • One-key 2× toggle and reset to normal speed
 • Shows how much time is left at the current speed and when the video will end
+• Each tab keeps its own speed
 • Session stats: time watched and time saved
 
 ⌨️ KEYBOARD SHORTCUTS
@@ -81,6 +82,7 @@ Ideal para assistir aulas mais rápido, rever um trecho várias vezes ou simples
 • De 0,1× a 16×, com ajuste fino ou presets de 1× a 4× (teclas 1 a 7)
 • Alternância rápida para 2× e volta à velocidade normal com uma tecla
 • Mostra quanto tempo falta para o vídeo acabar na velocidade atual e a hora em que ele termina
+• Cada aba mantém a própria velocidade
 • Estatísticas da sessão: tempo assistido e tempo economizado
 
 ⌨️ ATALHOS DE TECLADO
