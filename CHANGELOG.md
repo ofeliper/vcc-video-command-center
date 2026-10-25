@@ -3,6 +3,18 @@
 Todas as mudanças relevantes do VCC. A versão é a mesma para a extensão (Firefox e Chrome) e para o
 userscript do Tampermonkey.
 
+## [0.10.1] — 2026-10-25
+
+### Alterado
+- **Velocidade por aba:** mudar a velocidade numa aba não muda mais as outras abas abertas do mesmo
+  site. A última velocidade usada continua salva por site e vale para as próximas páginas. A
+  velocidade do site definida na página de configurações continua valendo na hora nas abas abertas.
+  Sugestão e primeira versão de [@KayhanB21](https://github.com/KayhanB21)
+  ([#1](https://github.com/ofeliper/vcc-video-command-center/pull/1)).
+
+### Adicionado
+- Licença [MIT](LICENSE), também incluída nos pacotes das lojas e indicada no userscript.
+
 ## [0.10.0] — 2026-10-04
 
 ### Adicionado

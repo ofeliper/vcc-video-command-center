@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         VCC — Video Command Center
 // @namespace    https://github.com/ofeliper/vcc-video-command-center
-// @version      0.10.0
+// @version      0.10.1
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       ofeliper
+// @license      MIT
 // @homepageURL  https://github.com/ofeliper/vcc-video-command-center
 // @supportURL   https://github.com/ofeliper/vcc-video-command-center/issues
 // @match        *://*/*
@@ -3873,6 +3874,10 @@
     const prevSpeed = state.speed, prevVolume = state.volume, prevMuted = state.muted;
     const prevRotation = state.siteRotation;
     loadState();
+    // A velocidade é de cada aba: a velocidade salva do site só vale quando a
+    // página carrega, então mudar a velocidade em outra aba não altera esta.
+    // (A página de configurações avisa as abas por mensagem: VCC_APPLY_SITE_SPEED.)
+    state.speed = prevSpeed;
     KEYS = loadKeys(domain);
     lang = I18N.resolve(langPref);
     t = I18N.translator(lang);
@@ -3881,7 +3886,6 @@
     if (active && !state.videoControlsActive) { startVideoEngine(); rebuildPanel(); return; }
     if (!active && state.videoControlsActive) { deactivateCurrentSite(); return; }
 
-    if (Math.abs(prevSpeed - state.speed) > 0.001) applySpeed(state.speed, false);
     if (prevVolume !== state.volume || prevMuted !== state.muted) {
       targetVideoList().forEach(vid => { try { vid.volume = state.volume; vid.muted = state.muted; } catch {} });
       updateBarsDisplay(); updateCPVolume();
@@ -3935,6 +3939,12 @@
         return { ok: true };
       case 'VCC_OPEN_PANEL':
         if (!state.cpVisible) toggleCPVisibility();
+        return { ok: true };
+      case 'VCC_APPLY_SITE_SPEED':
+        // Velocidade do site mudada na página de configurações: vale na hora.
+        if (normalizeSite(message.domain) === domain && state.videoControlsActive) {
+          applySpeed(clamp(message.speed, SPEED_MIN, SPEED_MAX, state.speed), false);
+        }
         return { ok: true };
       case 'VCC_GET_STATUS':
         return { ok: true, domain, active: isSiteActive() };

@@ -66,6 +66,7 @@ function buildExtension(target) {
   copyDir(r('src', 'extension', 'options'), path.join(out, 'options'));
   copyDir(r('src', 'extension', '_locales'), path.join(out, '_locales'));
   copyDir(r('assets', 'icons'), path.join(out, 'icons'));
+  copyFile(r('LICENSE'), path.join(out, 'LICENSE'));
   console.log(`Built dist/${target} (v${version})`);
 }
 

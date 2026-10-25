@@ -1,7 +1,8 @@
 {
   "name": "vcc-video-command-center",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "private": true,
+  "license": "MIT",
   "description": "Centro de controle local para players HTML5.",
   "repository": {
     "type": "git",

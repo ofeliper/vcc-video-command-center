@@ -22,6 +22,7 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Desenvolvimento](#desenvolvimento)
 - [Publicar uma nova versão](#publicar-uma-nova-versão)
+- [Contribuições e licença](#contribuições-e-licença)
 - [Changelog](CHANGELOG.md)
 
 ---
@@ -34,6 +35,8 @@ para Tampermonkey**, todos gerados a partir do mesmo código, em **português (p
 - Tempo restante do vídeo na velocidade atual e a hora em que ele termina.
 - Segurar uma tecla para acelerar (2× por padrão) e voltar ao normal ao soltar.
 - A velocidade é reaplicada quando o player a reinicia (troca de vídeo, anúncio, play).
+- Cada aba mantém a própria velocidade. A última velocidade usada no site vale para as próximas páginas
+  abertas nele.
 
 **Atalhos de teclado**
 - Avançar/voltar (passo curto e passo longo), quadro a quadro, velocidade, volume, mudo e painel sem
@@ -383,6 +386,15 @@ Para testar mudanças, rode `npm run build` e recarregue a extensão (no Firefox
 
 Os textos das páginas das lojas (descrições em português e inglês, tags, comentários do
 desenvolvedor e legendas das capturas) e as capturas nos dois idiomas estão em [`store/`](store/).
+
+## Contribuições e licença
+
+Sugestões e correções são bem-vindas, por [issue](https://github.com/ofeliper/vcc-video-command-center/issues)
+ou pull request. Antes de enviar um pull request, rode `npm run build` e `npm run check` e inclua o
+`dist/userscript/vcc.user.js` gerado.
+
+O VCC é distribuído sob a [licença MIT](LICENSE): pode ser usado, modificado e redistribuído, desde
+que o aviso de copyright e a licença sejam mantidos.
 
 ## Suporte
 

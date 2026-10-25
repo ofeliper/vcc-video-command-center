@@ -4,6 +4,7 @@
 // @version      {{version}}
 // @description  Centro de controle local para players HTML5, voltado a uso pessoal e sem recursos de download, extração de stream ou contorno de DRM.
 // @author       ofeliper
+// @license      MIT
 // @homepageURL  https://github.com/ofeliper/vcc-video-command-center
 // @supportURL   https://github.com/ofeliper/vcc-video-command-center/issues
 // @match        *://*/*

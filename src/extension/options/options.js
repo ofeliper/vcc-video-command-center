@@ -255,6 +255,16 @@
     );
   }
 
+  // Cada aba guarda a própria velocidade e ignora as mudanças feitas em outras
+  // abas; a velocidade definida aqui é enviada às abas abertas do site.
+  async function setSiteSpeed(domain, speed) {
+    await set({ [skey(domain, 'speed')]: speed });
+    try {
+      const tabs = await api.tabs.query({});
+      await Promise.all(tabs.map(tab => Promise.resolve(api.tabs.sendMessage(tab.id, { type: 'VCC_APPLY_SITE_SPEED', domain, speed })).catch(() => {})));
+    } catch {}
+  }
+
   function videoDataCount(domain) {
     return {
       pos: Object.keys(data[skey(domain, 'resumePos')] || {}).length,
@@ -304,7 +314,7 @@
           set({ [gkey('activeSites')]: [...new Set(list)].sort() });
         }, { labelledby: `lbl-act-${safeId}` }), { id: `lbl-act-${safeId}` }),
         field(t('opt.siteSpeed'), null, [
-          numberInput(S('speed') ?? 1, SPEED_MIN, SPEED_MAX, 0.05, v => set({ [skey(domain, 'speed')]: Math.round(v * 100) / 100 }), t('opt.siteSpeed')),
+          numberInput(S('speed') ?? 1, SPEED_MIN, SPEED_MAX, 0.05, v => setSiteSpeed(domain, Math.round(v * 100) / 100), t('opt.siteSpeed')),
           h('span', { class: 'value' }, '×')]),
         field(t('opt.siteVolume'), null, [
           ...range(Math.round((S('volume') ?? 1) * 100), 0, 100, 1, pct, v => set({ [skey(domain, 'volume')]: v / 100 }), t('opt.siteVolume')),
